@@ -41,7 +41,7 @@ Referenzen: `assets/look-campus-mix-glow.png` und `assets/cover-with-portrait.pn
 - **Dunkle Rahmenfolien:** Titel, Kapitel, Einstieg und Abschluss auf Nacht-Hintergrund mit blauem Leuchten. Das Leuchten greift das 460-nm-Licht der Lampe auf.
 - **Helle Inhaltsfolien** auf Weiß mit dunkler Leiste links (150 px). Die Leiste zeigt oben die Episode („EP 02“), in der Mitte den Fortschritt durch die 2–6 Kapitel der Episode und unten das fläsh-Logo. Das aktuelle Kapitel leuchtet.
 - **Titelfolie:** Porträt von Dr. Gómez im großen Kreis (Ø 580 px) mit leuchtendem Ring und feinen Lichtringen. Der Untertitel bricht spätestens bei 820 px um, damit er die Ringe nicht kreuzt.
-- **Kreis für die Videoeinblendung:** Ø 300 px mit 56 px Abstand unten und rechts, also x 1564–1864 und y 724–1024. Er ist auf allen Folien außer der Titelfolie frei und als leuchtender Ring markiert.
+- **Kreis für die Videoeinblendung:** Ø 300 px mit 56 px Abstand unten und rechts, also x 1564–1864 und y 724–1024. Er ist auf allen Folien außer der Titelfolie frei, wird aber nicht gezeichnet (geändert am 19.10.2026 auf Wunsch von Martin: kein sichtbarer Ring).
 - **Typografie:**
   - Titel 39 pt
   - Punkt-Überschrift 21 pt, Erklärung 17 pt
@@ -79,7 +79,7 @@ Inhalts- und Bildfolien tragen die Leiste. Rahmenfolien nutzen dieselbe Leiste i
 
 ## 5. Gestaltungsregeln
 
-1. Der Kreis unten rechts bleibt frei, außer auf der Titelfolie.
+1. Der Kreis unten rechts bleibt frei, außer auf der Titelfolie. Er ist unsichtbar; die Prüfung achtet trotzdem darauf.
 2. Pro Folie höchstens 4 Punkte. Der Titel passt in eine Zeile mit maximal 6–7 Wörtern, eine Erklärung hat maximal etwa 14 Wörter.
 3. Was nicht passt, kommt in die Sprecher-Notizen oder auf eine Folgefolie. Inhalt wird nie verkleinert, um ihn hineinzuquetschen.
 4. Quellen stehen als „Evidence“ unten links, nur die Kurzangabe (Autor, Zeitschrift, Jahr).

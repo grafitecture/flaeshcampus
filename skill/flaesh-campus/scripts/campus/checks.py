@@ -118,7 +118,7 @@ def check_deck(pptx: Path, spec: dict, m: Measurer) -> list[Issue]:
         for shape in slide.shapes:
             name = _logical_name(shape)
             layout_ph = _layout_ph(slide, shape.placeholder_format.idx) if shape.is_placeholder else None
-            if layout_name != "01 Title" and not name.startswith("zone-ring") and _intersects_zone(shape):
+            if layout_name != "01 Title" and _intersects_zone(shape):
                 exempt = layout_name == "14 Photo" and (name == "Photo" or name.startswith(ZONE_EXEMPT_ON_PHOTO))
                 if not exempt:
                     issues.append(Issue(n, "zone", name, "overlaps the presenter circle"))

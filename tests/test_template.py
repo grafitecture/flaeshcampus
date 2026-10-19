@@ -53,14 +53,16 @@ def test_theme_fonts(prs):
     assert major == minor == "Corporate S"
 
 
-def test_zone_ring(prs):
+def test_zone_free_without_ring(prs):
+    """Kein sichtbarer Kreis unten rechts (Wunsch Martin, 19.10.); die Fläche bleibt für das Video reserviert."""
+    from campus.template import layout_spec
+
+    spec = layout_spec()
     for name in NAMES:
-        if name in ("01 Title", "14 Photo"):
-            continue
-        ring = named(layout(prs, name), "zone-ring")
-        assert ring is not None, name
-        assert box(ring) == tuple(px(v) for v in ZONE), name
-        assert ring._element.spPr.find(qn("a:effectLst")).find(qn("a:glow")) is not None, name
+        lay = layout(prs, name)
+        assert named(lay, "zone-ring") is None, name
+        assert not [s.name for s in lay.shapes if box(s) == tuple(px(v) for v in ZONE)], name
+        assert spec[name]["zone"] is (name != "01 Title"), name
 
 
 def test_rail(prs):

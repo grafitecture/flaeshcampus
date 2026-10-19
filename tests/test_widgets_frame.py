@@ -3,8 +3,8 @@ from PIL import Image
 from pptx import Presentation
 
 from campus.measure import Measurer
-from campus.tokens import PH_IDX, ZONE, px
-from campus.widgets_frame import evidence, focus_box, footer, place_photo, rail_progress, zone_ring_on_top
+from campus.tokens import PH_IDX, px
+from campus.widgets_frame import evidence, focus_box, footer, place_photo, rail_progress
 
 CHAPTERS = ["Document", "Protect", "Apply", "Activate & Monitor", "Seal & Instruct"]
 
@@ -108,14 +108,6 @@ def test_evidence_and_footer(prs):
     assert shapes["evidence-text"].text_frame.text == "Ontiveros & Paravina, J Dent 2009"
     assert (shapes["evidence-text"].left, shapes["evidence-text"].top) == (px(240), px(948))
     assert shapes["footer"].top == px(1010)
-
-
-def test_zone_ring_on_top(prs):
-    slide = new_slide(prs, "14 Photo")
-    zone_ring_on_top(slide, dark=True)
-    last = list(slide.shapes)[-1]
-    assert last.name == "zone-ring-top"
-    assert (last.left, last.top, last.width, last.height) == tuple(px(v) for v in ZONE)
 
 
 def test_brief_card_stays_below_text(prs, tmp_path):

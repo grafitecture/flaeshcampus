@@ -2,7 +2,7 @@
 from dataclasses import dataclass, field
 from typing import Literal
 
-from .tokens import COLOR, KICKER_SPC, LABEL_SPC, SIZE_PT, ZONE
+from .tokens import COLOR, KICKER_SPC, LABEL_SPC, SIZE_PT
 
 Box = tuple[float, float, float, float]
 
@@ -98,12 +98,7 @@ def frame_decor(frame: str) -> list[DecorDef]:
         ]
     else:
         decor.append(DecorDef("image", "rail-logo", (31, 960, 88, 37), {"file": "brand/logo-white.png"}))
-    if frame == "light":
-        decor.append(DecorDef("ellipse", "zone-ring", ZONE,
-                              {"fill": COLOR["white"], "line": (COLOR["sky"], 4), "glow": (COLOR["sky"], 46, 45)}))
-    elif frame == "dark":
-        decor.append(DecorDef("ellipse", "zone-ring", ZONE,
-                              {"fill": COLOR["ring_dark"], "line": (COLOR["sky"], 4), "glow": (COLOR["sky"], 60, 55)}))
+    # Die Kreis-Zone (ZONE) bleibt für die Videoeinblendung frei, wird aber nicht mehr gezeichnet (Martin, 19.10.).
     return decor
 
 

@@ -103,6 +103,13 @@ def test_optional_absent(deck, template_path, tmp_path):
     assert PH_IDX["Kicker"] not in [ph.placeholder_format.idx for ph in slides[1].placeholders]
 
 
+def test_no_ring_on_slides(deck):
+    """Auch Fotofolien legen keinen Kreis mehr über das Bild."""
+    prs, _ = deck
+    for n, slide in enumerate(prs.slides, 1):
+        assert not [s.name for s in slide.shapes if s.name.startswith("zone-ring")], n
+
+
 def test_notes(deck):
     prs, _ = deck
     assert prs.slides[4].notes_slide.notes_text_frame.text == "Notes for slide five."

@@ -9,7 +9,7 @@ from pptx.enum.shapes import MSO_SHAPE
 
 from . import oxml
 from .measure import Measurer
-from .tokens import COLOR, EMU_PER_PX, LABEL_SPC, SIZE_PT, ZONE, px
+from .tokens import COLOR, EMU_PER_PX, LABEL_SPC, SIZE_PT, px
 
 RAIL_DOT_X = 68          # Mitte der Punkte in der Leiste
 RAIL_TOP = 315           # Mitte des ersten Punkts (Punkt-Tops ab y 300)
@@ -164,7 +164,3 @@ def brief_card(slide, box, brief: str) -> None:
     textbox(slide, "brief-text", (x + 40, cy - 16, w - 80, min(h / 2, 120)),
             [(brief, style("body", "slate", align="center"))])
 
-
-def zone_ring_on_top(slide, dark: bool) -> None:
-    shape(slide, MSO_SHAPE.OVAL, "zone-ring-top", ZONE, fill="ring_dark" if dark else "white",
-          line=("sky", 4), glow=("sky", 60, 55))
