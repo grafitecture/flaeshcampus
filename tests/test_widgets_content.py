@@ -4,8 +4,8 @@ from pptx.dml.color import RGBColor
 from pptx.util import Pt
 
 from campus.tokens import COLOR, PH_IDX, px
-from campus.widgets_content import (bars_card, checklist, compare_columns, points_text, quiz_options,
-                                    steps_grid, summary_items)
+from campus.widgets_content import (bars_card, case_findings, checklist, closing_steps, compare_columns, markers,
+                                    points_text, quiz_options, steps_grid, summary_items, timeline)
 
 SKY = RGBColor.from_string(COLOR["sky"])
 
@@ -69,6 +69,69 @@ def test_bars(prs):
     assert shapes["bar-fill-1"].fill.fore_color.rgb == SKY
     card = shapes["chart-card"]
     assert card.top + card.height <= px(724) or card.left + card.width <= px(1564)
+
+
+def test_bar_labels_above_fills(prs):
+    """Beschriftungen liegen in der Ebenenfolge über den Balken (Leuchten verdeckt keinen Text); Werte ohne Leerzeichen."""
+    slide = new_slide(prs, "07 Points + Chart")
+    bars_card(slide, {"title": "Light power", "bars": [{"label": "Docked", "value": 100, "highlight": True},
+                                                       {"label": "+1 cm", "value": 56}]})
+    order = [s.name for s in slide.shapes]
+    for i in (1, 2):
+        assert order.index(f"bar-label-{i}") > order.index(f"bar-fill-{i}")
+    assert by_name(slide)["bar-value-2"].text_frame.text == "56%"
+
+
+def glow_px(shape) -> float:
+    from pptx.oxml.ns import qn
+
+    return int(shape._element.spPr.find(qn("a:effectLst")).find(qn("a:glow")).get("rad")) / 6350
+
+
+def test_timeline_labels_do_not_overlap(prs):
+    slide = new_slide(prs, "12 Scale")
+    timeline(slide, [{"at": f"{i} h", "label": "Near-full thickness"} for i in range(6)])
+    shapes = by_name(slide)
+    for i in range(1, 6):
+        a, b = shapes[f"tl-label-{i}"], shapes[f"tl-label-{i + 1}"]
+        assert a.left + a.width <= b.left
+    dot = shapes["tl-dot-1"]
+    assert glow_px(dot) <= dot.width / 6350 / 2
+
+
+def test_marker_glow_small(prs):
+    slide = new_slide(prs, "16 Photo Annotated")
+    markers(slide, (240, 300, 900, 600), [{"x": 0.5, "y": 0.5, "label": "Retractor docked"}])
+    dot = by_name(slide)["marker-1"]
+    assert glow_px(dot) <= dot.width / 6350 / 2
+
+
+def bottom(shape):
+    return shape.top + shape.height
+
+
+def test_summary_rows_breathe(prs):
+    """Dreizeilige Texte stoßen nicht an den nächsten Punkt; die letzte Zeile endet über der Evidence."""
+    slide = new_slide(prs, "13 Summary")
+    summary_items(slide, [{"title": f"Item {i}", "text": "Text"} for i in range(5)])
+    shapes = by_name(slide)
+    assert shapes["sum-title-2"].top - bottom(shapes["sum-text-1"]) >= px(16)
+    assert bottom(shapes["sum-text-3"]) <= px(920)
+
+
+def test_closing_rows_breathe(prs):
+    slide = new_slide(prs, "04 Closing")
+    closing_steps(slide, [{"title": f"Step {i}", "text": "Text"} for i in range(3)])
+    shapes = by_name(slide)
+    assert shapes["next-step-num-2"].top - bottom(shapes["next-step-text-1"]) >= px(16)
+
+
+def test_case_rows_clear_story_and_evidence(prs):
+    slide = new_slide(prs, "17 Case")
+    case_findings(slide, [{"finding": f"Finding {i}", "cause": "Cause"} for i in range(5)])
+    shapes = by_name(slide)
+    assert shapes["finding-head"].top >= px(330 + 150 + 24)
+    assert bottom(shapes["cause-5"]) <= px(920)
 
 
 def test_quiz_highlight(prs):

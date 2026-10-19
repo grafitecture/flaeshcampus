@@ -39,8 +39,8 @@ EXPECTED = [
     ("08 Statement", "Text", "body", (240, 730, 1200, 130), "body"),
     ("12 Scale", "Points", "body", (240, 560, 1260, 330), "lead"),
     ("14 Photo", "Photo", "pic", (150, 0, 1770, 1080), "small"),
-    ("14 Photo", "Kicker", "body", (190, 780, 1300, 60), "kicker"),
-    ("14 Photo", "Title", "title", (190, 840, 1300, 110), "title"),
+    ("14 Photo", "Kicker", "body", (190, 780, 1300, 62), "kicker"),
+    ("14 Photo", "Title", "title", (190, 840, 1300, 112), "title"),
     ("14 Photo", "Caption", "body", (190, 950, 1300, 90), "body"),
     ("15 Before / After", "PhotoBefore", "pic", (240, 330, 600, 400), "small"),
     ("15 Before / After", "PhotoAfter", "pic", (900, 330, 600, 400), "small"),
@@ -86,6 +86,16 @@ def test_cover_photo(prs):
     assert sp_pr.find(qn("a:prstGeom")).get("prst") == "ellipse"
     assert sp_pr.find(qn("a:ln")).get("w") == str(px(6))
     assert sp_pr.find(qn("a:effectLst")).find(qn("a:glow")).get("rad") == str(px(90))
+
+
+def test_photo_band_seamless(prs):
+    """Kicker, Titel und Bildunterschrift bilden auf 14 Photo ein deckendes Band ohne helle Fugen."""
+    boxes = [find(prs, "14 Photo", n, t) for n, t in (("Kicker", "body"), ("Title", "title"), ("Caption", "body"))]
+    for upper, lower in zip(boxes, boxes[1:]):
+        assert upper.top + upper.height > lower.top
+    for ph in boxes:
+        fill = ph._element.spPr.find(qn("a:solidFill"))
+        assert fill is not None and fill[0].find(qn("a:alpha")) is None
 
 
 def test_spec_json(tmp_path):

@@ -130,6 +130,24 @@ def test_cli_plan_error(tmp_path):
     assert "unknown type" in result.stdout
 
 
+def test_make_template_gallery(tmp_path):
+    """--gallery baut die Layout-Galerie in die Vorlage; Decks aus dieser Vorlage enthalten nur ihre eigenen Folien."""
+    out = tmp_path / "template" / "flaesh-campus-template.pptx"
+    gallery = SKILL / "examples" / "layout-gallery.json"
+    result = subprocess.run([sys.executable, str(SKILL / "scripts" / "make_template.py"), "--out", str(out),
+                             "--gallery", str(gallery)], capture_output=True, text=True)
+    assert result.returncode == 0, result.stdout + result.stderr
+    prs = Presentation(out)
+    plan = json.loads(gallery.read_text(encoding="utf-8"))
+    assert len(prs.slide_layouts) == 18
+    assert len(prs.slides) == len(plan["slides"]) + 1  # das Quiz bringt seine Auflösungsfolie mit
+    assert sorted({s.slide_layout.name for s in prs.slides}) == sorted(lay.name for lay in prs.slide_layouts)
+    assert (out.parent / "layout-spec.json").exists()
+    deck = tmp_path / "deck.pptx"
+    build_deck({"episode": plan["episode"], "slides": [{"type": "cover"}]}, out, deck, SKILL / "examples")
+    assert len(Presentation(deck).slides) == 1
+
+
 def test_cli_ok(tmp_path, template_path):
     plan = {"episode": {**EPISODE, "presenter": {"name": "Dr. Germán Gómez"}},
             "slides": [{"type": "cover"}, {"type": "points", "title": "Two points", "points": POINTS}]}

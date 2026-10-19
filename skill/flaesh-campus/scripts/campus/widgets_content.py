@@ -96,19 +96,19 @@ def steps_grid(slide, steps: list[dict], dark: bool, area=(240, 330, 1260, 560))
 def summary_items(slide, items: list[dict]) -> None:
     for i, item in enumerate(items, 1):
         col, row = (0, i - 1) if i <= 3 else (1, i - 4)
-        x, y = 240 + col * 640, 330 + row * 180
+        x, y = 240 + col * 640, 330 + row * 200
         shape(slide, MSO_SHAPE.OVAL, f"sum-check-{i}", (x, y, 48, 48), fill="sky")
         check_icon(slide, f"sum-check-icon-{i}", x + 8, y + 8, 32, "white")
-        textbox(slide, f"sum-title-{i}", (x + 72, y + 4, 528, 44), [(item["title"], style("lead", "slate"))])
-        textbox(slide, f"sum-text-{i}", (x + 72, y + 52, 528, 110), [(item["text"], style("body", "ink"))])
+        textbox(slide, f"sum-title-{i}", (x + 72, y, 528, 50), [(item["title"], style("lead", "slate"))])
+        textbox(slide, f"sum-text-{i}", (x + 72, y + 54, 528, 120), [(item["text"], style("body", "ink"))])
 
 
 def closing_steps(slide, steps: list[dict]) -> None:
     for i, step in enumerate(steps, 1):
-        y = 330 + (i - 1) * 130
+        y = 330 + (i - 1) * 160
         _number(slide, f"next-step-num-{i}", (240, y, 56, 56), i, "sky", "white", 18)
-        textbox(slide, f"next-step-title-{i}", (316, y + 4, 804, 44), [(step["title"], style("lead", "white"))])
-        textbox(slide, f"next-step-text-{i}", (316, y + 52, 804, 70), [(step["text"], style("body", "on_dark"))])
+        textbox(slide, f"next-step-title-{i}", (316, y + 3, 804, 50), [(step["title"], style("lead", "white"))])
+        textbox(slide, f"next-step-text-{i}", (316, y + 56, 804, 80), [(step["text"], style("body", "on_dark"))])
 
 
 # ---------------------------------------------------------------- Balken
@@ -125,18 +125,20 @@ def bars_card(slide, chart: dict, box=(1000, 330, 800, 364)) -> None:
     textbox(slide, "chart-title", (x + 50, y + 34, inner, 30),
             [(chart.get("title", ""), style("small", "slate", caps=True, spc=KICKER_SPC))])
     track_w = inner - 130
-    for i, bar in enumerate(bars, 1):
-        by = y + 84 + (i - 1) * pitch
-        textbox(slide, f"bar-label-{i}", (x + 50, by, inner, 34), [(bar["label"], style("body", "slate"))])
-        shape(slide, MSO_SHAPE.ROUNDED_RECTANGLE, f"bar-track-{i}", (x + 50, by + 40, track_w, 40),
+    tops = [y + 84 + (i - 1) * pitch for i in range(1, len(bars) + 1)]
+    for i, (bar, by) in enumerate(zip(bars, tops), 1):
+        track_y = by + 46                  # Beschriftung (40 px, eine Zeile 17 pt) steht über dem Balken
+        shape(slide, MSO_SHAPE.ROUNDED_RECTANGLE, f"bar-track-{i}", (x + 50, track_y, track_w, 40),
               fill="white", radius_px=20)
         hi = bar.get("highlight")
         fill_w = max(track_w * bar["value"] / 100, 1)
-        shape(slide, MSO_SHAPE.ROUNDED_RECTANGLE, f"bar-fill-{i}", (x + 50, by + 40, fill_w, 40),
+        shape(slide, MSO_SHAPE.ROUNDED_RECTANGLE, f"bar-fill-{i}", (x + 50, track_y, fill_w, 40),
               fill="sky" if hi else "steel", glow=("sky", 30, 60) if hi else None, radius_px=20)
-        value = bar.get("display", f"{bar['value']:g} %")
-        textbox(slide, f"bar-value-{i}", (x + w - 50 - 120, by + 40, 120, 40),
+        value = bar.get("display", f"{bar['value']:g}%")
+        textbox(slide, f"bar-value-{i}", (x + w - 50 - 120, track_y - 5, 120, 50),
                 [(value, style("lead", "slate", align="right"))], anchor="ctr")
+    for i, (bar, by) in enumerate(zip(bars, tops), 1):  # Text zuletzt: das Leuchten liegt nie über der Schrift
+        textbox(slide, f"bar-label-{i}", (x + 50, by, inner, 40), [(bar["label"], style("body", "slate"))])
     if chart.get("note"):
         textbox(slide, "chart-note", (x + 50, y + h - 20 - 36, inner, 36), [(chart["note"], style("small", "muted"))])
 
@@ -175,8 +177,8 @@ def scale_chips(slide, items: list[str], highlight: list[str], box=(240, 330, 15
                              anchor="ctr")
 
 
-def scale_caption(slide, text: str) -> None:
-    textbox(slide, "scale-caption", (240, 490, 1260, 40), [(text, style("small", "muted"))])
+def scale_caption(slide, text: str, y: float = 490) -> None:
+    textbox(slide, "scale-caption", (240, y, 1260, 40), [(text, style("small", "muted"))])
 
 
 def timeline(slide, points: list[dict], box=(240, 330, 1260, 200), dark: bool = False) -> None:
@@ -185,12 +187,13 @@ def timeline(slide, points: list[dict], box=(240, 330, 1260, 200), dark: bool = 
     n = len(points)
     xs = [inner_x + (inner_w * i / (n - 1) if n > 1 else inner_w / 2) for i in range(n)]
     line_y = y + 60
+    label_w = min(300, inner_w / (n - 1) - 24) if n > 1 else 300  # Nachbarn überlappen nicht (bis 6 Punkte)
     shape(slide, MSO_SHAPE.RECTANGLE, "tl-line", (xs[0], line_y - 2, xs[-1] - xs[0], 4), fill="steel")
     for i, (cx, point) in enumerate(zip(xs, points), 1):
-        shape(slide, MSO_SHAPE.OVAL, f"tl-dot-{i}", (cx - 12, line_y - 12, 24, 24), fill="sky", glow=("sky", 20, 60))
-        textbox(slide, f"tl-at-{i}", (cx - 150, y, 300, 40),
+        shape(slide, MSO_SHAPE.OVAL, f"tl-dot-{i}", (cx - 12, line_y - 12, 24, 24), fill="sky", glow=("sky", 10, 60))
+        textbox(slide, f"tl-at-{i}", (cx - label_w / 2, y - 10, label_w, 50),
                 [(point["at"], style("lead", "white" if dark else "slate", align="center"))], anchor="b")
-        textbox(slide, f"tl-label-{i}", (cx - 150, line_y + 26, 300, 100),
+        textbox(slide, f"tl-label-{i}", (cx - label_w / 2, line_y + 26, label_w, 80),
                 [(point["label"], style("body", "on_dark" if dark else "ink", align="center"))])
 
 
@@ -201,19 +204,19 @@ def markers(slide, photo_box, items: list[dict]) -> None:
     for i, mk in enumerate(items, 1):
         cx, cy = px0 + mk["x"] * pw, py0 + mk["y"] * ph
         _number(slide, f"marker-{i}", (cx - 24, cy - 24, 48, 48), i, "sky", "white", 18,
-                line=("white", 3), glow=("sky", 30, 70))
+                line=("white", 3), glow=("sky", 20, 70))
         y = 320 + (i - 1) * 76
         _number(slide, f"legend-num-{i}", (1200, y + 8, 44, 44), i, "sky", "white", 16)
         textbox(slide, f"legend-{i}", (1264, y, 496, 60), [(mk["label"], style("body", "ink"))], anchor="ctr")
 
 
-def case_findings(slide, findings: list[dict], y: float = 520) -> None:
+def case_findings(slide, findings: list[dict], y: float = 560) -> None:
     textbox(slide, "finding-head", (240, y - 44, 560, 30),
             [("Finding", style("label", "sky", caps=True, spc=LABEL_SPC))])
     textbox(slide, "cause-head", (880, y - 44, 620, 30),
             [("Cause", style("label", "sky", caps=True, spc=LABEL_SPC))])
     for i, item in enumerate(findings, 1):
-        top = y + (i - 1) * 76
+        top = y + (i - 1) * 72
         textbox(slide, f"finding-{i}", (240, top, 560, 64), [(item["finding"], style("body", "slate"))], anchor="ctr")
         shape(slide, MSO_SHAPE.RIGHT_ARROW, f"arrow-{i}", (820, top + 20, 40, 24), fill="sky")
         textbox(slide, f"cause-{i}", (880, top, 620, 64), [(item["cause"], style("body", "ink"))], anchor="ctr")

@@ -66,7 +66,7 @@ def rail_progress(slide, chapters: list[str], current: int | None, dark: bool) -
     for i, cy in enumerate(centers, 1):
         if current and i == current:
             size, name = 30, f"rail-dot-{i}-active"
-            dot = dict(fill="sky", glow=("sky", 26, 95))
+            dot = dict(fill="sky", glow=("sky", 12, 75))   # kleines Leuchten: rund in PowerPoint und LibreOffice
             num_color = "sky"
         elif current and i < current:
             size, name, dot, num_color = 16, f"rail-dot-{i}", dict(fill="steel"), "steel"
@@ -75,7 +75,7 @@ def rail_progress(slide, chapters: list[str], current: int | None, dark: bool) -
             dot = dict(fill="rail" if dark else "night", line=("dim", 3))
             num_color = "dim"
         shape(slide, MSO_SHAPE.OVAL, name, (RAIL_DOT_X - size / 2, cy - size / 2, size, size), **dot)
-        textbox(slide, f"rail-num-{i}", (92, cy - 16, 40, 32), [(str(i), style("small", num_color))], anchor="ctr")
+        textbox(slide, f"rail-num-{i}", (100, cy - 16, 40, 32), [(str(i), style("small", num_color))], anchor="ctr")
 
 
 def evidence(slide, text: str, dark: bool) -> None:

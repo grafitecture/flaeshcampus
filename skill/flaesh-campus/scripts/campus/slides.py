@@ -6,15 +6,16 @@ from typing import Callable
 from pptx.enum.shapes import PP_PLACEHOLDER
 
 from .layouts import LAYOUTS
-from .measure import Measurer
+from .measure import Measurer, Para
 from .plan import default_kicker
-from .tokens import PH_IDX, px
+from .tokens import EMU_PER_PX, PH_IDX, ZONE, px
 from .widgets_content import (bars_card, case_findings, checklist, closing_steps, compare_columns, markers,
                               points_text, quiz_options, scale_caption, scale_chips, steps_grid, summary_items,
                               timeline)
 from .widgets_frame import evidence, focus_box, footer, place_photo, rail_progress, zone_ring_on_top
 
 LAYOUT_BY_KEY = {ldef.key: ldef.name for ldef in LAYOUTS}
+CHAPTER_TITLE = next(p for ldef in LAYOUTS if ldef.key == "chapter" for p in ldef.placeholders if p.name == "Title")
 DARK_KEYS = {"cover", "chapter", "hook", "closing", "photo", "quiz"}
 NO_FOOTER = {"cover", "chapter", "photo"}
 
@@ -131,13 +132,38 @@ def render_cover(ctx: Ctx, s: dict) -> None:
     _frame(ctx, slide, s)
 
 
+def _set_box(shape, top_delta: int = 0, height_delta: int = 0, width: int | None = None) -> None:
+    """Platzhalter verschieben/strecken; alle vier Werte setzen, sonst fehlen geerbte Maße im xfrm."""
+    left, top, old_width, height = shape.left, shape.top, shape.width, shape.height
+    shape.left, shape.top = left, top + top_delta
+    shape.width, shape.height = old_width if width is None else width, height + height_delta
+
+
+def _grow_chapter_title(ctx: Ctx, slide, text: str) -> None:
+    """Lange Kapitelnamen („Activate & Monitor“) brechen um: Titel wächst nach unten, der Satz rückt nach."""
+    title = _placeholder(slide, "Title")
+    level = CHAPTER_TITLE.levels[0]
+    para = [Para(text, level["size_pt"], level.get("ln_spc_pct", 100))]
+    width = title.width / EMU_PER_PX
+    if ctx.m.block_height_px(para, width) <= title.height / EMU_PER_PX:
+        return
+    width = min(width, ZONE[0] - title.left / EMU_PER_PX - 24)  # sonst reicht die Box in die Kreis-Zone
+    extra = px(ctx.m.block_height_px(para, width)) - title.height
+    _set_box(title, height_delta=extra, width=px(width))
+    line = _placeholder(slide, "Line")
+    if line is not None:
+        _set_box(line, top_delta=extra)
+
+
 def render_chapter(ctx: Ctx, s: dict) -> None:
     chapters = ctx.plan["episode"]["chapters"]
     n = s["chapter"]
     slide = new_slide(ctx, LAYOUT_BY_KEY["chapter"])
     fill(slide, "Number", str(n))
     fill(slide, "Kicker", s.get("kicker") or f"Phase {n} of {len(chapters)}")
-    fill(slide, "Title", s.get("title") or chapters[n - 1])
+    title = s.get("title") or chapters[n - 1]
+    fill(slide, "Title", title)
+    _grow_chapter_title(ctx, slide, title)
     fill(slide, "Line", s.get("line"))
     _frame(ctx, slide, s, chapter=n)
 
@@ -226,7 +252,7 @@ def render_scale(ctx: Ctx, s: dict) -> None:
     else:
         timeline(slide, s["timeline"]["points"])
     if s.get("caption"):
-        scale_caption(slide, s["caption"])
+        scale_caption(slide, s["caption"], y=490 if "scale" in s else 510)  # unter zweizeiligen Zeitstrahl-Texten
     _points(slide, s.get("points"))
     _frame(ctx, slide, s)
 

@@ -83,7 +83,7 @@ def _check_scale(s):
     else:
         problems.append("needs 'scale' or 'timeline'")
     if "points" in s:
-        problems += _items(s["points"], "points", 1, 3, ("lead", "text"))
+        problems += _items(s["points"], "points", 1, 2, ("lead", "text"))
     return problems
 
 

@@ -12,7 +12,7 @@ from campus.checks import check_deck
 from campus.measure import Measurer
 from campus.render import render_pdf
 from campus.template import layout_spec
-from campus.tokens import px
+from campus.tokens import PH_IDX, px
 from conftest import REPO, SKILL
 
 FIXTURE = REPO / "tests" / "fixtures" / "minimal-plan.json"
@@ -81,6 +81,69 @@ def test_font(plan, template_path, tmp_path, m):
     run.font.size = Pt(13)
     prs.save(path)
     assert kinds(check_deck(path, layout_spec(), m), "font")
+
+
+WIDGET_SLIDES = [
+    {"type": "points_chart", "title": "The Lamp: Position Is Power",
+     "points": [{"lead": "Lock the geometry.", "text": "Patient at 45°, lamp locked on the retractor."},
+                {"lead": "The expensive centimetre.", "text": "One centimetre of gap costs ≈50% of the power."}],
+     "chart": {"title": "Light power at the enamel",
+               "bars": [{"label": "Lamp docked on the retractor", "value": 100, "highlight": True},
+                        {"label": "1 cm of extra gap", "value": 56}],
+               "note": "1 cm of extra gap ≈ 50% less light power"}},
+    {"type": "scale", "title": "The Aftercare Window",
+     "timeline": {"points": [{"at": "Minutes", "label": "Basal layer forms"},
+                             {"at": "~2 h", "label": "Near-full thickness"},
+                             {"at": "18–24 h", "label": "Maturation in vivo"}]}},
+    {"type": "summary", "title": "The SOP Blueprint", "items": [
+        {"title": "Protect", "text": "Vitamin E or vaseline, correct retractor, goggles, cured barrier — avoid the Seven Sins."},
+        {"title": "Activate & monitor", "text": "Lamp locked on the retractor · fläshcard discipline · comfort checkpoints."},
+        {"title": "Seal & instruct", "text": "Mousse, the aftercare window, the departure gift — identically, every time."}]},
+    {"type": "closing", "title": "Make It Your Team’s Reflex", "steps": [
+        {"title": "Run one full dry run", "text": "No patient in the chair — your assistant drives the fläshcard start to finish."},
+        {"title": "Appoint an SOP owner", "text": "One team member owns this protocol — and audits the clinic against it."},
+        {"title": "Laminate the phases", "text": "Visible chairside, next to the Seven Sins of Improper Isolation."}],
+     "next": {"title": "Episode 03 · Sensitivity", "text": "Preventing it, managing it."}},
+]
+
+
+def test_widgets_fit_their_boxes(plan, template_path, tmp_path, m):
+    """Einzeilige Beschriftungen, dreizeilige Zusammenfassungen und zweizeilige Schritte passen in ihre Boxen."""
+    plan["slides"] = copy.deepcopy(WIDGET_SLIDES)
+    path = build(plan, template_path, tmp_path)
+    assert kinds(check_deck(path, layout_spec(), m), "overflow") == []
+    shapes = {s.name: s for s in Presentation(path).slides[0].shapes}
+    for i in (1, 2):
+        label, track = shapes[f"bar-label-{i}"], shapes[f"bar-track-{i}"]
+        assert label.top + label.height <= track.top
+
+
+def test_timeline_caption_below_labels(plan, template_path, tmp_path, m):
+    """Zweizeilige Zeitstrahl-Beschriftungen und die Bildunterschrift überlappen nicht."""
+    plan["slides"] = [{"type": "scale", "title": "The Aftercare Window", "caption": "The pellicle rebuilds fast",
+                       "timeline": {"points": [{"at": "Minutes", "label": "Basal pellicle layer forms quickly"},
+                                               {"at": "~2 h", "label": "Near-full thickness"},
+                                               {"at": "18–24 h", "label": "Maturation in vivo"}]},
+                       "points": [{"lead": "Mind the first hours.", "text": "Chromogen-light choices."}]}]
+    path = build(plan, template_path, tmp_path)
+    assert check_deck(path, layout_spec(), m) == []
+    shapes = {s.name: s for s in Presentation(path).slides[0].shapes}
+    caption = shapes["scale-caption"]
+    assert all(caption.top >= s.top + s.height for n, s in shapes.items() if n.startswith("tl-label-"))
+    points = next(s for s in Presentation(path).slides[0].placeholders if s.placeholder_format.idx == PH_IDX["Points"])
+    assert caption.top + caption.height <= points.top
+
+
+def test_chapter_title_two_lines(plan, template_path, tmp_path, m):
+    plan["slides"] = [{"type": "chapter", "chapter": n, "line": "The last ten minutes decide how the first sixty are remembered."}
+                      for n in (4, 5)]
+    path = build(plan, template_path, tmp_path)
+    assert check_deck(path, layout_spec(), m) == []
+    for slide in Presentation(path).slides:
+        title = next(s for s in slide.placeholders if s.placeholder_format.idx == 0)
+        line = next(s for s in slide.placeholders if s.placeholder_format.idx == PH_IDX["Line"])
+        assert line.top >= title.top + title.height
+        assert line.top + line.height <= px(1000)
 
 
 @pytest.mark.slow

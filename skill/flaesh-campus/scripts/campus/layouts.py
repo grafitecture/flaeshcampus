@@ -123,7 +123,7 @@ def _light(name: str, key: str, *extra: PhDef, title: bool = True) -> LayoutDef:
     return _layout(name, key, "light", [*head, *extra])
 
 
-_PHOTO_CARD = {"fill": COLOR["night"], "fill_alpha": 85}
+_PHOTO_CARD = {"fill": COLOR["night"]}  # deckend und 2 px überlappend: ein Band ohne helle Fugen
 
 LAYOUTS: list[LayoutDef] = [
     _layout("01 Title", "cover", "cover", [
@@ -181,9 +181,9 @@ LAYOUTS: list[LayoutDef] = [
     _light("13 Summary", "summary"),
     _layout("14 Photo", "photo", "full", [
         pic_ph("Photo", (150, 0, 1770, 1080)),
-        PhDef("Kicker", "body", (190, 780, 1300, 60), [KICKER], ["Step by step"],
+        PhDef("Kicker", "body", (190, 780, 1300, 62), [KICKER], ["Step by step"],
               insets=(40, 22, 40, 0), **_PHOTO_CARD),
-        PhDef("Title", "title", (190, 840, 1300, 110), [lvl("title", "white")], ["Photo title"],
+        PhDef("Title", "title", (190, 840, 1300, 112), [lvl("title", "white")], ["Photo title"],
               insets=(40, 6, 40, 0), **_PHOTO_CARD),
         text_ph("Caption", (190, 950, 1300, 90), "body", "on_dark", "Caption", insets=(40, 0, 40, 18),
                 **_PHOTO_CARD),

@@ -33,6 +33,23 @@ def test_rail_active(prs):
     assert {f"rail-num-{i}" for i in range(1, 6)} <= set(names(slide))
 
 
+def glow_px(shape) -> float:
+    from pptx.oxml.ns import qn
+
+    glow = shape._element.spPr.find(qn("a:effectLst")).find(qn("a:glow"))
+    return int(glow.get("rad")) / 6350
+
+
+def test_rail_active_glow_clear_of_label(prs):
+    """Das Leuchten des aktiven Punkts bleibt klein (kein Leucht-Klotz) und lässt die Kapitelnummer frei."""
+    slide = new_slide(prs, "05 Points")
+    rail_progress(slide, CHAPTERS, 2, dark=False)
+    shapes = {s.name: s for s in slide.shapes}
+    dot, num = shapes["rail-dot-2-active"], shapes["rail-num-2"]
+    assert glow_px(dot) <= dot.width / 6350 / 2
+    assert dot.left + dot.width + px(glow_px(dot)) <= num.left
+
+
 @pytest.mark.parametrize("n", [2, 6])
 def test_rail_bounds(prs, n):
     slide = new_slide(prs, "05 Points")

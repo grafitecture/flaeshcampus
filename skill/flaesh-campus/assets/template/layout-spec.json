@@ -1,0 +1,2069 @@
+{
+  "01 Title": {
+    "key": "cover",
+    "frame": "cover",
+    "zone": false,
+    "placeholders": {
+      "Episode": {
+        "idx": 10,
+        "type": "body",
+        "box": [
+          0,
+          108,
+          150,
+          70
+        ],
+        "levels": [
+          {
+            "size_pt": 31,
+            "color": "FFFFFF",
+            "align": "center"
+          }
+        ],
+        "insets": [
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "Kicker": {
+        "idx": 11,
+        "type": "body",
+        "box": [
+          230,
+          356,
+          980,
+          40
+        ],
+        "levels": [
+          {
+            "size_pt": 14,
+            "color": "00A5FF",
+            "caps": true,
+            "spc": 196
+          }
+        ],
+        "insets": [
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "Title": {
+        "idx": 0,
+        "type": "title",
+        "box": [
+          226,
+          404,
+          960,
+          230
+        ],
+        "levels": [
+          {
+            "size_pt": 52,
+            "color": "FFFFFF",
+            "ln_spc_pct": 90
+          }
+        ],
+        "insets": [
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "Subtitle": {
+        "idx": 12,
+        "type": "body",
+        "box": [
+          230,
+          654,
+          820,
+          110
+        ],
+        "levels": [
+          {
+            "size_pt": 20,
+            "color": "C9D4DA"
+          }
+        ],
+        "insets": [
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "Presenter": {
+        "idx": 13,
+        "type": "body",
+        "box": [
+          230,
+          876,
+          1000,
+          52
+        ],
+        "levels": [
+          {
+            "size_pt": 21,
+            "color": "FFFFFF"
+          }
+        ],
+        "insets": [
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "Credentials": {
+        "idx": 14,
+        "type": "body",
+        "box": [
+          230,
+          930,
+          1000,
+          80
+        ],
+        "levels": [
+          {
+            "size_pt": 13,
+            "color": "ABB7BE"
+          }
+        ],
+        "insets": [
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "Photo": {
+        "idx": 15,
+        "type": "pic",
+        "box": [
+          1236,
+          250,
+          580,
+          580
+        ],
+        "levels": [
+          {
+            "size_pt": 13,
+            "color": "7D8B91",
+            "align": "center"
+          }
+        ],
+        "insets": [
+          0,
+          0,
+          0,
+          0
+        ]
+      }
+    }
+  },
+  "02 Chapter": {
+    "key": "chapter",
+    "frame": "dark",
+    "zone": true,
+    "placeholders": {
+      "Episode": {
+        "idx": 10,
+        "type": "body",
+        "box": [
+          0,
+          108,
+          150,
+          70
+        ],
+        "levels": [
+          {
+            "size_pt": 31,
+            "color": "FFFFFF",
+            "align": "center"
+          }
+        ],
+        "insets": [
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "Number": {
+        "idx": 16,
+        "type": "body",
+        "box": [
+          230,
+          20,
+          560,
+          880
+        ],
+        "levels": [
+          {
+            "size_pt": 400,
+            "color": "00A5FF",
+            "ln_spc_pct": 85,
+            "glow": [
+              "00A5FF",
+              80,
+              65
+            ]
+          }
+        ],
+        "insets": [
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "Kicker": {
+        "idx": 11,
+        "type": "body",
+        "box": [
+          800,
+          330,
+          900,
+          40
+        ],
+        "levels": [
+          {
+            "size_pt": 14,
+            "color": "00A5FF",
+            "caps": true,
+            "spc": 196
+          }
+        ],
+        "insets": [
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "Title": {
+        "idx": 0,
+        "type": "title",
+        "box": [
+          792,
+          376,
+          1000,
+          180
+        ],
+        "levels": [
+          {
+            "size_pt": 85,
+            "color": "FFFFFF",
+            "ln_spc_pct": 90
+          }
+        ],
+        "insets": [
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "Line": {
+        "idx": 17,
+        "type": "body",
+        "box": [
+          800,
+          590,
+          700,
+          130
+        ],
+        "levels": [
+          {
+            "size_pt": 23,
+            "color": "C9D4DA"
+          }
+        ],
+        "insets": [
+          0,
+          0,
+          0,
+          0
+        ]
+      }
+    }
+  },
+  "03 Hook": {
+    "key": "hook",
+    "frame": "dark",
+    "zone": true,
+    "placeholders": {
+      "Episode": {
+        "idx": 10,
+        "type": "body",
+        "box": [
+          0,
+          108,
+          150,
+          70
+        ],
+        "levels": [
+          {
+            "size_pt": 31,
+            "color": "FFFFFF",
+            "align": "center"
+          }
+        ],
+        "insets": [
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "Kicker": {
+        "idx": 11,
+        "type": "body",
+        "box": [
+          240,
+          110,
+          1500,
+          40
+        ],
+        "levels": [
+          {
+            "size_pt": 14,
+            "color": "00A5FF",
+            "caps": true,
+            "spc": 196
+          }
+        ],
+        "insets": [
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "Quote": {
+        "idx": 18,
+        "type": "body",
+        "box": [
+          240,
+          170,
+          1300,
+          300
+        ],
+        "levels": [
+          {
+            "size_pt": 36,
+            "color": "FFFFFF"
+          }
+        ],
+        "insets": [
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "TruthLabel": {
+        "idx": 19,
+        "type": "body",
+        "box": [
+          290,
+          560,
+          500,
+          30
+        ],
+        "levels": [
+          {
+            "size_pt": 11,
+            "color": "ABB7BE",
+            "caps": true,
+            "spc": 176
+          }
+        ],
+        "insets": [
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "TruthText": {
+        "idx": 20,
+        "type": "body",
+        "box": [
+          290,
+          610,
+          500,
+          240
+        ],
+        "levels": [
+          {
+            "size_pt": 17,
+            "color": "C9D4DA"
+          }
+        ],
+        "insets": [
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "AnswerLabel": {
+        "idx": 21,
+        "type": "body",
+        "box": [
+          930,
+          560,
+          520,
+          30
+        ],
+        "levels": [
+          {
+            "size_pt": 11,
+            "color": "00A5FF",
+            "caps": true,
+            "spc": 176
+          }
+        ],
+        "insets": [
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "AnswerText": {
+        "idx": 22,
+        "type": "body",
+        "box": [
+          930,
+          610,
+          520,
+          240
+        ],
+        "levels": [
+          {
+            "size_pt": 17,
+            "color": "FFFFFF"
+          }
+        ],
+        "insets": [
+          0,
+          0,
+          0,
+          0
+        ]
+      }
+    }
+  },
+  "04 Closing": {
+    "key": "closing",
+    "frame": "dark",
+    "zone": true,
+    "placeholders": {
+      "Episode": {
+        "idx": 10,
+        "type": "body",
+        "box": [
+          0,
+          108,
+          150,
+          70
+        ],
+        "levels": [
+          {
+            "size_pt": 31,
+            "color": "FFFFFF",
+            "align": "center"
+          }
+        ],
+        "insets": [
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "Kicker": {
+        "idx": 11,
+        "type": "body",
+        "box": [
+          240,
+          110,
+          1500,
+          40
+        ],
+        "levels": [
+          {
+            "size_pt": 14,
+            "color": "00A5FF",
+            "caps": true,
+            "spc": 196
+          }
+        ],
+        "insets": [
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "Title": {
+        "idx": 0,
+        "type": "title",
+        "box": [
+          240,
+          150,
+          1500,
+          100
+        ],
+        "levels": [
+          {
+            "size_pt": 39,
+            "color": "FFFFFF"
+          }
+        ],
+        "insets": [
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "NextLabel": {
+        "idx": 23,
+        "type": "body",
+        "box": [
+          1230,
+          370,
+          520,
+          30
+        ],
+        "levels": [
+          {
+            "size_pt": 11,
+            "color": "00A5FF",
+            "caps": true,
+            "spc": 176
+          }
+        ],
+        "insets": [
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "NextTitle": {
+        "idx": 24,
+        "type": "body",
+        "box": [
+          1230,
+          410,
+          520,
+          120
+        ],
+        "levels": [
+          {
+            "size_pt": 21,
+            "color": "FFFFFF"
+          }
+        ],
+        "insets": [
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "NextText": {
+        "idx": 25,
+        "type": "body",
+        "box": [
+          1230,
+          540,
+          520,
+          110
+        ],
+        "levels": [
+          {
+            "size_pt": 17,
+            "color": "C9D4DA"
+          }
+        ],
+        "insets": [
+          0,
+          0,
+          0,
+          0
+        ]
+      }
+    }
+  },
+  "05 Points": {
+    "key": "points",
+    "frame": "light",
+    "zone": true,
+    "placeholders": {
+      "Episode": {
+        "idx": 10,
+        "type": "body",
+        "box": [
+          0,
+          108,
+          150,
+          70
+        ],
+        "levels": [
+          {
+            "size_pt": 31,
+            "color": "FFFFFF",
+            "align": "center"
+          }
+        ],
+        "insets": [
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "Kicker": {
+        "idx": 11,
+        "type": "body",
+        "box": [
+          240,
+          110,
+          1500,
+          40
+        ],
+        "levels": [
+          {
+            "size_pt": 14,
+            "color": "00A5FF",
+            "caps": true,
+            "spc": 196
+          }
+        ],
+        "insets": [
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "Title": {
+        "idx": 0,
+        "type": "title",
+        "box": [
+          240,
+          150,
+          1500,
+          100
+        ],
+        "levels": [
+          {
+            "size_pt": 39,
+            "color": "5D6C73"
+          }
+        ],
+        "insets": [
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "Points": {
+        "idx": 26,
+        "type": "body",
+        "box": [
+          240,
+          330,
+          1260,
+          560
+        ],
+        "levels": [
+          {
+            "size_pt": 21,
+            "color": "5D6C73",
+            "spc_before_pt": 22,
+            "mar_l_px": 80,
+            "indent_px": -80,
+            "tab_px": 80
+          },
+          {
+            "size_pt": 17,
+            "color": "333333",
+            "spc_before_pt": 6,
+            "mar_l_px": 80
+          }
+        ],
+        "insets": [
+          0,
+          0,
+          0,
+          0
+        ]
+      }
+    }
+  },
+  "06 Points + Photo": {
+    "key": "points_photo",
+    "frame": "light",
+    "zone": true,
+    "placeholders": {
+      "Episode": {
+        "idx": 10,
+        "type": "body",
+        "box": [
+          0,
+          108,
+          150,
+          70
+        ],
+        "levels": [
+          {
+            "size_pt": 31,
+            "color": "FFFFFF",
+            "align": "center"
+          }
+        ],
+        "insets": [
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "Kicker": {
+        "idx": 11,
+        "type": "body",
+        "box": [
+          240,
+          110,
+          1500,
+          40
+        ],
+        "levels": [
+          {
+            "size_pt": 14,
+            "color": "00A5FF",
+            "caps": true,
+            "spc": 196
+          }
+        ],
+        "insets": [
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "Title": {
+        "idx": 0,
+        "type": "title",
+        "box": [
+          240,
+          150,
+          1500,
+          100
+        ],
+        "levels": [
+          {
+            "size_pt": 39,
+            "color": "5D6C73"
+          }
+        ],
+        "insets": [
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "Points": {
+        "idx": 26,
+        "type": "body",
+        "box": [
+          240,
+          330,
+          700,
+          560
+        ],
+        "levels": [
+          {
+            "size_pt": 21,
+            "color": "5D6C73",
+            "spc_before_pt": 22,
+            "mar_l_px": 80,
+            "indent_px": -80,
+            "tab_px": 80
+          },
+          {
+            "size_pt": 17,
+            "color": "333333",
+            "spc_before_pt": 6,
+            "mar_l_px": 80
+          }
+        ],
+        "insets": [
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "Photo": {
+        "idx": 15,
+        "type": "pic",
+        "box": [
+          1000,
+          300,
+          800,
+          400
+        ],
+        "levels": [
+          {
+            "size_pt": 13,
+            "color": "7D8B91",
+            "align": "center"
+          }
+        ],
+        "insets": [
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "Caption": {
+        "idx": 27,
+        "type": "body",
+        "box": [
+          1000,
+          712,
+          540,
+          40
+        ],
+        "levels": [
+          {
+            "size_pt": 13,
+            "color": "7D8B91"
+          }
+        ],
+        "insets": [
+          0,
+          0,
+          0,
+          0
+        ]
+      }
+    }
+  },
+  "07 Points + Chart": {
+    "key": "points_chart",
+    "frame": "light",
+    "zone": true,
+    "placeholders": {
+      "Episode": {
+        "idx": 10,
+        "type": "body",
+        "box": [
+          0,
+          108,
+          150,
+          70
+        ],
+        "levels": [
+          {
+            "size_pt": 31,
+            "color": "FFFFFF",
+            "align": "center"
+          }
+        ],
+        "insets": [
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "Kicker": {
+        "idx": 11,
+        "type": "body",
+        "box": [
+          240,
+          110,
+          1500,
+          40
+        ],
+        "levels": [
+          {
+            "size_pt": 14,
+            "color": "00A5FF",
+            "caps": true,
+            "spc": 196
+          }
+        ],
+        "insets": [
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "Title": {
+        "idx": 0,
+        "type": "title",
+        "box": [
+          240,
+          150,
+          1500,
+          100
+        ],
+        "levels": [
+          {
+            "size_pt": 39,
+            "color": "5D6C73"
+          }
+        ],
+        "insets": [
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "Points": {
+        "idx": 26,
+        "type": "body",
+        "box": [
+          240,
+          330,
+          700,
+          560
+        ],
+        "levels": [
+          {
+            "size_pt": 21,
+            "color": "5D6C73",
+            "spc_before_pt": 22,
+            "mar_l_px": 80,
+            "indent_px": -80,
+            "tab_px": 80
+          },
+          {
+            "size_pt": 17,
+            "color": "333333",
+            "spc_before_pt": 6,
+            "mar_l_px": 80
+          }
+        ],
+        "insets": [
+          0,
+          0,
+          0,
+          0
+        ]
+      }
+    }
+  },
+  "08 Statement": {
+    "key": "statement",
+    "frame": "light",
+    "zone": true,
+    "placeholders": {
+      "Episode": {
+        "idx": 10,
+        "type": "body",
+        "box": [
+          0,
+          108,
+          150,
+          70
+        ],
+        "levels": [
+          {
+            "size_pt": 31,
+            "color": "FFFFFF",
+            "align": "center"
+          }
+        ],
+        "insets": [
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "Kicker": {
+        "idx": 11,
+        "type": "body",
+        "box": [
+          240,
+          110,
+          1500,
+          40
+        ],
+        "levels": [
+          {
+            "size_pt": 14,
+            "color": "00A5FF",
+            "caps": true,
+            "spc": 196
+          }
+        ],
+        "insets": [
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "Big": {
+        "idx": 28,
+        "type": "body",
+        "box": [
+          240,
+          200,
+          1300,
+          330
+        ],
+        "levels": [
+          {
+            "size_pt": 160,
+            "color": "00A5FF",
+            "ln_spc_pct": 85
+          }
+        ],
+        "insets": [
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "Statement": {
+        "idx": 29,
+        "type": "body",
+        "box": [
+          240,
+          560,
+          1200,
+          150
+        ],
+        "levels": [
+          {
+            "size_pt": 32,
+            "color": "5D6C73"
+          }
+        ],
+        "insets": [
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "Text": {
+        "idx": 30,
+        "type": "body",
+        "box": [
+          240,
+          730,
+          1200,
+          130
+        ],
+        "levels": [
+          {
+            "size_pt": 17,
+            "color": "333333"
+          }
+        ],
+        "insets": [
+          0,
+          0,
+          0,
+          0
+        ]
+      }
+    }
+  },
+  "09 Checklist": {
+    "key": "checklist",
+    "frame": "light",
+    "zone": true,
+    "placeholders": {
+      "Episode": {
+        "idx": 10,
+        "type": "body",
+        "box": [
+          0,
+          108,
+          150,
+          70
+        ],
+        "levels": [
+          {
+            "size_pt": 31,
+            "color": "FFFFFF",
+            "align": "center"
+          }
+        ],
+        "insets": [
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "Kicker": {
+        "idx": 11,
+        "type": "body",
+        "box": [
+          240,
+          110,
+          1500,
+          40
+        ],
+        "levels": [
+          {
+            "size_pt": 14,
+            "color": "00A5FF",
+            "caps": true,
+            "spc": 196
+          }
+        ],
+        "insets": [
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "Title": {
+        "idx": 0,
+        "type": "title",
+        "box": [
+          240,
+          150,
+          1500,
+          100
+        ],
+        "levels": [
+          {
+            "size_pt": 39,
+            "color": "5D6C73"
+          }
+        ],
+        "insets": [
+          0,
+          0,
+          0,
+          0
+        ]
+      }
+    }
+  },
+  "10 Steps": {
+    "key": "steps",
+    "frame": "light",
+    "zone": true,
+    "placeholders": {
+      "Episode": {
+        "idx": 10,
+        "type": "body",
+        "box": [
+          0,
+          108,
+          150,
+          70
+        ],
+        "levels": [
+          {
+            "size_pt": 31,
+            "color": "FFFFFF",
+            "align": "center"
+          }
+        ],
+        "insets": [
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "Kicker": {
+        "idx": 11,
+        "type": "body",
+        "box": [
+          240,
+          110,
+          1500,
+          40
+        ],
+        "levels": [
+          {
+            "size_pt": 14,
+            "color": "00A5FF",
+            "caps": true,
+            "spc": 196
+          }
+        ],
+        "insets": [
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "Title": {
+        "idx": 0,
+        "type": "title",
+        "box": [
+          240,
+          150,
+          1500,
+          100
+        ],
+        "levels": [
+          {
+            "size_pt": 39,
+            "color": "5D6C73"
+          }
+        ],
+        "insets": [
+          0,
+          0,
+          0,
+          0
+        ]
+      }
+    }
+  },
+  "11 Compare": {
+    "key": "compare",
+    "frame": "light",
+    "zone": true,
+    "placeholders": {
+      "Episode": {
+        "idx": 10,
+        "type": "body",
+        "box": [
+          0,
+          108,
+          150,
+          70
+        ],
+        "levels": [
+          {
+            "size_pt": 31,
+            "color": "FFFFFF",
+            "align": "center"
+          }
+        ],
+        "insets": [
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "Kicker": {
+        "idx": 11,
+        "type": "body",
+        "box": [
+          240,
+          110,
+          1500,
+          40
+        ],
+        "levels": [
+          {
+            "size_pt": 14,
+            "color": "00A5FF",
+            "caps": true,
+            "spc": 196
+          }
+        ],
+        "insets": [
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "Title": {
+        "idx": 0,
+        "type": "title",
+        "box": [
+          240,
+          150,
+          1500,
+          100
+        ],
+        "levels": [
+          {
+            "size_pt": 39,
+            "color": "5D6C73"
+          }
+        ],
+        "insets": [
+          0,
+          0,
+          0,
+          0
+        ]
+      }
+    }
+  },
+  "12 Scale": {
+    "key": "scale",
+    "frame": "light",
+    "zone": true,
+    "placeholders": {
+      "Episode": {
+        "idx": 10,
+        "type": "body",
+        "box": [
+          0,
+          108,
+          150,
+          70
+        ],
+        "levels": [
+          {
+            "size_pt": 31,
+            "color": "FFFFFF",
+            "align": "center"
+          }
+        ],
+        "insets": [
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "Kicker": {
+        "idx": 11,
+        "type": "body",
+        "box": [
+          240,
+          110,
+          1500,
+          40
+        ],
+        "levels": [
+          {
+            "size_pt": 14,
+            "color": "00A5FF",
+            "caps": true,
+            "spc": 196
+          }
+        ],
+        "insets": [
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "Title": {
+        "idx": 0,
+        "type": "title",
+        "box": [
+          240,
+          150,
+          1500,
+          100
+        ],
+        "levels": [
+          {
+            "size_pt": 39,
+            "color": "5D6C73"
+          }
+        ],
+        "insets": [
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "Points": {
+        "idx": 26,
+        "type": "body",
+        "box": [
+          240,
+          560,
+          1260,
+          330
+        ],
+        "levels": [
+          {
+            "size_pt": 21,
+            "color": "5D6C73",
+            "spc_before_pt": 22,
+            "mar_l_px": 80,
+            "indent_px": -80,
+            "tab_px": 80
+          },
+          {
+            "size_pt": 17,
+            "color": "333333",
+            "spc_before_pt": 6,
+            "mar_l_px": 80
+          }
+        ],
+        "insets": [
+          0,
+          0,
+          0,
+          0
+        ]
+      }
+    }
+  },
+  "13 Summary": {
+    "key": "summary",
+    "frame": "light",
+    "zone": true,
+    "placeholders": {
+      "Episode": {
+        "idx": 10,
+        "type": "body",
+        "box": [
+          0,
+          108,
+          150,
+          70
+        ],
+        "levels": [
+          {
+            "size_pt": 31,
+            "color": "FFFFFF",
+            "align": "center"
+          }
+        ],
+        "insets": [
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "Kicker": {
+        "idx": 11,
+        "type": "body",
+        "box": [
+          240,
+          110,
+          1500,
+          40
+        ],
+        "levels": [
+          {
+            "size_pt": 14,
+            "color": "00A5FF",
+            "caps": true,
+            "spc": 196
+          }
+        ],
+        "insets": [
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "Title": {
+        "idx": 0,
+        "type": "title",
+        "box": [
+          240,
+          150,
+          1500,
+          100
+        ],
+        "levels": [
+          {
+            "size_pt": 39,
+            "color": "5D6C73"
+          }
+        ],
+        "insets": [
+          0,
+          0,
+          0,
+          0
+        ]
+      }
+    }
+  },
+  "14 Photo": {
+    "key": "photo",
+    "frame": "full",
+    "zone": true,
+    "placeholders": {
+      "Episode": {
+        "idx": 10,
+        "type": "body",
+        "box": [
+          0,
+          108,
+          150,
+          70
+        ],
+        "levels": [
+          {
+            "size_pt": 31,
+            "color": "FFFFFF",
+            "align": "center"
+          }
+        ],
+        "insets": [
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "Photo": {
+        "idx": 15,
+        "type": "pic",
+        "box": [
+          150,
+          0,
+          1770,
+          1080
+        ],
+        "levels": [
+          {
+            "size_pt": 13,
+            "color": "7D8B91",
+            "align": "center"
+          }
+        ],
+        "insets": [
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "Kicker": {
+        "idx": 11,
+        "type": "body",
+        "box": [
+          190,
+          780,
+          1300,
+          62
+        ],
+        "levels": [
+          {
+            "size_pt": 14,
+            "color": "00A5FF",
+            "caps": true,
+            "spc": 196
+          }
+        ],
+        "insets": [
+          40,
+          22,
+          40,
+          0
+        ]
+      },
+      "Title": {
+        "idx": 0,
+        "type": "title",
+        "box": [
+          190,
+          840,
+          1300,
+          112
+        ],
+        "levels": [
+          {
+            "size_pt": 39,
+            "color": "FFFFFF"
+          }
+        ],
+        "insets": [
+          40,
+          6,
+          40,
+          0
+        ]
+      },
+      "Caption": {
+        "idx": 27,
+        "type": "body",
+        "box": [
+          190,
+          950,
+          1300,
+          90
+        ],
+        "levels": [
+          {
+            "size_pt": 17,
+            "color": "C9D4DA"
+          }
+        ],
+        "insets": [
+          40,
+          0,
+          40,
+          18
+        ]
+      }
+    }
+  },
+  "15 Before / After": {
+    "key": "before_after",
+    "frame": "light",
+    "zone": true,
+    "placeholders": {
+      "Episode": {
+        "idx": 10,
+        "type": "body",
+        "box": [
+          0,
+          108,
+          150,
+          70
+        ],
+        "levels": [
+          {
+            "size_pt": 31,
+            "color": "FFFFFF",
+            "align": "center"
+          }
+        ],
+        "insets": [
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "Kicker": {
+        "idx": 11,
+        "type": "body",
+        "box": [
+          240,
+          110,
+          1500,
+          40
+        ],
+        "levels": [
+          {
+            "size_pt": 14,
+            "color": "00A5FF",
+            "caps": true,
+            "spc": 196
+          }
+        ],
+        "insets": [
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "Title": {
+        "idx": 0,
+        "type": "title",
+        "box": [
+          240,
+          150,
+          1500,
+          100
+        ],
+        "levels": [
+          {
+            "size_pt": 39,
+            "color": "5D6C73"
+          }
+        ],
+        "insets": [
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "PhotoBefore": {
+        "idx": 31,
+        "type": "pic",
+        "box": [
+          240,
+          330,
+          600,
+          400
+        ],
+        "levels": [
+          {
+            "size_pt": 13,
+            "color": "7D8B91",
+            "align": "center"
+          }
+        ],
+        "insets": [
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "PhotoAfter": {
+        "idx": 32,
+        "type": "pic",
+        "box": [
+          900,
+          330,
+          600,
+          400
+        ],
+        "levels": [
+          {
+            "size_pt": 13,
+            "color": "7D8B91",
+            "align": "center"
+          }
+        ],
+        "insets": [
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "LabelBefore": {
+        "idx": 33,
+        "type": "body",
+        "box": [
+          240,
+          750,
+          600,
+          40
+        ],
+        "levels": [
+          {
+            "size_pt": 17,
+            "color": "5D6C73"
+          }
+        ],
+        "insets": [
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "LabelAfter": {
+        "idx": 34,
+        "type": "body",
+        "box": [
+          900,
+          750,
+          600,
+          40
+        ],
+        "levels": [
+          {
+            "size_pt": 17,
+            "color": "5D6C73"
+          }
+        ],
+        "insets": [
+          0,
+          0,
+          0,
+          0
+        ]
+      }
+    }
+  },
+  "16 Photo Annotated": {
+    "key": "photo_annotated",
+    "frame": "light",
+    "zone": true,
+    "placeholders": {
+      "Episode": {
+        "idx": 10,
+        "type": "body",
+        "box": [
+          0,
+          108,
+          150,
+          70
+        ],
+        "levels": [
+          {
+            "size_pt": 31,
+            "color": "FFFFFF",
+            "align": "center"
+          }
+        ],
+        "insets": [
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "Kicker": {
+        "idx": 11,
+        "type": "body",
+        "box": [
+          240,
+          110,
+          1500,
+          40
+        ],
+        "levels": [
+          {
+            "size_pt": 14,
+            "color": "00A5FF",
+            "caps": true,
+            "spc": 196
+          }
+        ],
+        "insets": [
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "Title": {
+        "idx": 0,
+        "type": "title",
+        "box": [
+          240,
+          150,
+          1500,
+          100
+        ],
+        "levels": [
+          {
+            "size_pt": 39,
+            "color": "5D6C73"
+          }
+        ],
+        "insets": [
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "Photo": {
+        "idx": 15,
+        "type": "pic",
+        "box": [
+          240,
+          300,
+          900,
+          600
+        ],
+        "levels": [
+          {
+            "size_pt": 13,
+            "color": "7D8B91",
+            "align": "center"
+          }
+        ],
+        "insets": [
+          0,
+          0,
+          0,
+          0
+        ]
+      }
+    }
+  },
+  "17 Case": {
+    "key": "case",
+    "frame": "light",
+    "zone": true,
+    "placeholders": {
+      "Episode": {
+        "idx": 10,
+        "type": "body",
+        "box": [
+          0,
+          108,
+          150,
+          70
+        ],
+        "levels": [
+          {
+            "size_pt": 31,
+            "color": "FFFFFF",
+            "align": "center"
+          }
+        ],
+        "insets": [
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "Kicker": {
+        "idx": 11,
+        "type": "body",
+        "box": [
+          240,
+          110,
+          1500,
+          40
+        ],
+        "levels": [
+          {
+            "size_pt": 14,
+            "color": "00A5FF",
+            "caps": true,
+            "spc": 196
+          }
+        ],
+        "insets": [
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "Title": {
+        "idx": 0,
+        "type": "title",
+        "box": [
+          240,
+          150,
+          1500,
+          100
+        ],
+        "levels": [
+          {
+            "size_pt": 39,
+            "color": "5D6C73"
+          }
+        ],
+        "insets": [
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "Story": {
+        "idx": 35,
+        "type": "body",
+        "box": [
+          240,
+          330,
+          1260,
+          150
+        ],
+        "levels": [
+          {
+            "size_pt": 21,
+            "color": "5D6C73"
+          }
+        ],
+        "insets": [
+          0,
+          0,
+          0,
+          0
+        ]
+      }
+    }
+  },
+  "18 Quiz": {
+    "key": "quiz",
+    "frame": "dark",
+    "zone": true,
+    "placeholders": {
+      "Episode": {
+        "idx": 10,
+        "type": "body",
+        "box": [
+          0,
+          108,
+          150,
+          70
+        ],
+        "levels": [
+          {
+            "size_pt": 31,
+            "color": "FFFFFF",
+            "align": "center"
+          }
+        ],
+        "insets": [
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "Kicker": {
+        "idx": 11,
+        "type": "body",
+        "box": [
+          240,
+          110,
+          1500,
+          40
+        ],
+        "levels": [
+          {
+            "size_pt": 14,
+            "color": "00A5FF",
+            "caps": true,
+            "spc": 196
+          }
+        ],
+        "insets": [
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "Question": {
+        "idx": 36,
+        "type": "body",
+        "box": [
+          240,
+          180,
+          1260,
+          220
+        ],
+        "levels": [
+          {
+            "size_pt": 36,
+            "color": "FFFFFF"
+          }
+        ],
+        "insets": [
+          0,
+          0,
+          0,
+          0
+        ]
+      }
+    }
+  }
+}

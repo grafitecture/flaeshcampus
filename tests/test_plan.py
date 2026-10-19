@@ -31,6 +31,15 @@ def test_points_bounds(plan):
     assert any("points: 2–4 items" in e for e in validate_plan(plan))
 
 
+def test_scale_points_bound(plan):
+    """Unter Skala oder Zeitstrahl passen höchstens zwei Punkte (Platzhalter 330 px hoch)."""
+    points = [{"lead": f"Point {i}", "text": "Text"} for i in range(3)]
+    plan["slides"].append({"type": "scale", "title": "Shade guide", "scale": {"items": ["B1", "A1"]}, "points": points})
+    assert any("slide 5 (scale): points: 1–2 items" in e for e in validate_plan(plan))
+    plan["slides"][-1]["points"] = points[:2]
+    assert validate_plan(plan) == []
+
+
 def test_chapter_range(plan):
     plan["slides"][2]["chapter"] = 6
     assert any("chapter 6 out of range 1–5" in e for e in validate_plan(plan))
