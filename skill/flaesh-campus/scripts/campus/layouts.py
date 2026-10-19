@@ -128,19 +128,19 @@ _PHOTO_CARD = {"fill": COLOR["night"], "fill_alpha": 85}
 LAYOUTS: list[LayoutDef] = [
     _layout("01 Title", "cover", "cover", [
         PhDef("Kicker", "body", (230, 356, 980, 40), [KICKER], ["Online Training · Episode 00"]),
-        PhDef("Title", "title", (226, 404, 960, 230), [lvl("display", "white", ln_spc_pct=102)],
+        PhDef("Title", "title", (226, 404, 960, 230), [lvl("display", "white", ln_spc_pct=90)],
               ["Episode title"]),
         text_ph("Subtitle", (230, 654, 820, 110), "subtitle", "on_dark", "Subtitle of the episode"),
-        text_ph("Presenter", (230, 880, 1000, 46), "lead", "white", "Dr. Germán Gómez"),
+        text_ph("Presenter", (230, 876, 1000, 52), "lead", "white", "Dr. Germán Gómez"),
         text_ph("Credentials", (230, 930, 1000, 80), "small", "steel", "Credentials"),
         PhDef("Photo", "pic", (1236, 250, 580, 580), PIC_LEVELS, ["Insert portrait"], anchor="ctr",
               geom="ellipse", line=(COLOR["sky"], 6), glow=(COLOR["sky"], 90, 60)),
     ]),
     _layout("02 Chapter", "chapter", "dark", [
         PhDef("Number", "body", (230, 20, 560, 880),
-              [lvl("chapter_number", "sky", glow=(COLOR["sky"], 80, 65))], ["1"]),
+              [lvl("chapter_number", "sky", ln_spc_pct=85, glow=(COLOR["sky"], 80, 65))], ["1"]),
         PhDef("Kicker", "body", (800, 330, 900, 40), [KICKER], ["Phase 1 of 5"]),
-        PhDef("Title", "title", (792, 376, 1000, 180), [lvl("chapter_title", "white")], ["Chapter"]),
+        PhDef("Title", "title", (792, 376, 1000, 180), [lvl("chapter_title", "white", ln_spc_pct=90)], ["Chapter"]),
         text_ph("Line", (800, 590, 700, 130), "line", "on_dark", "One sentence about this chapter."),
     ], decor=[
         DecorDef("radial", "glow-bg", (-60, -200, 1240, 1240),
@@ -171,7 +171,7 @@ LAYOUTS: list[LayoutDef] = [
            text_ph("Caption", (1000, 712, 540, 40), "small", "muted", "Photo caption")),
     _light("07 Points + Chart", "points_chart", points_ph((240, 330, 700, 560))),
     _light("08 Statement", "statement",
-           text_ph("Big", (240, 200, 1300, 330), "statement_big", "sky", "30"),
+           PhDef("Big", "body", (240, 200, 1300, 330), [lvl("statement_big", "sky", ln_spc_pct=85)], ["30"]),
            text_ph("Statement", (240, 560, 1200, 150), "statement", "slate", "Statement in one or two lines"),
            text_ph("Text", (240, 730, 1200, 130), "body", "ink", "Supporting sentence."), title=False),
     _light("09 Checklist", "checklist"),

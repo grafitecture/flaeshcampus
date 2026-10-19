@@ -14,7 +14,7 @@ EXPECTED = [
     ("01 Title", "Kicker", "body", (230, 356, 980, 40), "kicker"),
     ("01 Title", "Title", "title", (226, 404, 960, 230), "display"),
     ("01 Title", "Subtitle", "body", (230, 654, 820, 110), "subtitle"),
-    ("01 Title", "Presenter", "body", (230, 880, 1000, 46), "lead"),
+    ("01 Title", "Presenter", "body", (230, 876, 1000, 52), "lead"),
     ("01 Title", "Credentials", "body", (230, 930, 1000, 80), "small"),
     ("01 Title", "Photo", "pic", (1236, 250, 580, 580), "small"),
     ("02 Chapter", "Number", "body", (230, 20, 560, 880), "chapter_number"),
