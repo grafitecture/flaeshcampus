@@ -243,3 +243,49 @@ def to_placeholder(
         r.append(t)
         p.append(r)
         txBody.append(p)
+
+
+_ALIGN = {"left": "LEFT", "center": "CENTER", "right": "RIGHT"}
+_ANCHOR = {"t": "TOP", "ctr": "MIDDLE", "b": "BOTTOM"}
+
+
+def style_run(run, style: dict) -> None:
+    """Setzt Schrift, Größe, Farbe, Versalien und Laufweite eines Laufs explizit."""
+    from pptx.dml.color import RGBColor
+    from pptx.util import Pt
+
+    run.font.name = FONT
+    run.font.size = Pt(style["size_pt"])
+    run.font.bold = False
+    run.font.italic = False
+    run.font.color.rgb = RGBColor.from_string(style["color"])
+    rpr = run._r.get_or_add_rPr()
+    if style.get("caps"):
+        rpr.set("cap", "all")
+    if style.get("spc"):
+        rpr.set("spc", str(int(style["spc"])))
+    if style.get("glow"):
+        add_text_glow(rpr, *style["glow"])
+
+
+def fill_text_frame(tf, paragraphs: list[tuple[str, dict]], anchor: str = "t") -> None:
+    """Füllt einen Textrahmen: ein Lauf pro Absatz, ohne Innenabstand, ohne Autofit."""
+    from pptx.enum.text import MSO_ANCHOR, MSO_AUTO_SIZE, PP_ALIGN
+    from pptx.util import Pt
+
+    tf.word_wrap = True
+    tf.auto_size = MSO_AUTO_SIZE.NONE
+    tf.margin_left = tf.margin_right = tf.margin_top = tf.margin_bottom = 0
+    tf.vertical_anchor = getattr(MSO_ANCHOR, _ANCHOR[anchor])
+    for i, (text, style) in enumerate(paragraphs):
+        para = tf.paragraphs[0] if i == 0 else tf.add_paragraph()
+        para.alignment = getattr(PP_ALIGN, _ALIGN[style.get("align", "left")])
+        if style.get("ln_spc_pct"):
+            para.line_spacing = style["ln_spc_pct"] / 100
+        if style.get("spc_before_pt"):
+            para.space_before = Pt(style["spc_before_pt"])
+        if style.get("spc_after_pt"):
+            para.space_after = Pt(style["spc_after_pt"])
+        run = para.add_run()
+        run.text = text
+        style_run(run, style)

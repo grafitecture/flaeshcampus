@@ -18,9 +18,7 @@ def font_path() -> pathlib.Path:
 
 @pytest.fixture(scope="session")
 def template_path(tmp_path_factory) -> pathlib.Path:
-    try:
-        from campus.template import build_template
-    except ImportError:
-        pytest.skip("template builder not implemented yet")
+    from campus.template import build_template
+
     out = tmp_path_factory.mktemp("template") / "flaesh-campus-template.pptx"
     return build_template(out, SKILL / "assets")

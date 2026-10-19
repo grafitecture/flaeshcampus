@@ -70,3 +70,25 @@ def test_pic_placeholder_ellipse(layout_shapes):
     ph = shape._element.nvSpPr.nvPr.find(qn("p:ph"))
     assert ph.get("type") == "pic"
     assert shape._element.spPr.find(qn("a:prstGeom")).get("prst") == "ellipse"
+
+
+def test_fill_text_frame(layout_shapes):
+    from pptx.enum.text import PP_ALIGN
+    from pptx.util import Pt
+
+    from campus.oxml import fill_text_frame
+
+    tb = layout_shapes.add_textbox(0, px(84), px(150), px(30))
+    style = {"size_pt": 11, "color": "ABB7BE", "caps": True, "spc": 176, "align": "center"}
+    fill_text_frame(tb.text_frame, [("EP", style)], anchor="b")
+    para = tb.text_frame.paragraphs[0]
+    run = para.runs[0]
+    assert tb.text_frame.text == "EP"
+    assert run.font.size == Pt(11) and run.font.name == "Corporate S"
+    assert run.font.color.rgb == RGBColor.from_string("ABB7BE")
+    assert run._r.rPr.get("cap") == "all" and run._r.rPr.get("spc") == "176"
+    assert para.alignment == PP_ALIGN.CENTER
+    body_pr = tb.text_frame._txBody.bodyPr
+    assert body_pr.get("anchor") == "b" and body_pr.get("wrap") == "square"
+    assert body_pr.find(qn("a:spAutoFit")) is None
+    assert tb.text_frame.margin_left == 0 and tb.text_frame.margin_top == 0
