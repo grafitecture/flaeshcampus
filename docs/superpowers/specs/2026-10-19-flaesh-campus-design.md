@@ -115,7 +115,7 @@ flaesh-campus/
    - Sprecher-Notizen
 4. **Leuchten:**
    - Ringe, Punkte und Fokus-Boxen bekommen den PowerPoint-Effekt „Leuchten“.
-   - Flächiges Leuchten im Hintergrund liegt als PNG-Ebene in den dunklen Layouts.
+   - Flächiges Leuchten im Hintergrund ist eine Ellipse mit radialem Farbverlauf in den dunklen Layouts.
 5. **Prüfung:** `check_deck.py` misst jeden Text mit den echten Schriftmaßen von Corporate S. Es meldet:
    - Text, der überläuft
    - Elemente in der Kreis-Zone
@@ -129,7 +129,7 @@ flaesh-campus/
 
 | Fall | Reaktion |
 |---|---|
-| Unbekannter Folientyp | Folie wird als `points` gebaut, mit Hinweis in der Ausgabe |
+| Unbekannter Folientyp oder fehlendes Pflichtfeld | Build bricht mit klarer Meldung je Folie ab; Claude korrigiert den Folienplan und baut neu |
 | Text zu lang | Claude kürzt oder teilt die Folie und baut neu. Die Schriftgröße wird nicht verkleinert |
 | Foto fehlt oder ist zu klein | Platzhalter mit Briefing, Eintrag in der Fotoliste |
 | Schrift im Prüf-System nicht vorhanden | Prüfung mit Ersatzmaßen, Hinweis, dass die Feinprüfung in PowerPoint nötig ist |
