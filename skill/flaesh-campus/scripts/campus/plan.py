@@ -131,7 +131,7 @@ CHECKS = {
     "hook": lambda s: _text(s, "quote") + _box(s.get("truth"), "truth", ("text",))
     + _box(s.get("answer"), "answer", ("text",)),
     "closing": lambda s: _text(s, "title") + _items(s.get("steps"), "steps", 1, 3, ("title", "text"))
-    + (_box(s["next"], "next", ("title",)) if "next" in s else []),
+    + _box(s.get("next"), "next", ("title",)),
     "points": _check_points,
     "points_photo": _check_points_photo,
     "points_chart": _check_points_chart,

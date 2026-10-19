@@ -118,8 +118,9 @@ def _layout(name: str, key: str, frame: str, placeholders=(), decor=()) -> Layou
     return LayoutDef(name, key, frame, [EPISODE_PH, *placeholders], list(decor))
 
 
-def _light(name: str, key: str, *extra: PhDef) -> LayoutDef:
-    return _layout(name, key, "light", [KICKER_PH, title_ph(False), *extra])
+def _light(name: str, key: str, *extra: PhDef, title: bool = True) -> LayoutDef:
+    head = [KICKER_PH, title_ph(False)] if title else [KICKER_PH]
+    return _layout(name, key, "light", [*head, *extra])
 
 
 _PHOTO_CARD = {"fill": COLOR["night"], "fill_alpha": 85}
@@ -172,7 +173,7 @@ LAYOUTS: list[LayoutDef] = [
     _light("08 Statement", "statement",
            text_ph("Big", (240, 200, 1300, 330), "statement_big", "sky", "30"),
            text_ph("Statement", (240, 560, 1200, 150), "statement", "slate", "Statement in one or two lines"),
-           text_ph("Text", (240, 730, 1200, 130), "body", "ink", "Supporting sentence.")),
+           text_ph("Text", (240, 730, 1200, 130), "body", "ink", "Supporting sentence."), title=False),
     _light("09 Checklist", "checklist"),
     _light("10 Steps", "steps"),
     _light("11 Compare", "compare"),

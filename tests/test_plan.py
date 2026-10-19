@@ -66,3 +66,9 @@ def test_load_plan_raises(tmp_path, plan):
 def test_default_kicker(plan):
     assert default_kicker(plan, {"type": "points", "chapter": 3}) == "Phase 3 · Apply"
     assert default_kicker(plan, {"type": "points"}) is None
+
+
+def test_closing_needs_next(plan):
+    plan["slides"].append({"type": "closing", "title": "Make it your team's reflex",
+                           "steps": [{"title": "Run one dry run", "text": "No patient in the chair."}]})
+    assert any("missing 'next'" in e for e in validate_plan(plan))

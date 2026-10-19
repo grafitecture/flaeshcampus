@@ -99,3 +99,12 @@ def test_zone_ring_on_top(prs):
     last = list(slide.shapes)[-1]
     assert last.name == "zone-ring-top"
     assert (last.left, last.top, last.width, last.height) == tuple(px(v) for v in ZONE)
+
+
+def test_brief_card_stays_below_text(prs, tmp_path):
+    slide = new_slide(prs, "14 Photo")
+    place_photo(slide, PH_IDX["Photo"], {"brief": "Foto: Isolation complete"}, tmp_path, [])
+    order = [s.name for s in slide.shapes]
+    title = next(s.name for s in slide.placeholders if s.placeholder_format.idx == 0)
+    assert order.index("brief-card") < order.index(title)
+    assert order.index("brief-text") < order.index(title)

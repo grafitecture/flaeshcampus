@@ -16,7 +16,7 @@ NAMES = [
     "13 Summary", "14 Photo", "15 Before / After", "16 Photo Annotated", "17 Case", "18 Quiz",
 ]
 KICKER_LAYOUTS = NAMES[2:13] + NAMES[14:18]          # 03–13, 15–18
-TITLE_LAYOUTS = NAMES[3:13] + NAMES[14:17]           # 04–13, 15–17
+TITLE_LAYOUTS = NAMES[3:7] + NAMES[8:13] + NAMES[14:17]  # 04–07, 09–13, 15–17 (08 hat Big statt Titel)
 VALIDATE = pathlib.Path("/mnt/skills/public/pptx/scripts/office/validate.py")
 
 
@@ -79,7 +79,7 @@ def test_header(prs):
         lay = layout(prs, name)
         title = next(p for p in lay.placeholders if p.placeholder_format.type == PP_PLACEHOLDER.TITLE)
         assert box(title) == (px(240), px(150), px(1500), px(100)), name
-    for name in ("03 Hook", "18 Quiz"):
+    for name in ("03 Hook", "08 Statement", "18 Quiz"):
         lay = layout(prs, name)
         assert not any(p.placeholder_format.type == PP_PLACEHOLDER.TITLE for p in lay.placeholders), name
 

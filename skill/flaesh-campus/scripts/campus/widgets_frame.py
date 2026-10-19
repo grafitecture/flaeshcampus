@@ -142,8 +142,15 @@ def place_photo(slide, idx: int, photo: dict | None, base_dir: Path, warnings: l
         warnings.append(f"Foto fehlt: {file}")
     text = brief or f"Photo missing: {file}"
     box = _as_px(ph)
-    ph._element.getparent().remove(ph._element)
+    tree = ph._element.getparent()
+    anchor = list(tree).index(ph._element)
+    tree.remove(ph._element)
+    count = len(tree)
     brief_card(slide, box, text)
+    # Die Karte nimmt die Ebene des Platzhalters ein, damit Texte darüber sichtbar bleiben.
+    for offset, el in enumerate(list(tree)[count:]):
+        tree.remove(el)
+        tree.insert(anchor + offset, el)
     return text
 
 
