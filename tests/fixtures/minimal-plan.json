@@ -1,0 +1,23 @@
+{
+  "episode": {
+    "number": 2,
+    "title": "In-Office Whitening Workflow",
+    "subtitle": "Step-by-Step Protocol + Common Mistakes",
+    "presenter": {"name": "Dr. Germán Gómez", "credentials": "DDS · MD · PhD", "photo": {"brief": "Portrait Dr. Gómez"}},
+    "chapters": ["Document", "Protect", "Apply", "Activate & Monitor", "Seal & Instruct"]
+  },
+  "slides": [
+    {"type": "cover"},
+    {"type": "chapter", "chapter": 3, "line": "The gel is engineered for precision."},
+    {"type": "points", "chapter": 3, "title": "The lamp: position is power",
+     "points": [
+       {"lead": "Lock the geometry", "text": "Patient at 45°, lamp docked on the retractor."},
+       {"lead": "Light, not heat", "text": "Blue 460 nm light activates the green gel."}
+     ],
+     "evidence": "Ontiveros & Paravina, J Dent 2009",
+     "notes": "Light intensity falls with the square of distance."},
+    {"type": "quiz", "question": "Cervical thirds still yellow — most likely cause?",
+     "options": ["Gel layer below 1 mm", "Barrier over-extended onto cervical enamel", "Lamp gap too large"],
+     "answer": 1, "explanation": "The barrier covered cervical enamel, so the gel never touched it."}
+  ]
+}
