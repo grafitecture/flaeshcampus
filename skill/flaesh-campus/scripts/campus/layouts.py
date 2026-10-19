@@ -48,6 +48,12 @@ def lvl(size: str | float, color: str, **extra) -> dict:
 
 KICKER = lvl("kicker", "sky", caps=True, spc=KICKER_SPC)
 LABEL_STEEL = lvl("label", "steel", caps=True, spc=LABEL_SPC)
+LABEL_SKY = lvl("label", "sky", caps=True, spc=LABEL_SPC)
+POINT_LEVELS = [
+    lvl("lead", "slate", spc_before_pt=22, mar_l_px=80, indent_px=-80, tab_px=80),
+    lvl("body", "ink", spc_before_pt=6, mar_l_px=80),
+]
+PIC_LEVELS = [lvl("small", "muted", align="center")]
 
 EPISODE_PH = PhDef("Episode", "body", (0, 108, 150, 70), [lvl("rail_ep", "white", align="center")], ["00"])
 KICKER_PH = PhDef("Kicker", "body", (240, 110, 1500, 40), [KICKER], ["Phase 1 · Chapter"])
@@ -56,6 +62,18 @@ KICKER_PH = PhDef("Kicker", "body", (240, 110, 1500, 40), [KICKER], ["Phase 1 ·
 def title_ph(dark: bool) -> PhDef:
     return PhDef("Title", "title", (240, 150, 1500, 100), [lvl("title", "white" if dark else "slate")],
                  ["Slide title"])
+
+
+def points_ph(box: Box) -> PhDef:
+    return PhDef("Points", "body", box, POINT_LEVELS, ["01\tPoint title", "Short explanation"])
+
+
+def pic_ph(name: str, box: Box, **extra) -> PhDef:
+    return PhDef(name, "pic", box, PIC_LEVELS, ["Insert photo"], anchor="ctr", **extra)
+
+
+def text_ph(name: str, box: Box, size: str, color: str, prompt: str, **extra) -> PhDef:
+    return PhDef(name, "body", box, [lvl(size, color)], [prompt], **extra)
 
 
 def frame_decor(frame: str) -> list[DecorDef]:
@@ -104,31 +122,80 @@ def _light(name: str, key: str, *extra: PhDef) -> LayoutDef:
     return _layout(name, key, "light", [KICKER_PH, title_ph(False), *extra])
 
 
+_PHOTO_CARD = {"fill": COLOR["night"], "fill_alpha": 85}
+
 LAYOUTS: list[LayoutDef] = [
-    _layout("01 Title", "cover", "cover"),
-    _layout("02 Chapter", "chapter", "dark", decor=[
+    _layout("01 Title", "cover", "cover", [
+        PhDef("Kicker", "body", (230, 356, 980, 40), [KICKER], ["Online Training · Episode 00"]),
+        PhDef("Title", "title", (226, 404, 960, 230), [lvl("display", "white", ln_spc_pct=102)],
+              ["Episode title"]),
+        text_ph("Subtitle", (230, 654, 820, 110), "subtitle", "on_dark", "Subtitle of the episode"),
+        text_ph("Presenter", (230, 880, 1000, 46), "lead", "white", "Dr. Germán Gómez"),
+        text_ph("Credentials", (230, 930, 1000, 80), "small", "steel", "Credentials"),
+        PhDef("Photo", "pic", (1236, 250, 580, 580), PIC_LEVELS, ["Insert portrait"], anchor="ctr",
+              geom="ellipse", line=(COLOR["sky"], 6), glow=(COLOR["sky"], 90, 60)),
+    ]),
+    _layout("02 Chapter", "chapter", "dark", [
+        PhDef("Number", "body", (230, 20, 560, 880),
+              [lvl("chapter_number", "sky", glow=(COLOR["sky"], 80, 65))], ["1"]),
+        PhDef("Kicker", "body", (800, 330, 900, 40), [KICKER], ["Phase 1 of 5"]),
+        PhDef("Title", "title", (792, 376, 1000, 180), [lvl("chapter_title", "white")], ["Chapter"]),
+        text_ph("Line", (800, 590, 700, 130), "line", "on_dark", "One sentence about this chapter."),
+    ], decor=[
         DecorDef("radial", "glow-bg", (-60, -200, 1240, 1240),
                  {"color": COLOR["sky"], "stops": [(0, 26), (50, 8), (100, 0)], "behind": True}),
     ]),
-    _layout("03 Hook", "hook", "dark", [KICKER_PH], decor=[
+    _layout("03 Hook", "hook", "dark", [
+        KICKER_PH,
+        text_ph("Quote", (240, 170, 1300, 300), "quote", "white", "The question your patient asks"),
+        PhDef("TruthLabel", "body", (290, 560, 500, 30), [LABEL_STEEL], ["The hard truth"]),
+        text_ph("TruthText", (290, 610, 500, 240), "body", "on_dark", "What really happens."),
+        PhDef("AnswerLabel", "body", (930, 560, 520, 30), [LABEL_SKY], ["The fläsh answer"]),
+        text_ph("AnswerText", (930, 610, 520, 240), "body", "white", "How the protocol solves it."),
+    ], decor=[
         _card("truth-card", (240, 520, 600, 360), accent=False),
         _card("answer-card", (880, 520, 620, 360), accent=True),
     ]),
-    _layout("04 Closing", "closing", "dark", [KICKER_PH, title_ph(True)], decor=[
+    _layout("04 Closing", "closing", "dark", [
+        KICKER_PH, title_ph(True),
+        PhDef("NextLabel", "body", (1230, 370, 520, 30), [LABEL_SKY], ["Up next"]),
+        text_ph("NextTitle", (1230, 410, 520, 120), "lead", "white", "Episode 00 · Title"),
+        text_ph("NextText", (1230, 540, 520, 110), "body", "on_dark", "What the next episode covers."),
+    ], decor=[
         _card("next-card", (1180, 330, 620, 330), accent=True),
     ]),
-    _light("05 Points", "points"),
-    _light("06 Points + Photo", "points_photo"),
-    _light("07 Points + Chart", "points_chart"),
-    _light("08 Statement", "statement"),
+    _light("05 Points", "points", points_ph((240, 330, 1260, 560))),
+    _light("06 Points + Photo", "points_photo", points_ph((240, 330, 700, 560)),
+           pic_ph("Photo", (1000, 300, 800, 400)),
+           text_ph("Caption", (1000, 712, 540, 40), "small", "muted", "Photo caption")),
+    _light("07 Points + Chart", "points_chart", points_ph((240, 330, 700, 560))),
+    _light("08 Statement", "statement",
+           text_ph("Big", (240, 200, 1300, 330), "statement_big", "sky", "30"),
+           text_ph("Statement", (240, 560, 1200, 150), "statement", "slate", "Statement in one or two lines"),
+           text_ph("Text", (240, 730, 1200, 130), "body", "ink", "Supporting sentence.")),
     _light("09 Checklist", "checklist"),
     _light("10 Steps", "steps"),
     _light("11 Compare", "compare"),
-    _light("12 Scale", "scale"),
+    _light("12 Scale", "scale", points_ph((240, 560, 1260, 330))),
     _light("13 Summary", "summary"),
-    _layout("14 Photo", "photo", "full"),
-    _light("15 Before / After", "before_after"),
-    _light("16 Photo Annotated", "photo_annotated"),
-    _light("17 Case", "case"),
-    _layout("18 Quiz", "quiz", "dark", [KICKER_PH]),
+    _layout("14 Photo", "photo", "full", [
+        pic_ph("Photo", (150, 0, 1770, 1080)),
+        PhDef("Kicker", "body", (190, 780, 1300, 60), [KICKER], ["Step by step"],
+              insets=(40, 22, 40, 0), **_PHOTO_CARD),
+        PhDef("Title", "title", (190, 840, 1300, 110), [lvl("title", "white")], ["Photo title"],
+              insets=(40, 6, 40, 0), **_PHOTO_CARD),
+        text_ph("Caption", (190, 950, 1300, 90), "body", "on_dark", "Caption", insets=(40, 0, 40, 18),
+                **_PHOTO_CARD),
+    ]),
+    _light("15 Before / After", "before_after",
+           pic_ph("PhotoBefore", (240, 330, 600, 400)), pic_ph("PhotoAfter", (900, 330, 600, 400)),
+           text_ph("LabelBefore", (240, 750, 600, 40), "body", "slate", "Before"),
+           text_ph("LabelAfter", (900, 750, 600, 40), "body", "slate", "After")),
+    _light("16 Photo Annotated", "photo_annotated", pic_ph("Photo", (240, 300, 900, 600))),
+    _light("17 Case", "case",
+           text_ph("Story", (240, 330, 1260, 150), "lead", "slate", "The case in two or three sentences.")),
+    _layout("18 Quiz", "quiz", "dark", [
+        KICKER_PH,
+        text_ph("Question", (240, 180, 1260, 220), "quote", "white", "Question?"),
+    ]),
 ]

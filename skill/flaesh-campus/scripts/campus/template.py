@@ -1,4 +1,5 @@
 """Erzeugt die fläsh-Campus-Vorlage: Theme, Master und 18 Layouts."""
+import json
 from pathlib import Path
 from xml.sax.saxutils import escape
 
@@ -204,3 +205,29 @@ def _add_placeholder(shapes, ph: PhDef) -> None:
                         ph.anchor, ph.insets, ph.geom)
     fill = ph.fill or (COLOR["mist"] if ph.ph_type == "pic" else None)
     _apply_fill_line(shape, fill, ph.fill_alpha, ph.line, ph.glow)
+
+
+def layout_spec() -> dict:
+    """Maße und Stile aller Layouts als JSON-taugliches Dict (Quelle für Prüfung und Skill-Doku)."""
+    spec = {}
+    for ldef in LAYOUTS:
+        spec[ldef.name] = {
+            "key": ldef.key,
+            "frame": ldef.frame,
+            "zone": ldef.frame != "cover",
+            "placeholders": {
+                ph.name: {
+                    "idx": 0 if ph.ph_type == "title" else PH_IDX[ph.name],
+                    "type": ph.ph_type,
+                    "box": list(ph.box),
+                    "levels": ph.levels,
+                    "insets": list(ph.insets),
+                }
+                for ph in ldef.placeholders
+            },
+        }
+    return json.loads(json.dumps(spec))
+
+
+def write_layout_spec(path: Path) -> None:
+    Path(path).write_text(json.dumps(layout_spec(), indent=2, ensure_ascii=False), encoding="utf-8")
