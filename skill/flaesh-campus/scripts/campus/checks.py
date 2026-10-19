@@ -20,7 +20,7 @@ ZONE_EXEMPT_ON_PHOTO = ("brief-",)
 @dataclass
 class Issue:
     slide: int
-    kind: Literal["overflow", "zone", "empty", "font", "glyph"]
+    kind: Literal["overflow", "zone", "empty", "font", "glyph", "word", "bounds"]
     shape: str
     detail: str
 
@@ -113,11 +113,15 @@ def check_deck(pptx: Path, spec: dict, m: Measurer) -> list[Issue]:
     prs = Presentation(str(pptx))
     cmap = _cmap(m)
     issues: list[Issue] = []
+    slide_w, slide_h = _px(prs.slide_width), _px(prs.slide_height)
     for n, slide in enumerate(prs.slides, 1):
         layout_name = slide.slide_layout.name
         for shape in slide.shapes:
             name = _logical_name(shape)
             layout_ph = _layout_ph(slide, shape.placeholder_format.idx) if shape.is_placeholder else None
+            x, y = _px(shape.left), _px(shape.top)
+            if x < -1 or y < -1 or x + _px(shape.width) > slide_w + 1 or y + _px(shape.height) > slide_h + 1:
+                issues.append(Issue(n, "bounds", name, "outside the slide"))
             if layout_name != "01 Title" and _intersects_zone(shape):
                 exempt = layout_name == "14 Photo" and (name == "Photo" or name.startswith(ZONE_EXEMPT_ON_PHOTO))
                 if not exempt:
@@ -142,7 +146,11 @@ def check_deck(pptx: Path, spec: dict, m: Measurer) -> list[Issue]:
             left, top, right, bottom = _insets(shape, layout_ph)
             width = _px(shape.width) - left - right
             height = _px(shape.height) - top - bottom
-            measured = m.block_height_px(_paras(shape, layout_ph), width)
+            paras = _paras(shape, layout_ph)
+            for p in paras:
+                for word in m.long_words(p.text.rsplit("\t", 1)[-1], p.size_pt, width - p.indent_px, p.spc_pt):
+                    issues.append(Issue(n, "word", name, f"'{word}' is wider than the box – breaks mid-word"))
+            measured = m.block_height_px(paras, width)
             if measured > height + 2:
                 issues.append(Issue(n, "overflow", name, f"{measured:.0f}px > {height:.0f}px"))
     return issues

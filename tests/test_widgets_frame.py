@@ -72,6 +72,43 @@ def test_photo_aspect(prs, tmp_path):
     assert warnings == []
 
 
+def test_photo_unreadable(prs, tmp_path):
+    (tmp_path / "broken.jpg").write_bytes(b"not an image at all")
+    slide = new_slide(prs, "06 Points + Photo")
+    warnings = []
+    brief = place_photo(slide, PH_IDX["Photo"], {"file": "broken.jpg", "brief": "Lamp docked"}, tmp_path, warnings)
+    assert brief == "Lamp docked"
+    assert "brief-card" in names(slide)
+    assert any("broken.jpg" in w for w in warnings)
+
+
+def test_photo_webp_with_jpg_suffix(prs, tmp_path):
+    Image.new("RGB", (1600, 800), "white").save(tmp_path / "mislabeled.jpg", "WEBP")
+    slide = new_slide(prs, "06 Points + Photo")
+    warnings = []
+    assert place_photo(slide, PH_IDX["Photo"], {"file": "mislabeled.jpg"}, tmp_path, warnings) is None
+    assert warnings == []
+
+
+def test_photo_exif_orientation(prs, tmp_path):
+    exif = Image.Exif()
+    exif[0x0112] = 6                       # Kamera hochkant: um 90° drehen
+    Image.new("RGB", (1600, 800), "white").save(tmp_path / "rotated.jpg", exif=exif)
+    slide = new_slide(prs, "06 Points + Photo")
+    place_photo(slide, PH_IDX["Photo"], {"file": "rotated.jpg"}, tmp_path, [])
+    assert slide.placeholders[PH_IDX["Photo"]].image.size == (800, 1600)
+
+
+def test_photo_too_small(prs, tmp_path):
+    """Spec §6: zu kleines Foto → Platzhalter mit Briefing und Eintrag in der Fotoliste."""
+    Image.new("RGB", (40, 24), "white").save(tmp_path / "thumb.jpg")
+    slide = new_slide(prs, "06 Points + Photo")
+    warnings = []
+    brief = place_photo(slide, PH_IDX["Photo"], {"file": "thumb.jpg"}, tmp_path, warnings)
+    assert brief and "brief-card" in names(slide)
+    assert any("thumb.jpg" in w for w in warnings)
+
+
 def test_photo_missing(prs, tmp_path):
     slide = new_slide(prs, "06 Points + Photo")
     warnings = []

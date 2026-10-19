@@ -40,6 +40,47 @@ def test_scale_points_bound(plan):
     assert validate_plan(plan) == []
 
 
+def _slide(plan, n):
+    return plan["slides"][n - 1]
+
+
+CHART = {"type": "points_chart", "title": "Chart", "points": [{"lead": "a", "text": "b"}, {"lead": "c", "text": "d"}],
+         "chart": {"bars": [{"label": "Docked", "value": 100}, {"label": "Gap", "value": 56}]}}
+TYPE_SLIPS = [
+    (lambda p: _slide(p, 3).update(notes=["a", "b"]), "slide 3 (points): 'notes' must be text"),
+    (lambda p: _slide(p, 3).update(evidence=2004), "slide 3 (points): 'evidence' must be text"),
+    (lambda p: _slide(p, 3)["points"][0].update(lead=7), "slide 3 (points): points[1] 'lead' must be text"),
+    (lambda p: _slide(p, 3).update(focus={"title": 5, "text": "x"}), "slide 3 (points): focus 'title' must be text"),
+    (lambda p: _slide(p, 4).update(explanation=["a"]), "slide 4 (quiz): 'explanation' must be text"),
+    (lambda p: p["episode"].update(title=7), "episode: 'title' must be text"),
+    (lambda p: p["episode"].update(presenter="Dr. X"), "episode: 'presenter' must be an object"),
+    (lambda p: p["episode"]["presenter"].update(photo={"file": 5}), "episode: presenter.photo 'file' must be text"),
+    (lambda p: p["slides"].append({**CHART, "chart": {"bars": [{"label": "a", "value": 1, "display": 10},
+                                                                {"label": "b", "value": 2}]}}),
+     "slide 5 (points_chart): chart.bars[1] 'display' must be text"),
+    (lambda p: p["slides"].append({"type": "scale", "title": "Shades", "scale": "B1 A1"}),
+     "slide 5 (scale): 'scale' must be an object"),
+    (lambda p: p["slides"].append({"type": "scale", "title": "Shades", "scale": {"items": ["A3", "A3.5"],
+                                                                                 "highlight": "A3"}}),
+     "slide 5 (scale): scale.highlight must be a list of texts"),
+    (lambda p: p["slides"].append({"type": "photo_annotated", "title": "Setup", "photo": {"brief": "x"},
+                                   "markers": [{"x": 0.5, "y": 0.5, "label": 3}]}),
+     "slide 5 (photo_annotated): markers[1] 'label' must be text"),
+    (lambda p: p["slides"].append({"type": "steps", "title": "Fix", "steps": [{"title": 4, "text": "x"}] * 3}),
+     "slide 5 (steps): steps[1] 'title' must be text"),
+    (lambda p: p["slides"].append({"type": "photo", "title": "Prepare", "photo": {"brief": "x"},
+                                   "evidence": "Li & Greenwall, Br Dent J 2013"}),
+     "slide 5 (photo): 'evidence' is not shown on photo slides — put the source into the caption"),
+]
+
+
+@pytest.mark.parametrize("mutate,expected", TYPE_SLIPS)
+def test_type_slips_reported(plan, mutate, expected):
+    """Falsche Feldtypen ergeben eine klare Meldung je Folie statt eines Absturzes beim Bauen."""
+    mutate(plan)
+    assert expected in validate_plan(plan)
+
+
 def test_chapter_range(plan):
     plan["slides"][2]["chapter"] = 6
     assert any("chapter 6 out of range 1–5" in e for e in validate_plan(plan))

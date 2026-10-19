@@ -146,6 +146,34 @@ def test_chapter_title_two_lines(plan, template_path, tmp_path, m):
         assert line.top + line.height <= px(1000)
 
 
+def test_long_chapter_words_reported(plan, template_path, tmp_path, m):
+    """Überlange Wörter im Kapiteltitel werden gemeldet, und nichts rutscht unter die Folie."""
+    plan["episode"]["chapters"] = ["Document", "Patient Communication & Aftercare", "Contraindications"]
+    plan["slides"] = [{"type": "chapter", "chapter": n, "line": "One sentence for the chapter."} for n in (2, 3)]
+    out = tmp_path / "long.pptx"
+    report = build_deck(plan, template_path, out, SKILL / "examples")
+    issues = check_deck(out, layout_spec(), m)
+    words = kinds(issues, "word")
+    assert any(i.slide == 1 and "Communication" in i.detail for i in words)
+    assert any(i.slide == 2 and "Contraindications" in i.detail for i in words)
+    assert kinds(issues, "bounds") == []
+    assert len(report.warnings) == 2
+    for slide in Presentation(out).slides:
+        for shape in slide.shapes:
+            assert shape.top + shape.height <= px(1080), shape.name
+
+
+def test_bounds_reported(plan, template_path, tmp_path, m):
+    path = build(plan, template_path, tmp_path)
+    prs = Presentation(path)
+    tb = prs.slides[2].shapes.add_textbox(px(240), px(1060), px(400), px(60))
+    tb.name = "below"
+    tb.text_frame.paragraphs[0].add_run().text = "x"
+    prs.save(path)
+    bounds = kinds(check_deck(path, layout_spec(), m), "bounds")
+    assert [(i.slide, i.shape) for i in bounds] == [(3, "below")]
+
+
 @pytest.mark.slow
 def test_render_pages(plan, template_path, tmp_path):
     if not shutil.which("pdfinfo"):

@@ -25,7 +25,7 @@ def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("plan", type=pathlib.Path)
     parser.add_argument("--out", required=True, type=pathlib.Path)
-    parser.add_argument("--template", type=pathlib.Path, default=DEFAULT_TEMPLATE)
+    parser.add_argument("--template", type=pathlib.Path, help="Vorlage; ohne Angabe die Standardvorlage des Skills")
     args = parser.parse_args()
     try:
         plan = load_plan(args.plan)
@@ -33,8 +33,12 @@ def main() -> int:
         for line in err.errors:
             print(line)
         return 2
-    template = args.template
+    if args.template is not None and not args.template.exists():
+        print(f"Vorlage nicht gefunden: {args.template}")
+        return 2
+    template = args.template or DEFAULT_TEMPLATE
     if not template.exists():
+        print("Hinweis: Standardvorlage fehlt, baue mit frisch erzeugter Vorlage", file=sys.stderr)
         template = build_template(pathlib.Path(tempfile.mkdtemp()) / "template.pptx", HERE.parent / "assets")
     report = build_deck(plan, template, args.out, args.plan.resolve().parent)
     print(json.dumps(asdict(report), ensure_ascii=False, indent=2))

@@ -96,5 +96,5 @@ class Measurer:
             total += len(lines) * self.line_height_px(p.size_pt, p.ln_spc_pct)
         return total
 
-    def long_words(self, text: str, size_pt: float, width_px: float) -> list[str]:
-        return [w for w in text.split() if self.width_px(w, size_pt) > width_px]
+    def long_words(self, text: str, size_pt: float, width_px: float, spc_pt: float = 0) -> list[str]:
+        return [w for w in text.split() if self.width_px(w, size_pt, spc_pt) > width_px]

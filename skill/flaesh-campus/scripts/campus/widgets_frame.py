@@ -2,7 +2,7 @@
 import tempfile
 from pathlib import Path
 
-from PIL import Image
+from PIL import Image, ImageOps
 from pptx.dml.color import RGBColor
 from pptx.enum.dml import MSO_LINE
 from pptx.enum.shapes import MSO_SHAPE
@@ -114,12 +114,29 @@ def _as_px(ph) -> tuple[float, float, float, float]:
     return tuple(v / EMU_PER_PX for v in (ph.left, ph.top, ph.width, ph.height))
 
 
-def _usable_image(path: Path) -> Path:
-    if path.suffix.lower() in (".jpg", ".jpeg", ".png"):
-        return path
-    out = Path(tempfile.mkdtemp(prefix="campus-img-")) / (path.stem + ".jpg")
-    Image.open(path).convert("RGB").save(out, "JPEG", quality=92)
-    return out
+MIN_PHOTO_RATIO = 0.5  # unter halber Sollgröße gilt ein Foto als zu klein (Spec §6: Platzhalter + Fotoliste)
+
+
+def _usable_image(path: Path) -> tuple[Path, tuple[int, int]]:
+    """Bild am Inhalt erkennen, EXIF-Drehung anwenden; alles außer JPEG/PNG neu speichern. Gibt Pfad und Pixelmaß."""
+    with Image.open(path) as im:
+        im.load()
+        rotated = im.getexif().get(0x0112, 1) != 1
+        if im.format in ("JPEG", "PNG") and not rotated:
+            return path, im.size
+        img = ImageOps.exif_transpose(im)
+        alpha = img.mode in ("RGBA", "LA") or (img.mode == "P" and "transparency" in img.info)
+        out = Path(tempfile.mkdtemp(prefix="campus-img-")) / (path.stem + (".png" if alpha else ".jpg"))
+        if alpha:
+            img.save(out, "PNG")
+        else:
+            img.convert("RGB").save(out, "JPEG", quality=92)
+        return out, img.size
+
+
+def _cover_ratio(size: tuple[int, int], box: tuple[float, float, float, float]) -> float:
+    """Wie viele Bildpixel auf einen Folienpixel kommen, wenn das Bild den Rahmen füllt (beschnitten)."""
+    return min(size[0] / box[2], size[1] / box[3])
 
 
 def place_photo(slide, idx: int, photo: dict | None, base_dir: Path, warnings: list[str],
@@ -130,17 +147,29 @@ def place_photo(slide, idx: int, photo: dict | None, base_dir: Path, warnings: l
     path = Path(file) if file else None
     if path is not None and not path.is_absolute():
         path = Path(base_dir) / path
-    if path is not None and path.exists():
-        pic = ph.insert_picture(str(_usable_image(path)))
-        if ellipse:
-            pic.auto_shape_type = MSO_SHAPE.OVAL
-            pic.line.color.rgb = RGBColor.from_string(COLOR["sky"])
-            pic.line.width = px(6)
-            oxml.add_glow(pic, COLOR["sky"], 90, 60)
-        return None
-    if file:
-        warnings.append(f"Foto fehlt: {file}")
-    text = brief or f"Photo missing: {file}"
+    if path is None or not path.exists():
+        if file:
+            warnings.append(f"Foto fehlt: {file}")
+        return _brief_in_place(slide, ph, brief or f"Photo missing: {file}")
+    box = _as_px(ph)
+    try:
+        usable, size = _usable_image(path)
+    except Exception as err:  # beschädigt, abgeschnitten, unbekanntes Format: Briefing statt Absturz
+        warnings.append(f"Foto unlesbar: {file} ({type(err).__name__})")
+        return _brief_in_place(slide, ph, brief or f"Photo unreadable: {file}")
+    if _cover_ratio(size, box) < MIN_PHOTO_RATIO:
+        warnings.append(f"Foto zu klein: {file} ({size[0]}×{size[1]} px für {box[2]:.0f}×{box[3]:.0f} px)")
+        return _brief_in_place(slide, ph, brief or f"Photo too small: {file}")
+    pic = ph.insert_picture(str(usable))
+    if ellipse:
+        pic.auto_shape_type = MSO_SHAPE.OVAL
+        pic.line.color.rgb = RGBColor.from_string(COLOR["sky"])
+        pic.line.width = px(6)
+        oxml.add_glow(pic, COLOR["sky"], 90, 60)
+    return None
+
+
+def _brief_in_place(slide, ph, text: str) -> str:
     box = _as_px(ph)
     tree = ph._element.getparent()
     anchor = list(tree).index(ph._element)

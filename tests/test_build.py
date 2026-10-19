@@ -8,7 +8,7 @@ from pptx import Presentation
 from pptx.shapes.placeholder import PlaceholderPicture
 
 from campus.build import build_deck
-from campus.tokens import PH_IDX
+from campus.tokens import PH_IDX, px
 from conftest import REPO, SKILL
 
 EPISODE = {
@@ -153,6 +153,36 @@ def test_make_template_gallery(tmp_path):
     deck = tmp_path / "deck.pptx"
     build_deck({"episode": plan["episode"], "slides": [{"type": "cover"}]}, out, deck, SKILL / "examples")
     assert len(Presentation(deck).slides) == 1
+
+
+def test_cli_missing_template(tmp_path):
+    """Ein falscher --template-Pfad bricht ab, statt still eine frische Vorlage zu nehmen."""
+    path = tmp_path / "plan.json"
+    path.write_text(json.dumps({"episode": EPISODE, "slides": [{"type": "cover"}]}), encoding="utf-8")
+    result = subprocess.run([sys.executable, str(SKILL / "scripts" / "build_deck.py"), str(path),
+                             "--out", str(tmp_path / "x.pptx"), "--template", str(tmp_path / "nope.pptx")],
+                            capture_output=True, text=True)
+    assert result.returncode == 2
+    assert "nope.pptx" in result.stdout + result.stderr
+    assert not (tmp_path / "x.pptx").exists()
+
+
+def test_markers_follow_moved_photo(template_path, tmp_path):
+    """Verschiebt Martin das Foto in Layout 16, landen die Marker trotzdem auf dem Foto."""
+    prs = Presentation(template_path)
+    lay = next(lay for lay in prs.slide_layouts if lay.name == "16 Photo Annotated")
+    ph = next(p for p in lay.placeholders if p.placeholder_format.idx == PH_IDX["Photo"])
+    ph.left, ph.top, ph.width, ph.height = px(300), px(320), px(800), px(560)
+    moved = tmp_path / "moved.pptx"
+    prs.save(moved)
+    plan = {"episode": EPISODE, "slides": [{"type": "photo_annotated", "title": "Isolation setup",
+                                            "photo": {"brief": "Isolation setup"},
+                                            "markers": [{"x": 0.5, "y": 0.5, "label": "Centre"}]}]}
+    out = tmp_path / "deck.pptx"
+    build_deck(plan, moved, out, SKILL / "examples")
+    marker = next(s for s in Presentation(out).slides[0].shapes if s.name == "marker-1")
+    assert abs(marker.left + marker.width // 2 - px(700)) <= px(1)
+    assert abs(marker.top + marker.height // 2 - px(600)) <= px(1)
 
 
 def test_cli_ok(tmp_path, template_path):

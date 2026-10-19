@@ -1,9 +1,15 @@
 """Folienplan (JSON) laden und prüfen.
 
 Fehlertexte: "episode: …" bzw. "slide {n} ({type}): …"; alle Fehler werden gesammelt.
+Geprüft werden Pflichtfelder, Anzahlen und Typen, damit der Bau nie mit einem Traceback abbricht.
 """
 import json
 from pathlib import Path
+
+# Optionale Textfelder auf Folienebene; Pflichtfelder prüfen die Typ-Prüfungen unten zusätzlich.
+OPTIONAL_TEXT = ("kicker", "title", "evidence", "notes", "caption", "line", "big", "statement", "text",
+                 "explanation", "style")
+BOX_TEXT = ("label", "title", "text")
 
 
 class PlanError(Exception):
@@ -12,15 +18,28 @@ class PlanError(Exception):
         self.errors = errors
 
 
+def _is_text(value) -> bool:
+    return isinstance(value, str) and bool(value.strip())
+
+
 def _text(slide: dict, key: str) -> list[str]:
     value = slide.get(key)
-    return [] if isinstance(value, str) and value.strip() else [f"missing '{key}'"]
+    if value is not None and not isinstance(value, str):
+        return [f"'{key}' must be text"]
+    return [] if _is_text(value) else [f"missing '{key}'"]
+
+
+def _optional_text(obj: dict, keys: tuple[str, ...], prefix: str = "") -> list[str]:
+    return [f"{prefix}'{k}' must be text" for k in keys if k in obj and not isinstance(obj[k], str)]
 
 
 def _photo(value, name: str = "photo") -> list[str]:
-    if isinstance(value, dict) and (value.get("file") or value.get("brief")):
-        return []
-    return [f"{name} needs 'file' or 'brief'"]
+    if not isinstance(value, dict):
+        return [f"{name} needs 'file' or 'brief'"]
+    problems = _optional_text(value, ("file", "brief"), f"{name} ")
+    if problems:
+        return problems
+    return [] if (_is_text(value.get("file")) or _is_text(value.get("brief"))) else [f"{name} needs 'file' or 'brief'"]
 
 
 def _items(value, name: str, lo: int, hi: int, keys: tuple[str, ...] = ()) -> list[str]:
@@ -28,19 +47,27 @@ def _items(value, name: str, lo: int, hi: int, keys: tuple[str, ...] = ()) -> li
         return [f"{name}: exactly {lo} items" if lo == hi else f"{name}: {lo}–{hi} items"]
     problems = []
     for i, item in enumerate(value, 1):
-        if keys:
-            missing = [k for k in keys if not (isinstance(item, dict) and str(item.get(k, "")).strip())]
-            if missing:
-                problems.append(f"{name}[{i}] missing {', '.join(missing)}")
-        elif not (isinstance(item, str) and item.strip()):
-            problems.append(f"{name}[{i}] must be text")
+        if not keys:
+            if not _is_text(item):
+                problems.append(f"{name}[{i}] must be text")
+            continue
+        if not isinstance(item, dict):
+            problems.append(f"{name}[{i}] must be an object")
+            continue
+        wrong = [k for k in keys if k in item and item[k] is not None and not isinstance(item[k], str)]
+        problems += [f"{name}[{i}] '{k}' must be text" for k in wrong]
+        missing = [k for k in keys if k not in wrong and not _is_text(item.get(k))]
+        if missing:
+            problems.append(f"{name}[{i}] missing {', '.join(missing)}")
     return problems
 
 
 def _box(value, name: str, keys: tuple[str, ...]) -> list[str]:
     if not isinstance(value, dict):
         return [f"missing '{name}'"]
-    return [f"{name} missing '{k}'" for k in keys if not str(value.get(k, "")).strip()]
+    wrong = [k for k in BOX_TEXT if k in value and not isinstance(value[k], str)]
+    problems = [f"{name} '{k}' must be text" for k in wrong]
+    return problems + [f"{name} missing '{k}'" for k in keys if k not in wrong and not _is_text(value.get(k))]
 
 
 def _focus(slide: dict) -> list[str]:
@@ -60,16 +87,20 @@ def _check_points_chart(s):
     chart = s.get("chart")
     if not isinstance(chart, dict):
         return problems + ["missing 'chart'"]
+    problems += _optional_text(chart, ("title", "note"), "chart ")
     problems += _items(chart.get("bars"), "chart.bars", 2, 4, ("label",))
     for i, bar in enumerate(chart.get("bars") or [], 1):
-        value = bar.get("value") if isinstance(bar, dict) else None
-        if not isinstance(value, (int, float)) or not 0 <= value <= 100:
+        if not isinstance(bar, dict):
+            continue
+        value = bar.get("value")
+        if not isinstance(value, (int, float)) or isinstance(value, bool) or not 0 <= value <= 100:
             problems.append(f"chart.bars[{i}] value must be 0–100")
+        problems += _optional_text(bar, ("display",), f"chart.bars[{i}] ")
     return problems
 
 
 def _check_statement(s):
-    if not (str(s.get("big", "")).strip() or str(s.get("statement", "")).strip()):
+    if not (_is_text(s.get("big")) or _is_text(s.get("statement"))):
         return ["needs 'big' or 'statement'"]
     return []
 
@@ -77,9 +108,18 @@ def _check_statement(s):
 def _check_scale(s):
     problems = _text(s, "title")
     if "scale" in s:
-        problems += _items((s["scale"] or {}).get("items"), "scale.items", 2, 16)
+        scale = s["scale"]
+        if not isinstance(scale, dict):
+            return problems + ["'scale' must be an object"]
+        problems += _items(scale.get("items"), "scale.items", 2, 16)
+        highlight = scale.get("highlight", [])
+        if not isinstance(highlight, list) or not all(isinstance(h, str) for h in highlight):
+            problems.append("scale.highlight must be a list of texts")
     elif "timeline" in s:
-        problems += _items((s["timeline"] or {}).get("points"), "timeline.points", 2, 6, ("at", "label"))
+        timeline = s["timeline"]
+        if not isinstance(timeline, dict):
+            return problems + ["'timeline' must be an object"]
+        problems += _items(timeline.get("points"), "timeline.points", 2, 6, ("at", "label"))
     else:
         problems.append("needs 'scale' or 'timeline'")
     if "points" in s:
@@ -109,11 +149,18 @@ def _check_before_after(s):
     return problems
 
 
+def _check_photo(s):
+    problems = _text(s, "title") + _photo(s.get("photo"))
+    if "evidence" in s:  # die Fußzeilen-Evidence läge über dem Textband
+        problems.append("'evidence' is not shown on photo slides — put the source into the caption")
+    return problems
+
+
 def _check_photo_annotated(s):
     problems = _text(s, "title") + _photo(s.get("photo")) + _items(s.get("markers"), "markers", 1, 5, ("label",))
     for i, mk in enumerate(s.get("markers") or [], 1):
-        if not isinstance(mk, dict) or not all(isinstance(mk.get(k), (int, float)) and 0 <= mk[k] <= 1
-                                                for k in ("x", "y")):
+        if not isinstance(mk, dict) or not all(isinstance(mk.get(k), (int, float)) and not isinstance(mk.get(k), bool)
+                                                and 0 <= mk[k] <= 1 for k in ("x", "y")):
             problems.append(f"markers[{i}] x and y must be 0–1")
     return problems
 
@@ -141,7 +188,7 @@ CHECKS = {
     "compare": _check_compare,
     "scale": _check_scale,
     "summary": lambda s: _text(s, "title") + _items(s.get("items"), "items", 1, 5, ("title", "text")),
-    "photo": lambda s: _text(s, "title") + _photo(s.get("photo")),
+    "photo": _check_photo,
     "before_after": _check_before_after,
     "photo_annotated": _check_photo_annotated,
     "case": lambda s: _text(s, "title") + _text(s, "story")
@@ -156,20 +203,25 @@ def _check_episode(episode) -> list[str]:
         return ["episode: missing"]
     problems = []
     if not isinstance(episode.get("number"), int) or isinstance(episode.get("number"), bool):
-        problems.append("episode: 'number' must be an integer")
-    if not str(episode.get("title", "")).strip():
-        problems.append("episode: missing 'title'")
-    problems += [f"episode: {p}" for p in _items(episode.get("chapters"), "chapters", 2, 6)]
-    presenter = episode.get("presenter")
-    if isinstance(presenter, dict) and "photo" in presenter:
-        problems += [f"episode: presenter.{p}" for p in _photo(presenter["photo"])]
-    return problems
+        problems.append("'number' must be an integer")
+    problems += _text(episode, "title") + _optional_text(episode, ("subtitle",))
+    problems += _items(episode.get("chapters"), "chapters", 2, 6)
+    if "presenter" in episode:
+        presenter = episode["presenter"]
+        if not isinstance(presenter, dict):
+            problems.append("'presenter' must be an object")
+        else:
+            problems += _optional_text(presenter, ("name", "credentials"), "presenter ")
+            if "photo" in presenter:
+                problems += [f"presenter.{p}" for p in _photo(presenter["photo"])]
+    return [f"episode: {p}" for p in problems]
 
 
 def validate_plan(plan: dict) -> list[str]:
     episode = plan.get("episode") if isinstance(plan, dict) else None
     errors = _check_episode(episode)
-    chapters = (episode or {}).get("chapters") or []
+    chapters = (episode or {}).get("chapters") if isinstance(episode, dict) else None
+    chapters = chapters if isinstance(chapters, list) else []
     slides = plan.get("slides") if isinstance(plan, dict) else None
     if not isinstance(slides, list) or not slides:
         return errors + ["slides: at least one slide"]
@@ -179,12 +231,12 @@ def validate_plan(plan: dict) -> list[str]:
         if kind not in CHECKS:
             errors.append(prefix + f"unknown type '{kind}'")
             continue
-        problems = list(CHECKS[kind](slide))
+        problems = _optional_text(slide, OPTIONAL_TEXT) + list(CHECKS[kind](slide))
         if "chapter" in slide:
             ch = slide["chapter"]
             if not isinstance(ch, int) or isinstance(ch, bool) or not 1 <= ch <= len(chapters):
                 problems.append(f"chapter {ch} out of range 1–{len(chapters)}")
-        errors += [prefix + p for p in problems]
+        errors += [prefix + p for p in dict.fromkeys(problems)]
     return errors
 
 

@@ -148,7 +148,12 @@ def _grow_chapter_title(ctx: Ctx, slide, text: str) -> None:
     if ctx.m.block_height_px(para, width) <= title.height / EMU_PER_PX:
         return
     width = min(width, ZONE[0] - title.left / EMU_PER_PX - 24)  # sonst reicht die Box in die Kreis-Zone
-    extra = px(ctx.m.block_height_px(para, width)) - title.height
+    need = ctx.m.block_height_px(para, width)
+    cap = 2 * ctx.m.line_height_px(level["size_pt"], level.get("ln_spc_pct", 100))
+    if need > cap + 1 or ctx.m.long_words(text, level["size_pt"], width):
+        ctx.report.warnings.append(f"Folie {ctx.report.slides}: Kapitelname „{text}“ passt nicht in zwei Zeilen "
+                                   f"– kürzen oder trennen")
+    extra = px(min(need, cap)) - title.height
     _set_box(title, height_delta=extra, width=px(width))
     line = _placeholder(slide, "Line")
     if line is not None:
@@ -281,8 +286,10 @@ def render_before_after(ctx: Ctx, s: dict) -> None:
 
 def render_photo_annotated(ctx: Ctx, s: dict) -> None:
     slide = _start(ctx, s)
+    ph = _placeholder(slide, "Photo")  # Maße aus der Vorlage, auch wenn das Layout verändert wurde
+    box = tuple(v / EMU_PER_PX for v in (ph.left, ph.top, ph.width, ph.height))
     _photo(ctx, slide, "Photo", s["photo"])
-    markers(slide, (240, 300, 900, 600), s["markers"])
+    markers(slide, box, s["markers"])
     _frame(ctx, slide, s)
 
 
