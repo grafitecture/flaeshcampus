@@ -46,8 +46,8 @@ body {
   padding: 40px 0 32px;
   background: var(--rail); color: var(--white);
 }
-.rail-ep { margin: 0; text-align: center; font-size: 2rem; line-height: 1; font-variant-numeric: tabular-nums; }
-.rail-ep span { display: block; margin-bottom: .45rem; font-size: .8125rem; letter-spacing: .18em; color: var(--steel); }
+.rail-brand { margin: 0; display: flex; flex-direction: column; align-items: center; gap: .4rem; line-height: 1; }
+.rail-brand span { color: var(--sky); font-size: 1.05rem; }
 .rail-chapters {
   list-style: none; margin: auto 0; padding: 0;
   display: flex; flex-direction: column; gap: 30px; position: relative;
@@ -183,8 +183,8 @@ h2 { margin: 0 0 1rem; color: var(--slate); font-weight: 400; font-size: 2.25rem
     z-index: 10; height: auto; flex-direction: row; justify-content: space-between;
     padding: 10px 16px;
   }
-  .rail-ep { display: flex; align-items: baseline; gap: .4rem; font-size: 1.25rem; }
-  .rail-ep span { display: inline; margin: 0; }
+  .rail-brand { flex-direction: row; align-items: flex-end; gap: .45rem; }
+  .rail-brand span { font-size: 1rem; }
   .rail-chapters { flex-direction: row; gap: 6px; margin: 0; }
   .rail-chapters::before { left: 18px; right: 18px; top: 50%; bottom: auto; width: auto; height: 2px; }
   .rail-chapter { padding: 6px; gap: 0; }

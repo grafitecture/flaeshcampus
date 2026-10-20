@@ -42,17 +42,20 @@ def test_write_index(tmp_path):
     assert html.count('lang="de"') == 1
 
 
-def test_page_calls_the_deck_ppt(tmp_path):
-    """Auf der Seite heißt das Deck „PPT“, nicht „Episode“."""
+def test_page_calls_the_deck_flaesh_campus(tmp_path):
+    """Auf der Seite heißt das Deck „fläsh. Campus“ – weder „Episode“ noch „PPT“."""
     slides = [{"n": 1, "title": "Slide 1", "kicker": "", "chapter": None, "notes": "",
                "src": "slides/ep02/01.jpg", "thumb": "slides/ep02/thumb/01.jpg"}]
     episode = {"number": 2, "title": "In-Office Whitening Workflow", "presenter": "Dr. Germán Gómez",
                "chapters": ["Document"]}
     html = write_index(tmp_path, episode, slides, [], []).read_text(encoding="utf-8")
-    assert "<title>fläsh Campus · PPT</title>" in html
-    assert "Die PPT zur Trainingsreihe mit Dr. Germán Gómez." in html
-    assert '<p class="rail-ep">PPT</p>' in html
-    assert "Episode" not in html and ">EP<" not in html
+    assert "<title>fläsh. Campus · In-Office Whitening Workflow</title>" in html
+    assert "fläsh. Campus – die Trainingsreihe mit Dr. Germán Gómez." in html
+    assert "<p>fläsh. Campus ist eine Trainingsreihe von WHITEsmile" in html
+    rail = re.search(r'<aside class="rail".*?</aside>', html, re.S).group(0)
+    assert '<p class="rail-brand"><svg class="logo"' in rail and "<span>Campus</span></p>" in rail
+    assert rail.count('class="logo"') == 1
+    assert "Episode" not in html and ">EP<" not in html and "PPT" not in html
 
 
 def test_site_files_are_in_git():
@@ -99,11 +102,12 @@ def test_web_fonts_carry_their_license(tmp_path):
     assert "SIL OPEN FONT LICENSE Version 1.1" in text and "DISCLAIMER" in text
 
 
-def test_downloads_are_called_ppt():
-    """Die Downloads heißen „PPT als …“, die Dateinamen tragen kein ep02 mehr."""
+def test_downloads_are_called_flaesh_campus():
+    """Die Downloads heißen „fläsh. Campus als …“, die Dateinamen tragen kein ep02 mehr."""
     sources = download_sources(REPO / "out" / "episode-02.pptx", REPO / "gallery.pptx")
     assert [label for label, *_ in sources] == [
-        "PPT als PDF", "PPT als PowerPoint", "Vorlage mit allen Layouts", "Layout-Übersicht als PDF"]
+        "fläsh. Campus als PDF", "fläsh. Campus als PowerPoint", "Vorlage mit allen Layouts",
+        "Layout-Übersicht als PDF"]
     assert [name for _, _, name, _ in sources] == [
         "flaesh-campus-in-office-whitening-workflow.pdf", "flaesh-campus-in-office-whitening-workflow.pptx",
         "flaesh-campus-template.pptx", "flaesh-campus-layouts.pdf"]

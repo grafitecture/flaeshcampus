@@ -149,18 +149,17 @@ def write_index(out_dir: Path, episode: dict, slides: list[dict], layouts: list[
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex, nofollow">
-<title>fläsh Campus · PPT</title>
-<meta name="description" content="PPT zur Trainingsreihe fläsh Campus: {e(episode["title"])} mit {e(episode["presenter"])}.">
+<title>fläsh. Campus · {e(episode["title"])}</title>
+<meta name="description" content="fläsh. Campus: {e(episode["title"])} – Trainingsreihe mit {e(episode["presenter"])}.">
 <link rel="preload" href="assets/fonts/carlito-400.woff?v={ASSET_VERSION}" as="font" type="font/woff" crossorigin>
 <link rel="stylesheet" href="assets/site.css?v={ASSET_VERSION}">
 <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
 </head>
 <body>
 <a class="skip" href="#viewer">Zur Präsentation springen</a>
-<aside class="rail" aria-label="Kapitel der PPT">
-  <p class="rail-ep">PPT</p>
+<aside class="rail" aria-label="Kapitel">
+  <p class="rail-brand">{_logo()}<span>Campus</span></p>
   <ol class="rail-chapters">{chapters}</ol>
-  {_logo()}
 </aside>
 <main>
   <section class="stage" id="folien" aria-labelledby="titel">
@@ -170,7 +169,7 @@ def write_index(out_dir: Path, episode: dict, slides: list[dict], layouts: list[
     </header>
     <div class="intro">
       <h1 id="titel">{e(episode["title"])}</h1>
-      <p>Die PPT zur Trainingsreihe mit {e(episode["presenter"])}. Blättern mit den Pfeiltasten oder über die Vorschau.</p>
+      <p>fläsh. Campus – die Trainingsreihe mit {e(episode["presenter"])}. Blättern mit den Pfeiltasten oder über die Vorschau.</p>
     </div>
     <figure class="viewer" id="viewer" tabindex="-1">
       <div class="screen"><img id="slide" src="{first["src"]}" alt="Folie 1: {e(first["title"])}" width="1600" height="900" fetchpriority="high"></div>
@@ -187,7 +186,7 @@ def write_index(out_dir: Path, episode: dict, slides: list[dict], layouts: list[
   </section>
   <section class="paper" id="layouts" aria-labelledby="layouts-titel">
     <h2 id="layouts-titel">Die 18 Layouts</h2>
-    <p class="lead">Aus diesen Layouts entsteht jede Folie der Reihe. Die Beispiele zeigen Inhalte aus der PPT. Der Schlüssel unter dem Namen hilft bei Korrekturen, etwa „Folie 7 als compare“.</p>
+    <p class="lead">Aus diesen Layouts entsteht jede Folie der Reihe. Die Beispiele zeigen Inhalte aus fläsh. Campus. Der Schlüssel unter dem Namen hilft bei Korrekturen, etwa „Folie 7 als compare“.</p>
     <ul class="layouts">{layout_items}</ul>
   </section>
   <section class="paper files-section" id="dateien" aria-labelledby="dateien-titel">
@@ -195,7 +194,7 @@ def write_index(out_dir: Path, episode: dict, slides: list[dict], layouts: list[
     <ul class="files">{files}</ul>
     <p class="hint">Zum Bearbeiten der PowerPoint-Dateien muss die Schrift Corporate S installiert sein.</p>
   </section>
-  <footer class="colophon"><p>fläsh Campus ist eine Trainingsreihe von WHITEsmile mit {e(episode["presenter"])}. Gestaltung und Umsetzung: Grafitecture. Stand: {STAND}.</p></footer>
+  <footer class="colophon"><p>fläsh. Campus ist eine Trainingsreihe von WHITEsmile mit {e(episode["presenter"])}. Gestaltung und Umsetzung: Grafitecture. Stand: {STAND}.</p></footer>
 </main>
 <dialog class="lightbox" id="lightbox" aria-labelledby="lightbox-label">
   <form method="dialog"><button class="close" aria-label="Schließen">×</button></form>
@@ -231,8 +230,9 @@ def _layout_records(gallery: Path, paths: list[tuple[str, str]]) -> list[dict]:
 def download_sources(deck: Path, gallery: Path) -> list[tuple[str, Path, str, str]]:
     """Je Download: Beschriftung, Quelldatei, Dateiname auf der Seite, Dateiart."""
     return [
-        ("PPT als PDF", REPO / "out" / "episode-02.pdf", "flaesh-campus-in-office-whitening-workflow.pdf", "PDF"),
-        ("PPT als PowerPoint", deck, "flaesh-campus-in-office-whitening-workflow.pptx", "PowerPoint"),
+        ("fläsh. Campus als PDF", REPO / "out" / "episode-02.pdf", "flaesh-campus-in-office-whitening-workflow.pdf",
+         "PDF"),
+        ("fläsh. Campus als PowerPoint", deck, "flaesh-campus-in-office-whitening-workflow.pptx", "PowerPoint"),
         ("Vorlage mit allen Layouts", gallery, "flaesh-campus-template.pptx", "PowerPoint"),
         ("Layout-Übersicht als PDF", REPO / "out" / "flaesh-campus-layouts.pdf", "flaesh-campus-layouts.pdf", "PDF"),
     ]
