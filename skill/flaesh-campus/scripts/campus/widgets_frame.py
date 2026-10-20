@@ -6,6 +6,8 @@ from PIL import Image, ImageOps
 from pptx.dml.color import RGBColor
 from pptx.enum.dml import MSO_LINE
 from pptx.enum.shapes import MSO_SHAPE
+from pptx.oxml.xmlchemy import OxmlElement
+from pptx.oxml.ns import qn
 
 from . import oxml
 from .measure import Measurer
@@ -115,33 +117,38 @@ def _as_px(ph) -> tuple[float, float, float, float]:
 
 
 MIN_PHOTO_RATIO = 0.5  # unter halber Sollgröße gilt ein Foto als zu klein (Spec §6: Platzhalter + Fotoliste)
+MAX_PHOTO_RATIO = 2.0  # mehr als doppelte Auflösung bringt nichts und bläht das Deck auf
 
 
-def _usable_image(path: Path) -> tuple[Path, tuple[int, int]]:
-    """Bild am Inhalt erkennen, EXIF-Drehung anwenden; alles außer JPEG/PNG neu speichern. Gibt Pfad und Pixelmaß."""
+def _ratio(size: tuple[int, int], box: tuple[float, float, float, float], fit: bool) -> float:
+    """Bildpixel je Folienpixel: beim Füllen (beschnitten) zählt die knappere Seite, beim Einpassen die größere."""
+    rx, ry = size[0] / box[2], size[1] / box[3]
+    return max(rx, ry) if fit else min(rx, ry)
+
+
+def _usable_image(path: Path, box, fit: bool = False) -> tuple[Path, tuple[int, int]]:
+    """Bild am Inhalt erkennen, EXIF-Drehung anwenden, auf höchstens doppelte Rahmenauflösung verkleinern;
+    alles außer unverändertem JPEG/PNG wird neu gespeichert. Gibt Pfad und Pixelmaß zurück."""
     with Image.open(path) as im:
         im.load()
         rotated = im.getexif().get(0x0112, 1) != 1
-        if im.format in ("JPEG", "PNG") and not rotated:
+        img = ImageOps.exif_transpose(im) if rotated else im
+        scale = MAX_PHOTO_RATIO / _ratio(img.size, box, fit)
+        if im.format in ("JPEG", "PNG") and not rotated and scale >= 1:
             return path, im.size
-        img = ImageOps.exif_transpose(im)
+        if scale < 1:
+            img = img.resize((max(1, round(img.width * scale)), max(1, round(img.height * scale))), Image.LANCZOS)
         alpha = img.mode in ("RGBA", "LA") or (img.mode == "P" and "transparency" in img.info)
         out = Path(tempfile.mkdtemp(prefix="campus-img-")) / (path.stem + (".png" if alpha else ".jpg"))
         if alpha:
-            img.save(out, "PNG")
+            img.convert("RGBA").save(out, "PNG", optimize=True)
         else:
-            img.convert("RGB").save(out, "JPEG", quality=92)
+            img.convert("RGB").save(out, "JPEG", quality=88, optimize=True)
         return out, img.size
 
 
-def _cover_ratio(size: tuple[int, int], box: tuple[float, float, float, float]) -> float:
-    """Wie viele Bildpixel auf einen Folienpixel kommen, wenn das Bild den Rahmen füllt (beschnitten)."""
-    return min(size[0] / box[2], size[1] / box[3])
-
-
-def place_photo(slide, idx: int, photo: dict | None, base_dir: Path, warnings: list[str],
-                ellipse: bool = False) -> str | None:
-    ph = slide.placeholders[idx]
+def _prepare(photo: dict | None, base_dir: Path, box, warnings: list[str]):
+    """Foto prüfen: gibt (Pfad, Pixelmaß) zurück oder den Briefing-Text für eine Platzhalterkarte."""
     photo = photo or {}
     file, brief = photo.get("file"), photo.get("brief")
     path = Path(file) if file else None
@@ -150,22 +157,68 @@ def place_photo(slide, idx: int, photo: dict | None, base_dir: Path, warnings: l
     if path is None or not path.exists():
         if file:
             warnings.append(f"Foto fehlt: {file}")
-        return _brief_in_place(slide, ph, brief or f"Photo missing: {file}")
-    box = _as_px(ph)
+        return brief or f"Photo missing: {file}"
+    fit = bool(photo.get("fit"))
     try:
-        usable, size = _usable_image(path)
+        usable, size = _usable_image(path, box, fit)
     except Exception as err:  # beschädigt, abgeschnitten, unbekanntes Format: Briefing statt Absturz
         warnings.append(f"Foto unlesbar: {file} ({type(err).__name__})")
-        return _brief_in_place(slide, ph, brief or f"Photo unreadable: {file}")
-    if _cover_ratio(size, box) < MIN_PHOTO_RATIO:
+        return brief or f"Photo unreadable: {file}"
+    if _ratio(size, box, fit) < MIN_PHOTO_RATIO:
         warnings.append(f"Foto zu klein: {file} ({size[0]}×{size[1]} px für {box[2]:.0f}×{box[3]:.0f} px)")
-        return _brief_in_place(slide, ph, brief or f"Photo too small: {file}")
+        return brief or f"Photo too small: {file}"
+    return usable, size
+
+
+def _fitted(size: tuple[int, int], box) -> tuple[float, float, float, float]:
+    x, y, w, h = box
+    scale = min(w / size[0], h / size[1])
+    fw, fh = size[0] * scale, size[1] * scale
+    return x + (w - fw) / 2, y + (h - fh) / 2, fw, fh
+
+
+def place_photo(slide, idx: int, photo: dict | None, base_dir: Path, warnings: list[str],
+                ellipse: bool = False) -> str | None:
+    ph = slide.placeholders[idx]
+    box = _as_px(ph)
+    prepared = _prepare(photo, base_dir, box, warnings)
+    if isinstance(prepared, str):
+        return _brief_in_place(slide, ph, prepared)
+    usable, size = prepared
     pic = ph.insert_picture(str(usable))
+    # Die graue Leerfläche des Platzhalters nicht erben: transparente Bilder zeigen den Folienhintergrund.
+    sp_pr = pic._element.spPr
+    sp_pr.insert(1 + sum(1 for c in sp_pr if c.tag in (qn("a:xfrm"), qn("a:prstGeom"), qn("a:custGeom"))),
+                 OxmlElement("a:noFill"))
+    if (photo or {}).get("fit"):  # ganz zeigen: ohne Beschnitt, mittig im Rahmen
+        pic.crop_left = pic.crop_right = pic.crop_top = pic.crop_bottom = 0
+        x, y, w, h = _fitted(size, box)
+        pic.left, pic.top, pic.width, pic.height = px(x), px(y), px(w), px(h)
     if ellipse:
         pic.auto_shape_type = MSO_SHAPE.OVAL
         pic.line.color.rgb = RGBColor.from_string(COLOR["sky"])
         pic.line.width = px(6)
         oxml.add_glow(pic, COLOR["sky"], 90, 60)
+    return None
+
+
+def add_photo(slide, name: str, box, photo: dict | None, base_dir: Path, warnings: list[str]) -> str | None:
+    """Foto als freies Bild in einen Rahmen setzen (gefüllt und mittig beschnitten oder eingepasst)."""
+    prepared = _prepare(photo, base_dir, box, warnings)
+    if isinstance(prepared, str):
+        brief_card(slide, box, prepared)
+        return prepared
+    usable, size = prepared
+    fit = bool((photo or {}).get("fit"))
+    x, y, w, h = _fitted(size, box) if fit else box
+    pic = slide.shapes.add_picture(str(usable), px(x), px(y), px(w), px(h))
+    pic.name = name
+    if not fit:
+        image_aspect, box_aspect = size[0] / size[1], w / h
+        if image_aspect > box_aspect:
+            pic.crop_left = pic.crop_right = (1 - box_aspect / image_aspect) / 2
+        else:
+            pic.crop_top = pic.crop_bottom = (1 - image_aspect / box_aspect) / 2
     return None
 
 

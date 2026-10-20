@@ -65,7 +65,7 @@ Jedes Layout existiert als echtes PowerPoint-Layout im Folienmaster. Der Name im
 | 7 | 07 Points + Chart | `points_chart` | Wie 5, plus Grafik (Balken, Skala, Werte) |
 | 8 | 08 Statement | `statement` | Große Zahl oder Merksatz mit kurzer Erklärung |
 | 9 | 09 Checklist | `checklist` | Bis zu 7 nummerierte Punkte, optional mit Fokus-Box |
-| 10 | 10 Steps | `steps` | 3–5 nummerierte Schritte mit Titel und Text |
+| 10 | 10 Steps | `steps` | 3–5 nummerierte Schritte mit Titel und Text, oder 2–4 Schrittfotos (16:9) in einer Reihe mit Titel und Bildunterschrift; Zählung über `start` fortsetzbar |
 | 11 | 11 Compare | `compare` | Zwei Spalten: richtig/falsch oder Mythos/Fakt |
 | 12 | 12 Scale | `scale` | Skala (z. B. Shade Guide) oder Zeitstrahl (z. B. Pellikel) |
 | 13 | 13 Summary | `summary` | Bis zu 5 Punkte mit Haken |
@@ -84,6 +84,7 @@ Inhalts- und Bildfolien tragen die Leiste. Rahmenfolien nutzen dieselbe Leiste i
 3. Was nicht passt, kommt in die Sprecher-Notizen oder auf eine Folgefolie. Inhalt wird nie verkleinert, um ihn hineinzuquetschen.
 4. Quellen stehen als „Evidence“ unten links, nur die Kurzangabe (Autor, Zeitschrift, Jahr).
 5. Fehlt ein Foto, entsteht ein Platzhalter mit Bildbriefing, z. B. „Foto: Lampe am Retraktor angedockt“. Alle Briefings werden zusätzlich als Liste ausgegeben.
+   Fotos füllen ihren Rahmen und werden mittig beschnitten. Produktbilder und Bildschirmansichten werden mit `fit` ganz gezeigt, auf weißem Grund. Bilder werden auf höchstens die doppelte Rahmenauflösung verkleinert, damit das Deck klein bleibt.
 6. Symbole (Haken, Pfeile, Nummern, Aufzählungszeichen) sind Formen, keine Schriftzeichen.
 7. Fachliche Aussagen werden nicht verändert, nur gekürzt oder umverteilt.
 

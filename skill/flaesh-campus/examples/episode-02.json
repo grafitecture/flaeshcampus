@@ -120,7 +120,7 @@
         }
       ],
       "photo": {
-        "brief": "Prophylaxis: the same teeth before and after professional cleaning"
+        "file": "photos/ep02/prophylaxis-before-after.jpg"
       },
       "caption": "Professional prophylaxis — before and after",
       "notes": "PHASE 1 · DOCUMENT\nClean Before You Whiten\nWhitening never begins on an uncleaned tooth.\nProphylaxis first. Always — plaque, calculus and surface stain removed mechanically, before any chemistry.\nCleaning can be enough. If polishing delivers the shade the patient wanted, say so — nothing builds trust faster.\nWhitening is not polishing. The gel works deeper in the tooth, by oxidation of chromogens.\nClean enamel, even contact. Your first defense against the uneven result in our mini case.\nImage: Professional prophylaxis — before and after"
@@ -216,7 +216,7 @@
         }
       ],
       "photo": {
-        "brief": "Set-up: lamp docked on the lip retractor, patient wearing filtered goggles"
+        "file": "photos/ep02/lamp-docked-goggles.jpg"
       },
       "caption": "Lamp docked on the lip retractor · filtered goggles",
       "evidence": "Li & Greenwall, Br Dent J 2013",
@@ -248,28 +248,33 @@
       "notes": "PHASE 3 · APPLY\nThe gel is engineered for precision — starve it and you starve the result."
     },
     {
-      "type": "points",
+      "type": "points_photo",
       "chapter": 3,
       "title": "1 mm. Green. Neutral pH.",
       "points": [
         {
           "lead": "Dual-chamber 32% HP.",
-          "text": "Mix fresh — full potency protected until the moment of mixing."
+          "text": "Mixed fresh, full potency until use."
         },
         {
           "lead": "Green = precision.",
-          "text": "You see every surface covered — the gel turns clear as oxygen releases."
+          "text": "Every surface visibly covered."
         },
         {
           "lead": "Oxidation, not erosion.",
-          "text": "Oxidation of chromogens at a neutral pH — never corroding the enamel."
+          "text": "Chromogens oxidised at neutral pH."
         },
         {
           "lead": "Minimum 1 mm, everywhere.",
-          "text": "A thin, starved layer produces a pale patch — Sin #5."
+          "text": "A thin layer leaves a pale patch."
         }
       ],
-      "notes": "PHASE 3 · APPLY\n1 mm. Green. Neutral pH.\nThe gel is engineered for precision — starve it and you starve the result.\nDual-chamber 32% HP. Mix fresh — full potency protected until the moment of mixing.\nGreen = precision. You see every surface covered — the gel turns clear as oxygen releases.\nOxidation, not erosion. Whitens by oxidation of chromogens at a neutral pH — never by corroding the enamel surface.\nMinimum 1 mm, everywhere. A thin, starved layer produces a pale patch — Sin #5."
+      "notes": "PHASE 3 · APPLY\n1 mm. Green. Neutral pH.\nThe gel is engineered for precision — starve it and you starve the result.\nDual-chamber 32% HP. Mix fresh — full potency protected until the moment of mixing.\nGreen = precision. You see every surface covered — the gel turns clear as oxygen releases.\nOxidation, not erosion. Whitens by oxidation of chromogens at a neutral pH — never by corroding the enamel surface.\nMinimum 1 mm, everywhere. A thin, starved layer produces a pale patch — Sin #5.\nImage (as in the original slide): Chairside Light Whitening Gel (dual-chamber syringe, mixer) · Gingiva Protector · After Whitening Mousse",
+      "photo": {
+        "file": "photos/ep02/syringe-set.png",
+        "fit": true
+      },
+      "caption": "The fläsh syringe set: gel, barrier, mousse"
     },
     {
       "type": "points_chart",
@@ -332,7 +337,8 @@
         }
       ],
       "photo": {
-        "brief": "fläsh lamp touchscreen during a cycle: timer, mode and power visible"
+        "file": "photos/ep02/touchscreen-cycle-settings.png",
+        "fit": true
       },
       "caption": "The touchscreen guides each cycle",
       "notes": "PHASE 4 · ACTIVATE & MONITOR\nThe fläshcard Discipline\nInsert the card — and let the system lead your assistant, step by step.\n3–4 cycles × 15 minutes. The cycle length is not a negotiable estimate — it is the protocol.\nFresh gel between cycles. Suction off the spent gel — never let the patient rinse.\nThe touchscreen leads. Step-by-step guidance for your assistant, cycle by cycle.\nClosed, but flexible. Every remaining minute is banked by the card — those saved minutes become the hero of our mini case.\nImage: The fläsh lamp touchscreen guides each cycle — timer, modes, power, guided treatment."
@@ -433,34 +439,110 @@
       "notes": "PHASE 5 · SEAL & INSTRUCT\nThe Aftercare Window\nWhat you say in the next sixty seconds decides this week’s phone calls.\nThe pellicle rebuilds fast. A basal layer forms within minutes; near-full thickness by ~2 hours; maturation over ~18–24 hours in vivo.\nMind the first hours. Not a magic number — the rigid “48-hour” rule is weakly evidenced; make chromogen-light choices while the pellicle re-establishes.\nPre-empt the rebound. Today’s shade is partly dehydration-enhanced; slight settling over days is normal — say it in the chair.\nThe departure gift. fläsh Whitening Toothpaste with every patient — premium aftercare, your clinic on their shelf.\nEVIDENCE: Hannig M. Ultrastructural investigation of pellicle morphogenesis over a 24-h period. Clin Oral Investig. 1999;3(2):88–95."
     },
     {
-      "type": "photo",
+      "type": "steps",
       "kicker": "The in-office procedure · Step by step",
       "title": "Prepare & Protect",
-      "photo": {
-        "brief": "Isolation complete: lips protected, retractor docked, gingiva barrier cured"
-      },
-      "caption": "Clean, isolate and seal the soft tissue before any gel — the barrier is the treatment.",
-      "notes": "THE IN-OFFICE PROCEDURE · STEP BY STEP\nPrepare & Protect\nClean, isolate and seal the soft tissue before any gel.\nImage: Every complication is prevented here — the barrier is the treatment."
+      "start": 1,
+      "caption": "Clean, isolate and seal the soft tissue before any gel.",
+      "steps": [
+        {
+          "title": "Insert the lip retractor",
+          "photo": {
+            "file": "photos/ep02/01-insert-lip-retractor.jpg"
+          }
+        },
+        {
+          "title": "Air-dry teeth and gingiva",
+          "photo": {
+            "file": "photos/ep02/02-air-dry.jpg"
+          }
+        },
+        {
+          "title": "Apply the Gingiva Protector",
+          "photo": {
+            "file": "photos/ep02/03-apply-gingiva-protector.jpg"
+          }
+        }
+      ],
+      "notes": "THE IN-OFFICE PROCEDURE · STEP BY STEP\nPrepare & Protect\nClean, isolate and seal the soft tissue before any gel.\nImage: Every complication is prevented here — the barrier is the treatment.\nPhotos: insert lip retractor · air-dry (new, not in the original) · apply Gingiva Protector."
     },
     {
-      "type": "photo",
+      "type": "steps",
+      "kicker": "The in-office procedure · Step by step",
+      "title": "Prepare & Protect",
+      "start": 4,
+      "caption": "Every complication is prevented here — the barrier is the treatment.",
+      "steps": [
+        {
+          "title": "Light-cure the Gingiva Protector",
+          "photo": {
+            "file": "photos/ep02/04-light-cure-gingiva-protector.jpg"
+          }
+        },
+        {
+          "title": "Check the seal",
+          "photo": {
+            "file": "photos/ep02/05-check-seal.jpg"
+          }
+        }
+      ],
+      "notes": "THE IN-OFFICE PROCEDURE · STEP BY STEP\nPrepare & Protect\nClean, isolate and seal the soft tissue before any gel.\nImage: Every complication is prevented here — the barrier is the treatment.\nPhotos: light-cure Gingiva Protector · check the seal with the mirror (new, not in the original)."
+    },
+    {
+      "type": "steps",
       "kicker": "The in-office procedure · Step by step",
       "title": "Apply & Activate",
-      "photo": {
-        "brief": "1 mm layer of green gel on all facial surfaces, Highpower LED docked and running"
-      },
-      "caption": "A 1 mm layer of green gel, then the Highpower LED — repeat 3× (max 4×).",
-      "notes": "THE IN-OFFICE PROCEDURE · STEP BY STEP\nApply & Activate\nA 1 mm layer of green gel, then the Highpower LED — in timed cycles.\nImage: Repeat 3× (max 4×) — fresh gel each cycle, suction only, never rinse."
+      "start": 6,
+      "caption": "Repeat 3× (max 4×) — fresh gel each cycle, suction only, never rinse.",
+      "steps": [
+        {
+          "title": "Apply the gel, 1 mm thick",
+          "photo": {
+            "file": "photos/ep02/06-apply-gel.jpg"
+          }
+        },
+        {
+          "title": "Adjust the lamp, start 15 min",
+          "photo": {
+            "file": "photos/ep02/07-adjust-lamp.jpg"
+          }
+        },
+        {
+          "title": "Suction off the gel — no rinsing",
+          "photo": {
+            "file": "photos/ep02/08-suction-gel.jpg"
+          }
+        }
+      ],
+      "notes": "THE IN-OFFICE PROCEDURE · STEP BY STEP\nApply & Activate\nA 1 mm layer of green gel, then the Highpower LED — in timed cycles.\nImage: Repeat 3× (max 4×) — fresh gel each cycle, suction only, never rinse.\nPhoto labels in the original: Apply Gel (1 mm thick) · Adjust Whitening Lamp and turn on (15 minutes) · Suck off Gel without rinsing."
     },
     {
-      "type": "photo",
+      "type": "steps",
       "kicker": "The in-office procedure · Step by step",
       "title": "Seal & Finish",
-      "photo": {
-        "brief": "After Whitening Mousse applied, final shade taken with the value-ordered guide"
-      },
+      "start": 9,
       "caption": "After Whitening Mousse soothes and remineralises — then final shade & photos.",
-      "notes": "THE IN-OFFICE PROCEDURE · STEP BY STEP\nSeal & Finish\nRemove, remineralise and document the new shade.\nImage: After Whitening Mousse soothes and remineralises — then final shade & photos."
+      "steps": [
+        {
+          "title": "Rinse off residual gel with water",
+          "photo": {
+            "file": "photos/ep02/09-rinse-residual-gel.jpg"
+          }
+        },
+        {
+          "title": "Remove the Gingiva Protector",
+          "photo": {
+            "file": "photos/ep02/10-remove-gingiva-protector.jpg"
+          }
+        },
+        {
+          "title": "Apply After Whitening Mousse",
+          "photo": {
+            "file": "photos/ep02/11-apply-after-whitening-mousse.jpg"
+          }
+        }
+      ],
+      "notes": "THE IN-OFFICE PROCEDURE · STEP BY STEP\nSeal & Finish\nRemove, remineralise and document the new shade.\nImage: After Whitening Mousse soothes and remineralises — then final shade & photos.\nPhoto labels in the original: Rinse off residual gel with water · Remove Gingiva Protector · Apply After Whitening Mousse."
     },
     {
       "type": "case",

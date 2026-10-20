@@ -109,6 +109,38 @@ def test_photo_too_small(prs, tmp_path):
     assert any("thumb.jpg" in w for w in warnings)
 
 
+def test_photo_downscaled(prs, tmp_path):
+    """4K-Fotos werden auf höchstens das Doppelte des Rahmens verkleinert, sonst wird das Deck riesig."""
+    Image.new("RGB", (3840, 2160), "white").save(tmp_path / "uhd.jpg")
+    slide = new_slide(prs, "06 Points + Photo")  # Rahmen 800 × 400
+    place_photo(slide, PH_IDX["Photo"], {"file": "uhd.jpg"}, tmp_path, [])
+    w, h = slide.placeholders[PH_IDX["Photo"]].image.size
+    assert min(w / 800, h / 400) <= 2.01
+
+
+def test_photo_fit_keeps_whole_image(prs, tmp_path):
+    """Produktbilder und Bildschirme: ganz zeigen statt beschneiden, mittig im Rahmen."""
+    Image.new("RGBA", (600, 720), (0, 0, 0, 0)).save(tmp_path / "product.png")
+    slide = new_slide(prs, "06 Points + Photo")  # Rahmen x 1000, 800 × 400
+    place_photo(slide, PH_IDX["Photo"], {"file": "product.png", "fit": True}, tmp_path, [])
+    pic = slide.placeholders[PH_IDX["Photo"]]
+    assert (pic.crop_left, pic.crop_right, pic.crop_top, pic.crop_bottom) == (0, 0, 0, 0)
+    assert abs(pic.height - px(400)) <= px(1)
+    assert abs(pic.width - px(400 * 600 / 720)) <= px(1)
+    assert abs(pic.left + pic.width / 2 - px(1400)) <= px(1)
+
+
+def test_placed_photo_drops_placeholder_fill(prs, tmp_path):
+    """Transparente Produktbilder zeigen den Folienhintergrund, nicht die graue Leerfläche des Platzhalters."""
+    from pptx.oxml.ns import qn
+
+    Image.new("RGBA", (600, 720), (0, 0, 0, 0)).save(tmp_path / "product.png")
+    slide = new_slide(prs, "06 Points + Photo")
+    place_photo(slide, PH_IDX["Photo"], {"file": "product.png", "fit": True}, tmp_path, [])
+    sp_pr = slide.placeholders[PH_IDX["Photo"]]._element.spPr
+    assert sp_pr.find(qn("a:noFill")) is not None
+
+
 def test_photo_missing(prs, tmp_path):
     slide = new_slide(prs, "06 Points + Photo")
     warnings = []

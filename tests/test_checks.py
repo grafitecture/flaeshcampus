@@ -134,6 +134,23 @@ def test_timeline_caption_below_labels(plan, template_path, tmp_path, m):
     assert caption.top + caption.height <= points.top
 
 
+def test_photo_steps_slide_clean(plan, template_path, tmp_path, m):
+    """Eine Schrittfolie mit Fotos und Bildunterschrift besteht die Prüfung; ein fehlendes Foto wird Briefing."""
+    from PIL import Image
+
+    for i in range(2):
+        Image.new("RGB", (1920, 1080), "white").save(tmp_path / f"step{i}.jpg")
+    plan["slides"] = [{"type": "steps", "title": "Seal & Finish", "start": 9,
+                       "caption": "After Whitening Mousse soothes and remineralises — then final shade & photos.",
+                       "steps": [{"title": "Rinse off residual gel with water", "photo": {"file": "step0.jpg"}},
+                                 {"title": "Remove the Gingiva Protector", "photo": {"file": "step1.jpg"}},
+                                 {"title": "Apply After Whitening Mousse", "photo": {"brief": "Mousse applied"}}]}]
+    out = tmp_path / "steps.pptx"
+    report = build_deck(plan, template_path, out, tmp_path)
+    assert check_deck(out, layout_spec(), m) == []
+    assert report.briefs == [(1, "Mousse applied")]
+
+
 def test_chapter_title_two_lines(plan, template_path, tmp_path, m):
     plan["slides"] = [{"type": "chapter", "chapter": n, "line": "The last ten minutes decide how the first sixty are remembered."}
                       for n in (4, 5)]

@@ -111,7 +111,7 @@
         }
       ],
       "photo": {
-        "brief": "Set-up: lamp docked on the lip retractor, patient wearing filtered goggles"
+        "file": "photos/ep02/lamp-docked-goggles.jpg"
       },
       "caption": "Lamp docked on the lip retractor · filtered goggles",
       "evidence": "Li & Greenwall, Br Dent J 2013",
@@ -208,6 +208,34 @@
       "notes": "10 Steps (steps). 3–5 numbered steps with title and text (grid 3, 2+2 or 3+2)."
     },
     {
+      "type": "steps",
+      "kicker": "Layout 10 · steps with photos",
+      "title": "Apply & Activate",
+      "start": 6,
+      "caption": "Repeat 3× (max 4×) — fresh gel each cycle, suction only, never rinse.",
+      "steps": [
+        {
+          "title": "Apply the gel, 1 mm thick",
+          "photo": {
+            "file": "photos/ep02/06-apply-gel.jpg"
+          }
+        },
+        {
+          "title": "Adjust the lamp, start 15 min",
+          "photo": {
+            "file": "photos/ep02/07-adjust-lamp.jpg"
+          }
+        },
+        {
+          "title": "Suction off the gel — no rinsing",
+          "photo": {
+            "file": "photos/ep02/08-suction-gel.jpg"
+          }
+        }
+      ],
+      "notes": "10 Steps with photos (steps + photo). 2–4 photos (16:9) in a row, step number on the photo, title below (max. two lines), optional caption. 'start' continues the numbering across slides."
+    },
+    {
       "type": "compare",
       "kicker": "Layout 11 · compare",
       "title": "Oxidation, Not Erosion",
@@ -300,27 +328,27 @@
     {
       "type": "photo",
       "kicker": "Layout 14 · photo",
-      "title": "Prepare & Protect",
+      "title": "Apply & Activate",
       "photo": {
-        "brief": "Isolation complete: lips protected, retractor docked, gingiva barrier cured"
+        "file": "photos/ep02/07-adjust-lamp.jpg"
       },
-      "caption": "Clean, isolate and seal the soft tissue before any gel — the barrier is the treatment.",
+      "caption": "Repeat 3× (max 4×) — fresh gel each cycle, suction only, never rinse.",
       "notes": "14 Photo (photo). Full-bleed photo right of the rail, kicker, title and caption in a dark band. The video circle stays on top."
     },
     {
       "type": "before_after",
       "kicker": "Layout 15 · before_after",
-      "title": "Identical Setup, Before and After",
+      "title": "Clean Before You Whiten",
       "before": {
-        "label": "Before · baseline shade",
+        "label": "Before prophylaxis",
         "photo": {
-          "brief": "Baseline shade, identical setup"
+          "file": "photos/ep02/prophylaxis-before.jpg"
         }
       },
       "after": {
-        "label": "After · final shade",
+        "label": "After prophylaxis",
         "photo": {
-          "brief": "Final shade, identical setup"
+          "file": "photos/ep02/prophylaxis-after.jpg"
         }
       },
       "notes": "15 Before / After (before_after). Two photos (3:2) with labels, e.g. the shade value."
@@ -330,28 +358,28 @@
       "kicker": "Layout 16 · photo_annotated",
       "title": "The Isolation Setup",
       "photo": {
-        "brief": "Isolation setup"
+        "file": "photos/ep02/04-light-cure-gingiva-protector.jpg"
       },
       "markers": [
         {
-          "x": 0.5,
-          "y": 0.18,
+          "x": 0.82,
+          "y": 0.22,
           "label": "Filtered goggles"
         },
         {
-          "x": 0.32,
-          "y": 0.5,
-          "label": "Retractor docked on the lamp"
+          "x": 0.22,
+          "y": 0.26,
+          "label": "Curing light"
         },
         {
-          "x": 0.68,
-          "y": 0.62,
-          "label": "Lip protection"
+          "x": 0.36,
+          "y": 0.52,
+          "label": "Lip retractor"
         },
         {
-          "x": 0.5,
-          "y": 0.8,
-          "label": "Cured gingiva barrier"
+          "x": 0.6,
+          "y": 0.46,
+          "label": "Gingiva Protector, light-cured"
         }
       ],
       "notes": "16 Photo Annotated (photo_annotated). Photo with up to 5 numbered markers (x/y from 0 to 1) and a legend on the right."

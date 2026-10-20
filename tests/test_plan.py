@@ -74,6 +74,35 @@ TYPE_SLIPS = [
 ]
 
 
+PHOTO_STEPS = {"type": "steps", "title": "Apply & Activate", "start": 6, "caption": "Repeat 3× (max 4×).",
+               "steps": [{"title": "Apply the gel", "photo": {"file": "a.jpg"}},
+                         {"title": "Dock the lamp", "photo": {"brief": "Lamp docked", "fit": False}}]}
+TYPE_SLIPS += [
+    (lambda p: p["slides"].append({**PHOTO_STEPS, "steps": [{"title": "a", "photo": {"brief": "x"}},
+                                                            {"title": "b", "text": "c"}]}),
+     "slide 5 (steps): give every step a photo, or none"),
+    (lambda p: p["slides"].append({**PHOTO_STEPS, "steps": [{"title": f"s{i}", "photo": {"brief": "x"}}
+                                                            for i in range(5)]}),
+     "slide 5 (steps): steps: 2–4 items"),
+    (lambda p: p["slides"].append({"type": "steps", "title": "Fix", "caption": "x",
+                                   "steps": [{"title": "a", "text": "b"}] * 3}),
+     "slide 5 (steps): 'caption' needs step photos"),
+    (lambda p: p["slides"].append({**PHOTO_STEPS, "steps": [{"title": "a", "photo": {"brief": "x", "fit": "yes"}},
+                                                            {"title": "b", "photo": {"brief": "y"}}]}),
+     "slide 5 (steps): steps[1].photo 'fit' must be true or false"),
+    (lambda p: p["slides"].append({**PHOTO_STEPS, "start": 0}),
+     "slide 5 (steps): 'start' must be a whole number from 1"),
+    (lambda p: p["slides"].append({**PHOTO_STEPS, "steps": [{"title": "a", "text": "b", "photo": {"brief": "x"}},
+                                                            {"title": "c", "photo": {"brief": "y"}}]}),
+     "slide 5 (steps): steps[1] 'text' is not shown with photos — use the caption or notes"),
+]
+
+
+def test_photo_steps_valid(plan):
+    plan["slides"].append(PHOTO_STEPS)
+    assert validate_plan(plan) == []
+
+
 @pytest.mark.parametrize("mutate,expected", TYPE_SLIPS)
 def test_type_slips_reported(plan, mutate, expected):
     """Falsche Feldtypen ergeben eine klare Meldung je Folie statt eines Absturzes beim Bauen."""

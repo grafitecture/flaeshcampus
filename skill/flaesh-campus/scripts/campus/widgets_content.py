@@ -8,7 +8,7 @@ from pptx.util import Pt
 
 from . import oxml
 from .tokens import COLOR, KICKER_SPC, LABEL_SPC, px
-from .widgets_frame import shape, style, textbox
+from .widgets_frame import add_photo, shape, style, textbox
 
 
 # ---------------------------------------------------------------- Hilfen
@@ -76,7 +76,7 @@ def checklist(slide, items: list[str], x: float = 240, y: float = 330, w: float 
         textbox(slide, f"check-text-{i}", (x + 86, top, w - 86, 60), [(item, style("body", "ink"))], anchor="ctr")
 
 
-def steps_grid(slide, steps: list[dict], dark: bool, area=(240, 330, 1260, 560)) -> None:
+def steps_grid(slide, steps: list[dict], dark: bool, area=(240, 330, 1260, 560), start: int = 1) -> None:
     ax, ay, aw, ah = area
     rows = {3: [3], 4: [2, 2], 5: [3, 2]}.get(len(steps), [len(steps)])
     cols = max(rows)
@@ -88,9 +88,33 @@ def steps_grid(slide, steps: list[dict], dark: bool, area=(240, 330, 1260, 560))
             step = steps[i]
             i += 1
             x, y = ax + c * cw, ay + r * rh
-            _number(slide, f"step-num-{i}", (x, y, 56, 56), i, "sky", "white", 18)
+            _number(slide, f"step-num-{i}", (x, y, 56, 56), start + i - 1, "sky", "white", 18)
             textbox(slide, f"step-title-{i}", (x + 76, y + 6, cw - 106, 48), [(step["title"], style("lead", title_color))])
             textbox(slide, f"step-text-{i}", (x + 76, y + 60, cw - 106, rh - 80), [(step["text"], style("body", text_color))])
+
+
+PHOTO_STEPS_TOP, PHOTO_STEPS_GAP, PHOTO_STEPS_WIDTH, PHOTO_STEPS_MAX_CELL = 300, 24, 1560, 504
+
+
+def photo_steps(slide, steps: list[dict], base_dir, warnings: list[str], start: int = 1,
+                caption: str | None = None) -> list[str]:
+    """Schrittfotos in einer Reihe (16:9) über der Kreis-Zone, Nummer auf dem Foto, Titel darunter.
+    Gibt die Briefings fehlender Fotos zurück."""
+    n = len(steps)
+    cell = min(PHOTO_STEPS_MAX_CELL, (PHOTO_STEPS_WIDTH - PHOTO_STEPS_GAP * (n - 1)) / n)
+    h = cell * 9 / 16
+    briefs = []
+    for i, step in enumerate(steps, 1):
+        x = 240 + (i - 1) * (cell + PHOTO_STEPS_GAP)
+        brief = add_photo(slide, f"step-photo-{i}", (x, PHOTO_STEPS_TOP, cell, h), step["photo"], base_dir, warnings)
+        if brief:
+            briefs.append(brief)
+        _number(slide, f"step-num-{i}", (x + 16, PHOTO_STEPS_TOP + 16, 48, 48), start + i - 1, "sky", "white", 16)
+        textbox(slide, f"step-title-{i}", (x, PHOTO_STEPS_TOP + h + 16, cell, 100),
+                [(step["title"], style("lead", "slate"))])
+    if caption:
+        textbox(slide, "steps-caption", (240, PHOTO_STEPS_TOP + h + 156, 1260, 80), [(caption, style("body", "muted"))])
+    return briefs
 
 
 def summary_items(slide, items: list[dict]) -> None:

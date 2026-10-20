@@ -1,11 +1,12 @@
 import pytest
+from PIL import Image
 from pptx import Presentation
 from pptx.dml.color import RGBColor
 from pptx.util import Pt
 
 from campus.tokens import COLOR, PH_IDX, px
 from campus.widgets_content import (bars_card, case_findings, checklist, closing_steps, compare_columns, markers,
-                                    points_text, quiz_options, steps_grid, summary_items, timeline)
+                                    photo_steps, points_text, quiz_options, steps_grid, summary_items, timeline)
 
 SKY = RGBColor.from_string(COLOR["sky"])
 
@@ -132,6 +133,36 @@ def test_case_rows_clear_story_and_evidence(prs):
     shapes = by_name(slide)
     assert shapes["finding-head"].top >= px(330 + 150 + 24)
     assert bottom(shapes["cause-5"]) <= px(920)
+
+
+def test_photo_steps_row(prs, tmp_path):
+    """Schrittfotos in einer Reihe (16:9, gleich groß), Nummer auf dem Foto, Titel darunter, Zählung ab start."""
+    for i in range(3):
+        Image.new("RGB", (1920, 1080), "white").save(tmp_path / f"s{i}.jpg")
+    slide = new_slide(prs, "10 Steps")
+    warnings = []
+    briefs = photo_steps(slide, [{"title": f"Step {i}", "photo": {"file": f"s{i}.jpg"}} for i in range(3)],
+                         tmp_path, warnings, start=6)
+    shapes = by_name(slide)
+    pics = [shapes[f"step-photo-{i}"] for i in (1, 2, 3)]
+    assert len({p.top for p in pics}) == 1 and len({p.width for p in pics}) == 1
+    assert all(abs(p.width * 9 / 16 - p.height) <= px(2) for p in pics)
+    assert [shapes[f"step-num-{i}"].text_frame.text for i in (1, 2, 3)] == ["6", "7", "8"]
+    assert shapes["step-title-1"].top >= pics[0].top + pics[0].height
+    assert briefs == [] and warnings == []
+
+
+def test_photo_steps_caption_breathes(prs, tmp_path):
+    """Die Bildunterschrift hält Abstand zu zweizeiligen Schritt-Titeln und hebt sich farblich von ihnen ab."""
+    slide = new_slide(prs, "10 Steps")
+    photo_steps(slide, [{"title": "Rinse off residual gel with water", "photo": {"brief": "x"}},
+                        {"title": "Remove the Gingiva Protector", "photo": {"brief": "y"}}],
+                tmp_path, [], caption="After Whitening Mousse soothes and remineralises.")
+    shapes = by_name(slide)
+    title, caption = shapes["step-title-1"], shapes["steps-caption"]
+    assert caption.top - (title.top + title.height) >= px(32)
+    run = caption.text_frame.paragraphs[0].runs[0]
+    assert run.font.color.rgb == RGBColor.from_string(COLOR["muted"])
 
 
 def test_quiz_highlight(prs):

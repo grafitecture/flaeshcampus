@@ -9,7 +9,7 @@ from .layouts import LAYOUTS
 from .measure import Measurer, Para
 from .plan import default_kicker
 from .tokens import EMU_PER_PX, PH_IDX, ZONE, px
-from .widgets_content import (bars_card, case_findings, checklist, closing_steps, compare_columns, markers,
+from .widgets_content import (bars_card, case_findings, checklist, closing_steps, compare_columns, markers, photo_steps,
                               points_text, quiz_options, scale_caption, scale_chips, steps_grid, summary_items,
                               timeline)
 from .widgets_frame import evidence, focus_box, footer, place_photo, rail_progress
@@ -240,7 +240,12 @@ def render_checklist(ctx: Ctx, s: dict) -> None:
 
 def render_steps(ctx: Ctx, s: dict) -> None:
     slide = _start(ctx, s)
-    steps_grid(slide, s["steps"], dark=False)
+    start = s.get("start", 1)
+    if any("photo" in step for step in s["steps"]):
+        for brief in photo_steps(slide, s["steps"], ctx.base_dir, ctx.report.warnings, start, s.get("caption")):
+            ctx.report.briefs.append((ctx.report.slides, brief))
+    else:
+        steps_grid(slide, s["steps"], dark=False, start=start)
     _frame(ctx, slide, s)
 
 

@@ -37,6 +37,8 @@ def _photo(value, name: str = "photo") -> list[str]:
     if not isinstance(value, dict):
         return [f"{name} needs 'file' or 'brief'"]
     problems = _optional_text(value, ("file", "brief"), f"{name} ")
+    if "fit" in value and not isinstance(value["fit"], bool):
+        problems.append(f"{name} 'fit' must be true or false")
     if problems:
         return problems
     return [] if (_is_text(value.get("file")) or _is_text(value.get("brief"))) else [f"{name} needs 'file' or 'brief'"]
@@ -96,6 +98,29 @@ def _check_points_chart(s):
         if not isinstance(value, (int, float)) or isinstance(value, bool) or not 0 <= value <= 100:
             problems.append(f"chart.bars[{i}] value must be 0–100")
         problems += _optional_text(bar, ("display",), f"chart.bars[{i}] ")
+    return problems
+
+
+def _check_steps(s):
+    """Text-Schritte (3–5, Titel + Text) oder Foto-Schritte (2–4, Titel + Foto, optional Bildunterschrift)."""
+    problems = _text(s, "title")
+    steps = s.get("steps")
+    with_photo = [isinstance(st, dict) and "photo" in st for st in steps] if isinstance(steps, list) else []
+    if any(with_photo):
+        if not all(with_photo):
+            return problems + ["give every step a photo, or none"]
+        problems += _items(steps, "steps", 2, 4, ("title",))
+        for i, st in enumerate(steps, 1):
+            problems += _photo(st.get("photo"), f"steps[{i}].photo")
+            if "text" in st:
+                problems.append(f"steps[{i}] 'text' is not shown with photos — use the caption or notes")
+    else:
+        problems += _items(steps, "steps", 3, 5, ("title", "text"))
+        if "caption" in s:
+            problems.append("'caption' needs step photos")
+    start = s.get("start", 1)
+    if not isinstance(start, int) or isinstance(start, bool) or start < 1:
+        problems.append("'start' must be a whole number from 1")
     return problems
 
 
@@ -184,7 +209,7 @@ CHECKS = {
     "points_chart": _check_points_chart,
     "statement": _check_statement,
     "checklist": lambda s: _text(s, "title") + _items(s.get("items"), "items", 1, 7) + _focus(s),
-    "steps": lambda s: _text(s, "title") + _items(s.get("steps"), "steps", 3, 5, ("title", "text")),
+    "steps": _check_steps,
     "compare": _check_compare,
     "scale": _check_scale,
     "summary": lambda s: _text(s, "title") + _items(s.get("items"), "items", 1, 5, ("title", "text")),
