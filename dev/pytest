@@ -1,0 +1,4 @@
+#!/bin/sh
+# PyPI ist in dieser Sandbox gesperrt: nutzt das lokal installierte pytest mit dem System-Python.
+SP=$(ls -d /root/.local/share/uv/tools/pytest/lib/python3*/site-packages 2>/dev/null | head -1)
+exec env PYTHONPATH="${SP}${PYTHONPATH:+:$PYTHONPATH}" python3 -m pytest "$@"

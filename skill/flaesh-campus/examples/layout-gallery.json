@@ -1,0 +1,430 @@
+{
+  "episode": {
+    "number": 2,
+    "title": "In-Office Whitening Workflow",
+    "subtitle": "Step-by-Step Protocol + Common Mistakes",
+    "presenter": {
+      "name": "Dr. Germán Gómez",
+      "credentials": "DDS · MD · PhD (University of Tübingen) · Esthetic Dentistry & Implantology, Spain\n500+ lectures · 43 countries",
+      "photo": {
+        "file": "photos/gomez.jpg"
+      }
+    },
+    "chapters": [
+      "Document",
+      "Protect",
+      "Apply",
+      "Activate & Monitor",
+      "Seal & Instruct"
+    ]
+  },
+  "slides": [
+    {
+      "type": "cover",
+      "notes": "01 Title (cover). Episode number, title, subtitle; presenter name, credentials (two lines) and portrait in the glowing circle. The video circle is not reserved here.",
+      "kicker": "Layout 01 · cover"
+    },
+    {
+      "type": "chapter",
+      "chapter": 3,
+      "line": "The gel is engineered for precision.",
+      "notes": "02 Chapter (chapter). Big chapter number, chapter name from the episode, one sentence. Long names wrap to two lines; the sentence moves down.",
+      "kicker": "Layout 02 · chapter"
+    },
+    {
+      "type": "hook",
+      "kicker": "Layout 03 · hook",
+      "quote": "My friend had her whitening done here — hers looks incredible. Will mine?",
+      "truth": {
+        "text": "Same gel, same lamp — two clinics, visibly different results. The chemistry never changes between offices. The workflow does."
+      },
+      "answer": {
+        "text": "If the outcome depends on who happens to be working that day, you have a whitening lottery. A strict, standardized protocol ends the lottery."
+      },
+      "notes": "03 Hook (hook). Opening quote or question, ‘The hard truth’ card and ‘The fläsh answer’ card. Labels can be changed per slide."
+    },
+    {
+      "type": "closing",
+      "kicker": "Layout 04 · closing",
+      "title": "Make It Your Team’s Reflex",
+      "steps": [
+        {
+          "title": "Run one full dry run",
+          "text": "No patient in the chair — your assistant drives the fläshcard start to finish."
+        },
+        {
+          "title": "Appoint an SOP owner",
+          "text": "One team member owns this protocol — and audits the clinic against it."
+        },
+        {
+          "title": "Laminate the phases",
+          "text": "Visible chairside, next to the Seven Sins of Improper Isolation."
+        }
+      ],
+      "next": {
+        "title": "Episode 03 · Sensitivity Prevention & Management",
+        "text": "Preventing it, managing it — and turning a complaint into loyalty."
+      },
+      "notes": "04 Closing (closing). One to three next steps with title and text, plus the ‘Up next’ card for the following episode."
+    },
+    {
+      "type": "points",
+      "chapter": 3,
+      "title": "1 mm. Green. Neutral pH.",
+      "points": [
+        {
+          "lead": "Dual-chamber 32% HP.",
+          "text": "Mix fresh — full potency protected until the moment of mixing."
+        },
+        {
+          "lead": "Green = precision.",
+          "text": "You see every surface covered — the gel turns clear as oxygen releases."
+        },
+        {
+          "lead": "Oxidation, not erosion.",
+          "text": "Oxidation of chromogens at a neutral pH — never corroding the enamel."
+        },
+        {
+          "lead": "Minimum 1 mm, everywhere.",
+          "text": "A thin, starved layer produces a pale patch — Sin #5."
+        }
+      ],
+      "notes": "05 Points (points). The standard slide: 2–4 points, each with a short lead and an explanation of about 14 words. Optional focus box on the right (points then narrow to 900 px).",
+      "kicker": "Layout 05 · points"
+    },
+    {
+      "type": "points_photo",
+      "chapter": 2,
+      "title": "Soft Tissue First",
+      "points": [
+        {
+          "lead": "Vitamin E or vaseline on the lips.",
+          "text": "Then the fläsh lip retractor, docked onto the lamp head."
+        },
+        {
+          "lead": "Filtered eye protection.",
+          "text": "For the patient and for every team member present."
+        },
+        {
+          "lead": "Gingiva protector, light-cured.",
+          "text": "Dry gingiva; only slight overlap onto cervical enamel; cure until solid."
+        }
+      ],
+      "photo": {
+        "file": "photos/ep02/lamp-docked-goggles.jpg"
+      },
+      "caption": "Lamp docked on the lip retractor · filtered goggles",
+      "evidence": "Li & Greenwall, Br Dent J 2013",
+      "notes": "06 Points + Photo (points_photo). 2–4 points plus photo (2:1) with caption. Without a photo file, a placeholder with the photo brief appears.",
+      "kicker": "Layout 06 · points_photo"
+    },
+    {
+      "type": "points_chart",
+      "chapter": 3,
+      "title": "The Lamp: Position Is Power",
+      "points": [
+        {
+          "lead": "Lock the geometry.",
+          "text": "Patient at 45°, lamp head locked on the retractor — intensity level IIII."
+        },
+        {
+          "lead": "The expensive centimetre.",
+          "text": "One centimetre of gap costs ≈50% of the power."
+        },
+        {
+          "lead": "Complementary-colour activation.",
+          "text": "Blue 460 nm light, absorbed by the green gel — no UV, no infrared, below 39 °C."
+        }
+      ],
+      "chart": {
+        "title": "Light power at the enamel",
+        "bars": [
+          {
+            "label": "Lamp docked on the retractor",
+            "value": 100,
+            "highlight": true
+          },
+          {
+            "label": "1 cm of extra gap",
+            "value": 56
+          }
+        ],
+        "note": "1 cm of extra gap ≈ 50% less light power (3² = 9 vs 4² = 16)"
+      },
+      "evidence": "Ontiveros & Paravina, J Dent 2009",
+      "notes": "07 Points + Chart (points_chart). 2–4 points plus a bar card (2–4 bars, values 0–100, one bar highlighted) with an optional note.",
+      "kicker": "Layout 07 · points_chart"
+    },
+    {
+      "type": "statement",
+      "kicker": "Layout 08 · statement",
+      "big": "30",
+      "statement": "years of German-made whitening expertise",
+      "text": "Gel, lamp and fläshcard engineered as one closed system · WHITEsmile",
+      "notes": "08 Statement (statement). One big number or keyword, a statement line and a short explanation."
+    },
+    {
+      "type": "checklist",
+      "chapter": 2,
+      "title": "The Seven Sins of Isolation",
+      "items": [
+        "No lip protection — vitamin E or vaseline",
+        "Wrong retractor for the system",
+        "No filtered eye protection",
+        "Barrier not properly placed or cured",
+        "Not enough whitening gel (below 1 mm)",
+        "Patient left unattended — no signal agreed",
+        "Dentin sensitivity not managed"
+      ],
+      "focus": {
+        "title": "Burns are never caused by the gel.",
+        "text": "Rescue: vitamin E or vaseline onto the gingiva — no panic, protocol."
+      },
+      "notes": "09 Checklist (checklist). Up to 7 numbered items, optional focus box.",
+      "kicker": "Layout 09 · checklist"
+    },
+    {
+      "type": "steps",
+      "kicker": "Layout 10 · steps",
+      "title": "The Fix & The Conversation",
+      "steps": [
+        {
+          "title": "Re-isolate, correctly",
+          "text": "Rebuild the barrier and confirm the retractor is docked on the lamp head."
+        },
+        {
+          "title": "Fresh 1 mm gel",
+          "text": "Full-thickness layer on the canines and cervical thirds — the lagging zones."
+        },
+        {
+          "title": "Spend banked minutes",
+          "text": "The cycle time the fläshcard saved becomes a targeted touch-up."
+        },
+        {
+          "title": "Say the words",
+          "text": "“The canines are always last. The white areas are temporary.” Book the one-week photo."
+        }
+      ],
+      "notes": "10 Steps (steps). 3–5 numbered steps with title and text (grid 3, 2+2 or 3+2)."
+    },
+    {
+      "type": "steps",
+      "kicker": "Layout 10 · steps with photos",
+      "title": "Apply & Activate",
+      "start": 6,
+      "caption": "Repeat 3× (max 4×) — fresh gel each cycle, suction only, never rinse.",
+      "steps": [
+        {
+          "title": "Apply the gel, 1 mm thick",
+          "photo": {
+            "file": "photos/ep02/06-apply-gel.jpg"
+          }
+        },
+        {
+          "title": "Adjust the lamp, start 15 min",
+          "photo": {
+            "file": "photos/ep02/07-adjust-lamp.jpg"
+          }
+        },
+        {
+          "title": "Suction off the gel — no rinsing",
+          "photo": {
+            "file": "photos/ep02/08-suction-gel.jpg"
+          }
+        }
+      ],
+      "notes": "10 Steps with photos (steps + photo). 2–4 photos (16:9) in a row, step number on the photo, title below (max. two lines), optional caption. 'start' continues the numbering across slides."
+    },
+    {
+      "type": "compare",
+      "kicker": "Layout 11 · compare",
+      "title": "Oxidation, Not Erosion",
+      "style": "myth_fact",
+      "left": {
+        "label": "Myth",
+        "items": [
+          "Whitening etches the enamel",
+          "The lamp works by heating the tooth",
+          "Burns come from the gel"
+        ]
+      },
+      "right": {
+        "label": "Fact",
+        "items": [
+          "Oxidation of chromogens at neutral pH",
+          "Blue 460 nm light, below 39 °C — a photochemical effect",
+          "Burns are never caused by the gel — isolation prevents them"
+        ]
+      },
+      "notes": "11 Compare (compare). Two columns, 1–4 items each, rows aligned. Style myth_fact (fact side highlighted) or do_dont (do side highlighted)."
+    },
+    {
+      "type": "scale",
+      "chapter": 1,
+      "title": "The Value-Ordered Baseline",
+      "scale": {
+        "items": [
+          "B1",
+          "A1",
+          "B2",
+          "D2",
+          "A2",
+          "C1",
+          "C2",
+          "D4",
+          "A3",
+          "D3",
+          "B3",
+          "A3.5",
+          "B4",
+          "C3",
+          "A4",
+          "C4"
+        ]
+      },
+      "caption": "Value-ordered shade guide · lightest to darkest",
+      "points": [
+        {
+          "lead": "Determine it together.",
+          "text": "Daylight, teeth still hydrated, the tab in the patient’s own hand."
+        },
+        {
+          "lead": "Enter it into the lamp.",
+          "text": "After treatment it reports the shades gained — a number, not an opinion."
+        }
+      ],
+      "evidence": "Joiner A., J Dent 2004",
+      "notes": "12 Scale (scale). A scale of 2–16 chips (e.g. shade guide, optional highlight) or a timeline of 2–6 points, optional caption, 1–2 points below.",
+      "kicker": "Layout 12 · scale"
+    },
+    {
+      "type": "summary",
+      "kicker": "Layout 13 · summary",
+      "title": "The SOP Blueprint",
+      "items": [
+        {
+          "title": "Document",
+          "text": "Clean first, baseline shade in value order, photograph like a scientist."
+        },
+        {
+          "title": "Protect",
+          "text": "Vitamin E or vaseline, correct retractor, goggles, cured barrier — avoid the Seven Sins."
+        },
+        {
+          "title": "Apply",
+          "text": "A minimum 1 mm of green gel, working by oxidation at neutral pH."
+        },
+        {
+          "title": "Activate & monitor",
+          "text": "Lamp locked on the retractor · fläshcard discipline · comfort checkpoints."
+        },
+        {
+          "title": "Seal & instruct",
+          "text": "Mousse, the aftercare window, the departure gift — identically, every time."
+        }
+      ],
+      "notes": "13 Summary (summary). Up to 5 items with check mark, title and text (two columns)."
+    },
+    {
+      "type": "photo",
+      "kicker": "Layout 14 · photo",
+      "title": "Apply & Activate",
+      "photo": {
+        "file": "photos/ep02/07-adjust-lamp.jpg"
+      },
+      "caption": "Repeat 3× (max 4×) — fresh gel each cycle, suction only, never rinse.",
+      "notes": "14 Photo (photo). Full-bleed photo right of the rail, kicker, title and caption in a dark band. The video circle stays on top."
+    },
+    {
+      "type": "before_after",
+      "kicker": "Layout 15 · before_after",
+      "title": "Clean Before You Whiten",
+      "before": {
+        "label": "Before prophylaxis",
+        "photo": {
+          "file": "photos/ep02/prophylaxis-before.jpg"
+        }
+      },
+      "after": {
+        "label": "After prophylaxis",
+        "photo": {
+          "file": "photos/ep02/prophylaxis-after.jpg"
+        }
+      },
+      "notes": "15 Before / After (before_after). Two photos (3:2) with labels, e.g. the shade value."
+    },
+    {
+      "type": "photo_annotated",
+      "kicker": "Layout 16 · photo_annotated",
+      "title": "The Isolation Setup",
+      "photo": {
+        "file": "photos/ep02/04-light-cure-gingiva-protector.jpg"
+      },
+      "markers": [
+        {
+          "x": 0.82,
+          "y": 0.22,
+          "label": "Filtered goggles"
+        },
+        {
+          "x": 0.22,
+          "y": 0.26,
+          "label": "Curing light"
+        },
+        {
+          "x": 0.36,
+          "y": 0.52,
+          "label": "Lip retractor"
+        },
+        {
+          "x": 0.6,
+          "y": 0.46,
+          "label": "Gingiva Protector, light-cured"
+        }
+      ],
+      "notes": "16 Photo Annotated (photo_annotated). Photo with up to 5 numbered markers (x/y from 0 to 1) and a legend on the right."
+    },
+    {
+      "type": "case",
+      "kicker": "Layout 17 · case",
+      "title": "“The Uneven Case”",
+      "story": "A 38-year-old at the end of cycle 3 — centrals magnificent, cervical thirds still yellow, canines two steps behind, chalky patches on the laterals. She is holding the mirror.",
+      "findings": [
+        {
+          "finding": "Cervical thirds still yellow",
+          "cause": "Barrier over-extended onto cervical enamel"
+        },
+        {
+          "finding": "Patchy brightness",
+          "cause": "Gel layer below 1 mm in zones — Sin #5"
+        },
+        {
+          "finding": "Everything underperforming",
+          "cause": "Lamp gap or tilt — 1 cm ≈ −50% power"
+        },
+        {
+          "finding": "Canines two steps behind",
+          "cause": "Thicker dentin — biology, not error"
+        },
+        {
+          "finding": "Chalky white patches",
+          "cause": "Transient dehydration — not damage"
+        }
+      ],
+      "notes": "17 Case (case). Case story (up to three lines) and up to 5 findings, each with its cause in one line."
+    },
+    {
+      "type": "quiz",
+      "question": "Cervical thirds still yellow after cycle 3 — what is the most likely cause?",
+      "options": [
+        "Gel layer below 1 mm",
+        "Barrier over-extended onto cervical enamel",
+        "Lamp gap or tilt"
+      ],
+      "answer": 1,
+      "explanation": "The barrier covered the cervical enamel — the gel never touched it. Re-isolate correctly, then apply fresh 1 mm gel.",
+      "notes": "18 Quiz (quiz). Question with three answers; the build adds the answer slide with the highlighted option and the explanation.",
+      "kicker": "Layout 18 · quiz"
+    }
+  ]
+}

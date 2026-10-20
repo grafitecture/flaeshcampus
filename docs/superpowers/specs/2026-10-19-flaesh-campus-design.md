@@ -41,7 +41,7 @@ Referenzen: `assets/look-campus-mix-glow.png` und `assets/cover-with-portrait.pn
 - **Dunkle Rahmenfolien:** Titel, Kapitel, Einstieg und Abschluss auf Nacht-Hintergrund mit blauem Leuchten. Das Leuchten greift das 460-nm-Licht der Lampe auf.
 - **Helle Inhaltsfolien** auf Weiß mit dunkler Leiste links (150 px). Die Leiste zeigt oben die Episode („EP 02“), in der Mitte den Fortschritt durch die 2–6 Kapitel der Episode und unten das fläsh-Logo. Das aktuelle Kapitel leuchtet.
 - **Titelfolie:** Porträt von Dr. Gómez im großen Kreis (Ø 580 px) mit leuchtendem Ring und feinen Lichtringen. Der Untertitel bricht spätestens bei 820 px um, damit er die Ringe nicht kreuzt.
-- **Kreis für die Videoeinblendung:** Ø 300 px mit 56 px Abstand unten und rechts, also x 1564–1864 und y 724–1024. Er ist auf allen Folien außer der Titelfolie frei und als leuchtender Ring markiert.
+- **Kreis für die Videoeinblendung:** Ø 300 px mit 56 px Abstand unten und rechts, also x 1564–1864 und y 724–1024. Er ist auf allen Folien außer der Titelfolie frei, wird aber nicht gezeichnet (geändert am 19.10.2026 auf Wunsch von Martin: kein sichtbarer Ring).
 - **Typografie:**
   - Titel 39 pt
   - Punkt-Überschrift 21 pt, Erklärung 17 pt
@@ -65,7 +65,7 @@ Jedes Layout existiert als echtes PowerPoint-Layout im Folienmaster. Der Name im
 | 7 | 07 Points + Chart | `points_chart` | Wie 5, plus Grafik (Balken, Skala, Werte) |
 | 8 | 08 Statement | `statement` | Große Zahl oder Merksatz mit kurzer Erklärung |
 | 9 | 09 Checklist | `checklist` | Bis zu 7 nummerierte Punkte, optional mit Fokus-Box |
-| 10 | 10 Steps | `steps` | 3–5 nummerierte Schritte mit Titel und Text |
+| 10 | 10 Steps | `steps` | 3–5 nummerierte Schritte mit Titel und Text, oder 2–4 Schrittfotos (16:9) in einer Reihe mit Titel und Bildunterschrift; Zählung über `start` fortsetzbar |
 | 11 | 11 Compare | `compare` | Zwei Spalten: richtig/falsch oder Mythos/Fakt |
 | 12 | 12 Scale | `scale` | Skala (z. B. Shade Guide) oder Zeitstrahl (z. B. Pellikel) |
 | 13 | 13 Summary | `summary` | Bis zu 5 Punkte mit Haken |
@@ -79,11 +79,12 @@ Inhalts- und Bildfolien tragen die Leiste. Rahmenfolien nutzen dieselbe Leiste i
 
 ## 5. Gestaltungsregeln
 
-1. Der Kreis unten rechts bleibt frei, außer auf der Titelfolie.
+1. Der Kreis unten rechts bleibt frei, außer auf der Titelfolie. Er ist unsichtbar; die Prüfung achtet trotzdem darauf.
 2. Pro Folie höchstens 4 Punkte. Der Titel passt in eine Zeile mit maximal 6–7 Wörtern, eine Erklärung hat maximal etwa 14 Wörter.
 3. Was nicht passt, kommt in die Sprecher-Notizen oder auf eine Folgefolie. Inhalt wird nie verkleinert, um ihn hineinzuquetschen.
 4. Quellen stehen als „Evidence“ unten links, nur die Kurzangabe (Autor, Zeitschrift, Jahr).
 5. Fehlt ein Foto, entsteht ein Platzhalter mit Bildbriefing, z. B. „Foto: Lampe am Retraktor angedockt“. Alle Briefings werden zusätzlich als Liste ausgegeben.
+   Fotos füllen ihren Rahmen und werden mittig beschnitten. Produktbilder und Bildschirmansichten werden mit `fit` ganz gezeigt, auf weißem Grund. Bilder werden auf höchstens die doppelte Rahmenauflösung verkleinert, damit das Deck klein bleibt.
 6. Symbole (Haken, Pfeile, Nummern, Aufzählungszeichen) sind Formen, keine Schriftzeichen.
 7. Fachliche Aussagen werden nicht verändert, nur gekürzt oder umverteilt.
 
