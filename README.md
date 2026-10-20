@@ -31,4 +31,6 @@ Tests: `python3 -m pytest tests -q`
 
 ## Webseite
 
+Live: <https://flaeshcampus.vercel.app>. Jeder Push auf `main` veröffentlicht die Seite neu.
+
 Vercel liefert den Ordner `site/` aus, eingestellt in `vercel.json`. Einen Build-Schritt auf Vercel gibt es nicht. Die Seite ist von Suchmaschinen ausgeschlossen (`noindex`) und lädt keine externen Dienste. Die Seitenschrift ist Carlito (SIL Open Font License) und liegt auf dem eigenen Server.
