@@ -129,16 +129,16 @@ def write_index(out_dir: Path, episode: dict, slides: list[dict], layouts: list[
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex, nofollow">
-<title>fläsh Campus · Episode {episode["number"]}</title>
-<meta name="description" content="Episode {episode["number"]} der Trainingsreihe fläsh Campus: {e(episode["title"])} mit {e(episode["presenter"])}.">
+<title>fläsh Campus · PPT</title>
+<meta name="description" content="PPT zur Trainingsreihe fläsh Campus: {e(episode["title"])} mit {e(episode["presenter"])}.">
 <link rel="preload" href="assets/fonts/carlito-400.woff" as="font" type="font/woff" crossorigin>
 <link rel="stylesheet" href="assets/site.css">
 <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
 </head>
 <body>
 <a class="skip" href="#viewer">Zur Präsentation springen</a>
-<aside class="rail" aria-label="Kapitel von Episode {episode["number"]}">
-  <p class="rail-ep"><span>EP</span>{episode["number"]:02d}</p>
+<aside class="rail" aria-label="Kapitel der PPT">
+  <p class="rail-ep">PPT</p>
   <ol class="rail-chapters">{chapters}</ol>
   {_logo()}
 </aside>
@@ -150,7 +150,7 @@ def write_index(out_dir: Path, episode: dict, slides: list[dict], layouts: list[
     </header>
     <div class="intro">
       <h1 id="titel">{e(episode["title"])}</h1>
-      <p>Episode {episode["number"]} der Trainingsreihe mit {e(episode["presenter"])}. Blättern mit den Pfeiltasten oder über die Vorschau.</p>
+      <p>Die PPT zur Trainingsreihe mit {e(episode["presenter"])}. Blättern mit den Pfeiltasten oder über die Vorschau.</p>
     </div>
     <figure class="viewer" id="viewer" tabindex="-1">
       <div class="screen"><img id="slide" src="{first["src"]}" alt="Folie 1: {e(first["title"])}" width="1600" height="900" fetchpriority="high"></div>
@@ -167,7 +167,7 @@ def write_index(out_dir: Path, episode: dict, slides: list[dict], layouts: list[
   </section>
   <section class="paper" id="layouts" aria-labelledby="layouts-titel">
     <h2 id="layouts-titel">Die 18 Layouts</h2>
-    <p class="lead">Aus diesen Layouts entsteht jede Folie der Reihe. Die Beispiele zeigen Inhalte aus Episode 2. Der Schlüssel unter dem Namen hilft bei Korrekturen, etwa „Folie 7 als compare“.</p>
+    <p class="lead">Aus diesen Layouts entsteht jede Folie der Reihe. Die Beispiele zeigen Inhalte aus der PPT. Der Schlüssel unter dem Namen hilft bei Korrekturen, etwa „Folie 7 als compare“.</p>
     <ul class="layouts">{layout_items}</ul>
   </section>
   <section class="paper files-section" id="dateien" aria-labelledby="dateien-titel">
@@ -208,6 +208,16 @@ def _layout_records(gallery: Path, paths: list[tuple[str, str]]) -> list[dict]:
     return layouts
 
 
+def download_sources(deck: Path, gallery: Path) -> list[tuple[str, Path, str, str]]:
+    """Je Download: Beschriftung, Quelldatei, Dateiname auf der Seite, Dateiart."""
+    return [
+        ("PPT als PDF", REPO / "out" / "episode-02.pdf", "flaesh-campus-in-office-whitening-workflow.pdf", "PDF"),
+        ("PPT als PowerPoint", deck, "flaesh-campus-in-office-whitening-workflow.pptx", "PowerPoint"),
+        ("Vorlage mit allen Layouts", gallery, "flaesh-campus-template.pptx", "PowerPoint"),
+        ("Layout-Übersicht als PDF", REPO / "out" / "flaesh-campus-layouts.pdf", "flaesh-campus-layouts.pdf", "PDF"),
+    ]
+
+
 def main() -> None:
     plan = json.loads((SKILL / "examples" / "episode-02.json").read_text(encoding="utf-8"))
     ep = plan["episode"]
@@ -221,14 +231,8 @@ def main() -> None:
     layouts = _layout_records(gallery, render_images(gallery, SITE / "slides" / "layouts"))
     dl = SITE / "downloads"
     dl.mkdir(parents=True)
-    sources = [
-        ("Episode 2 als PDF", REPO / "out" / "episode-02.pdf", "flaesh-campus-ep02-in-office-whitening-workflow.pdf", "PDF"),
-        ("Episode 2 als PowerPoint", deck, "flaesh-campus-ep02-in-office-whitening-workflow.pptx", "PowerPoint"),
-        ("Vorlage mit allen Layouts", gallery, "flaesh-campus-template.pptx", "PowerPoint"),
-        ("Layout-Übersicht als PDF", REPO / "out" / "flaesh-campus-layouts.pdf", "flaesh-campus-layouts.pdf", "PDF"),
-    ]
     downloads = []
-    for label, src, name, kind in sources:
+    for label, src, name, kind in download_sources(deck, gallery):
         shutil.copyfile(src, dl / name)
         downloads.append({"label": label, "href": f"downloads/{name}", "size": _size(dl / name), "kind": kind})
     build_fonts(SITE / "assets" / "fonts")

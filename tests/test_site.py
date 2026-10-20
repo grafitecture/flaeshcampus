@@ -6,7 +6,7 @@ from conftest import REPO, SKILL
 sys.path.insert(0, str(REPO / "scripts" / "tools"))
 
 from campus.build import build_deck  # noqa: E402
-from build_site import slide_records, write_index  # noqa: E402
+from build_site import download_sources, slide_records, write_index  # noqa: E402
 
 FIXTURE = REPO / "tests" / "fixtures" / "minimal-plan.json"
 
@@ -37,3 +37,26 @@ def test_write_index(tmp_path):
     assert '<meta name="robots" content="noindex' in html
     assert "slides/ep02/02.jpg" in html and "downloads/ep02.pdf" in html and "slides/layouts/01.jpg" in html
     assert html.count('lang="de"') == 1
+
+
+def test_page_calls_the_deck_ppt(tmp_path):
+    """Auf der Seite heißt das Deck „PPT“, nicht „Episode“."""
+    slides = [{"n": 1, "title": "Slide 1", "kicker": "", "chapter": None, "notes": "",
+               "src": "slides/ep02/01.jpg", "thumb": "slides/ep02/thumb/01.jpg"}]
+    episode = {"number": 2, "title": "In-Office Whitening Workflow", "presenter": "Dr. Germán Gómez",
+               "chapters": ["Document"]}
+    html = write_index(tmp_path, episode, slides, [], []).read_text(encoding="utf-8")
+    assert "<title>fläsh Campus · PPT</title>" in html
+    assert "Die PPT zur Trainingsreihe mit Dr. Germán Gómez." in html
+    assert '<p class="rail-ep">PPT</p>' in html
+    assert "Episode" not in html and ">EP<" not in html
+
+
+def test_downloads_are_called_ppt():
+    """Die Downloads heißen „PPT als …“, die Dateinamen tragen kein ep02 mehr."""
+    sources = download_sources(REPO / "out" / "episode-02.pptx", REPO / "gallery.pptx")
+    assert [label for label, *_ in sources] == [
+        "PPT als PDF", "PPT als PowerPoint", "Vorlage mit allen Layouts", "Layout-Übersicht als PDF"]
+    assert [name for _, _, name, _ in sources] == [
+        "flaesh-campus-in-office-whitening-workflow.pdf", "flaesh-campus-in-office-whitening-workflow.pptx",
+        "flaesh-campus-template.pptx", "flaesh-campus-layouts.pdf"]
