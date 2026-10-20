@@ -76,18 +76,37 @@ def render_images(pptx: Path, out_dir: Path) -> list[tuple[str, str]]:
     return paths
 
 
+OFL_SOURCE = Path("/usr/share/doc/fonts-crosextra-carlito/copyright")
+
+
+def _ofl_text() -> str:
+    """Copyright und voller OFL-1.1-Text von Carlito, aus der Debian-Copyright-Datei des Schriftpakets."""
+    lines, inside = [], False
+    for line in OFL_SOURCE.read_text(encoding="utf-8").splitlines():
+        if line.startswith("License: OFL-1.1"):
+            inside = True
+        elif inside and line.startswith(" "):
+            lines.append("" if line.strip() == "." else line[1:])
+        elif inside:
+            break
+    return "\n".join(lines).strip() + "\n"
+
+
 def build_fonts(out_dir: Path) -> None:
-    """Carlito (OFL) als WOFF-Teilmenge: humanistische Grotesk, der Corporate S der Folien am nächsten."""
+    """Carlito (OFL) als WOFF-Teilmenge: humanistische Grotesk, der Corporate S der Folien am nächsten.
+
+    Die Lizenzfelder der Schrift bleiben erhalten, und der volle Lizenztext liegt daneben (OFL, Bedingung 2).
+    """
     from fontTools import subset
 
     out_dir.mkdir(parents=True, exist_ok=True)
     unicodes = "U+0020-007E,U+00A0-00FF,U+2010-2027,U+2030,U+2039,U+203A,U+20AC,U+2190-2193,U+2212,U+2248"
     for weight, src in (("400", "Carlito-Regular.ttf"), ("700", "Carlito-Bold.ttf")):
         subset.main([f"/usr/share/fonts/truetype/crosextra/{src}", f"--unicodes={unicodes}", "--flavor=woff",
-                     "--layout-features=kern,liga,tnum,lnum", f"--output-file={out_dir / f'carlito-{weight}.woff'}"])
+                     "--layout-features=kern,liga,tnum,lnum", "--name-IDs=*",
+                     f"--output-file={out_dir / f'carlito-{weight}.woff'}"])
     (out_dir / "Carlito-OFL.txt").write_text(
-        "Carlito – Copyright (c) 2010-2013 by tyPoland Lukasz Dziedzic with Reserved Font Name \"Carlito\".\n"
-        "Licensed under the SIL Open Font License, Version 1.1 – https://openfontlicense.org\n", encoding="utf-8")
+        "Carlito – https://github.com/googlefonts/carlito\n\n" + _ofl_text(), encoding="utf-8")
 
 
 # ---------------------------------------------------------------- HTML

@@ -1,12 +1,15 @@
 import json
+import re
+import subprocess
 import sys
 
 from conftest import REPO, SKILL
+from fontTools.ttLib import TTFont
 
 sys.path.insert(0, str(REPO / "scripts" / "tools"))
 
 from campus.build import build_deck  # noqa: E402
-from build_site import download_sources, slide_records, write_index  # noqa: E402
+from build_site import build_fonts, download_sources, slide_records, write_index  # noqa: E402
 
 FIXTURE = REPO / "tests" / "fixtures" / "minimal-plan.json"
 
@@ -50,6 +53,28 @@ def test_page_calls_the_deck_ppt(tmp_path):
     assert "Die PPT zur Trainingsreihe mit Dr. Germán Gómez." in html
     assert '<p class="rail-ep">PPT</p>' in html
     assert "Episode" not in html and ">EP<" not in html
+
+
+def test_site_files_are_in_git():
+    """Alles, was die Seite lädt, liegt im Repo – Vercel veröffentlicht nur, was eingecheckt ist."""
+    tracked = set(subprocess.run(["git", "ls-files", "site"], cwd=REPO, capture_output=True, text=True,
+                                 check=True).stdout.split())
+    css = (REPO / "site" / "assets" / "site.css").read_text(encoding="utf-8")
+    page = (REPO / "site" / "index.html").read_text(encoding="utf-8")
+    refs = {"site/assets/" + url for url in re.findall(r'url\("([^"]+)"\)', css)}
+    refs |= {"site/" + url for url in re.findall(r'(?:src|href)="((?:assets|slides|downloads)/[^"]+)"', page)}
+    refs.add("site/assets/fonts/Carlito-OFL.txt")
+    assert sorted(ref for ref in refs if ref not in tracked) == []
+
+
+def test_web_fonts_carry_their_license(tmp_path):
+    """Die Carlito-Teilmengen behalten ihre Lizenzfelder, daneben liegt der volle OFL-Text."""
+    build_fonts(tmp_path)
+    for weight in ("400", "700"):
+        ids = {rec.nameID for rec in TTFont(tmp_path / f"carlito-{weight}.woff")["name"].names}
+        assert {0, 13, 14} <= ids
+    text = (tmp_path / "Carlito-OFL.txt").read_text(encoding="utf-8")
+    assert "SIL OPEN FONT LICENSE Version 1.1" in text and "DISCLAIMER" in text
 
 
 def test_downloads_are_called_ppt():
