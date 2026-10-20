@@ -61,10 +61,32 @@ def test_site_files_are_in_git():
                                  check=True).stdout.split())
     css = (REPO / "site" / "assets" / "site.css").read_text(encoding="utf-8")
     page = (REPO / "site" / "index.html").read_text(encoding="utf-8")
-    refs = {"site/assets/" + url for url in re.findall(r'url\("([^"]+)"\)', css)}
-    refs |= {"site/" + url for url in re.findall(r'(?:src|href)="((?:assets|slides|downloads)/[^"]+)"', page)}
+    refs = {"site/assets/" + url for url in re.findall(r'url\("([^"?]+)', css)}
+    refs |= {"site/" + url for url in re.findall(r'(?:src|href)="((?:assets|slides|downloads)/[^"?]+)', page)}
     refs.add("site/assets/fonts/Carlito-OFL.txt")
     assert sorted(ref for ref in refs if ref not in tracked) == []
+
+
+def test_assets_bypass_stale_caches(tmp_path):
+    """Schriften, CSS und JS tragen eine Version im Link, damit alte Browser-Caches nicht mehr greifen."""
+    css = (REPO / "site" / "assets" / "site.css").read_text(encoding="utf-8")
+    font_urls = re.findall(r'url\("([^"]+\.woff[^"]*)"\)', css)
+    assert font_urls and all("?v=" in url for url in font_urls)
+    slides = [{"n": 1, "title": "Slide 1", "kicker": "", "chapter": None, "notes": "",
+               "src": "slides/ep02/01.jpg", "thumb": "slides/ep02/thumb/01.jpg"}]
+    episode = {"number": 2, "title": "T", "presenter": "P", "chapters": ["A"]}
+    page = write_index(tmp_path, episode, slides, [], []).read_text(encoding="utf-8")
+    preload = re.search(r'<link rel="preload" href="([^"]+)"', page).group(1)
+    assert preload in {"assets/" + url for url in font_urls}
+    assert re.search(r'href="assets/site\.css\?v=[^"]+"', page) and re.search(r'src="assets/site\.js\?v=[^"]+"', page)
+
+
+def test_vercel_does_not_pin_assets_for_a_day():
+    """Kein Tages-Cache mehr: Vercel hängt ihn auch an 404-Antworten. Der noindex-Kopf bleibt."""
+    cfg = json.loads((REPO / "vercel.json").read_text(encoding="utf-8"))
+    values = [header["value"] for rule in cfg["headers"] for header in rule["headers"]]
+    assert "noindex, nofollow" in values
+    assert not any("max-age" in value for value in values)
 
 
 def test_web_fonts_carry_their_license(tmp_path):

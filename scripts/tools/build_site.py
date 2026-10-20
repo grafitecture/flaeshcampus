@@ -28,6 +28,7 @@ from campus.tokens import PH_IDX  # noqa: E402
 SITE = REPO / "site"
 FULL_W, THUMB_W = 1600, 400
 STAND = "20. Oktober 2026"
+ASSET_VERSION = "2"  # Gleich dem ?v= der Schriften in site.css; erhöhen, wenn Browser alte Assets festhalten.
 
 
 # ---------------------------------------------------------------- Inhalte aus dem Deck
@@ -150,8 +151,8 @@ def write_index(out_dir: Path, episode: dict, slides: list[dict], layouts: list[
 <meta name="robots" content="noindex, nofollow">
 <title>fläsh Campus · PPT</title>
 <meta name="description" content="PPT zur Trainingsreihe fläsh Campus: {e(episode["title"])} mit {e(episode["presenter"])}.">
-<link rel="preload" href="assets/fonts/carlito-400.woff" as="font" type="font/woff" crossorigin>
-<link rel="stylesheet" href="assets/site.css">
+<link rel="preload" href="assets/fonts/carlito-400.woff?v={ASSET_VERSION}" as="font" type="font/woff" crossorigin>
+<link rel="stylesheet" href="assets/site.css?v={ASSET_VERSION}">
 <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
 </head>
 <body>
@@ -202,7 +203,7 @@ def write_index(out_dir: Path, episode: dict, slides: list[dict], layouts: list[
   <p id="lightbox-label"></p>
 </dialog>
 <script type="application/json" id="deck-data">{data}</script>
-<script src="assets/site.js" defer></script>
+<script src="assets/site.js?v={ASSET_VERSION}" defer></script>
 </body>
 </html>
 """
