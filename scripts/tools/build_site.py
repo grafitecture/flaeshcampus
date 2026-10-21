@@ -5,6 +5,7 @@ Aufruf (nach make_template.py --gallery und build_deck.py):
     python3 scripts/tools/build_site.py
 Erzeugt site/index.html, site/slides/…, site/downloads/… und die Schriftdateien. CSS und JS liegen fest in site/assets/.
 """
+import hashlib
 import html
 import json
 import shutil
@@ -91,6 +92,11 @@ def _ofl_text() -> str:
         elif inside:
             break
     return "\n".join(lines).strip() + "\n"
+
+
+def versioned(root: Path, rel: str) -> str:
+    """Link mit Inhalts-Kennung: ein geändertes Bild bekommt eine neue Adresse, alte Caches greifen nicht."""
+    return f"{rel}?v={hashlib.sha1((root / rel).read_bytes()).hexdigest()[:10]}"
 
 
 def build_fonts(out_dir: Path) -> None:
@@ -246,9 +252,11 @@ def main() -> None:
         shutil.rmtree(SITE / d, ignore_errors=True)
     records = slide_records(deck)
     for rec, (src, thumb) in zip(records, render_images(deck, SITE / "slides" / "ep02")):
-        rec.update(src=src, thumb=thumb)
+        rec.update(src=versioned(SITE, src), thumb=versioned(SITE, thumb))
         rec.pop("layout")
-    layouts = _layout_records(gallery, render_images(gallery, SITE / "slides" / "layouts"))
+    gallery_paths = [(versioned(SITE, src), versioned(SITE, thumb))
+                     for src, thumb in render_images(gallery, SITE / "slides" / "layouts")]
+    layouts = _layout_records(gallery, gallery_paths)
     dl = SITE / "downloads"
     dl.mkdir(parents=True)
     downloads = []

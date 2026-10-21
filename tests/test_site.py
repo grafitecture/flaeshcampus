@@ -9,7 +9,7 @@ from fontTools.ttLib import TTFont
 sys.path.insert(0, str(REPO / "scripts" / "tools"))
 
 from campus.build import build_deck  # noqa: E402
-from build_site import build_fonts, download_sources, slide_records, write_index  # noqa: E402
+from build_site import build_fonts, download_sources, slide_records, versioned, write_index  # noqa: E402
 
 FIXTURE = REPO / "tests" / "fixtures" / "minimal-plan.json"
 
@@ -82,6 +82,21 @@ def test_assets_bypass_stale_caches(tmp_path):
     preload = re.search(r'<link rel="preload" href="([^"]+)"', page).group(1)
     assert preload in {"assets/" + url for url in font_urls}
     assert re.search(r'href="assets/site\.css\?v=[^"]+"', page) and re.search(r'src="assets/site\.js\?v=[^"]+"', page)
+
+
+def test_slide_links_carry_a_content_version(tmp_path):
+    """Folienbilder tragen eine Kennung ihres Inhalts im Link: Ein geändertes Bild bekommt eine neue Adresse.
+
+    So greifen auch Browser-Caches nicht mehr, die Bilder früher 24 Stunden festhielten.
+    """
+    (tmp_path / "slides").mkdir()
+    image = tmp_path / "slides" / "01.jpg"
+    image.write_bytes(b"alt")
+    old = versioned(tmp_path, "slides/01.jpg")
+    image.write_bytes(b"neu")
+    new = versioned(tmp_path, "slides/01.jpg")
+    assert old.startswith("slides/01.jpg?v=") and new.startswith("slides/01.jpg?v=")
+    assert old != new and versioned(tmp_path, "slides/01.jpg") == new
 
 
 def test_vercel_does_not_pin_assets_for_a_day():
