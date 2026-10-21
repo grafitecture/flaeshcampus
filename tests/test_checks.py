@@ -56,6 +56,15 @@ def test_zone_violation(plan, template_path, tmp_path, m):
     assert [(i.slide, i.shape) for i in zone] == [(3, "intruder")]
 
 
+def test_video_zone_is_not_an_intruder(plan, template_path, tmp_path, m):
+    """Der Video-Kreis über der Vollbild-Fotofolie gehört in die Zone und ist kein Fehler."""
+    plan["slides"].insert(2, {"type": "photo", "kicker": "Step by step", "title": "Prepare & Protect",
+                              "photo": {"file": "photos/ep02/07-adjust-lamp.jpg"}, "caption": "Lamp docked."})
+    path = build(plan, template_path, tmp_path)
+    assert [s.name for s in Presentation(path).slides[2].shapes][-1] == "zone-presenter-top"
+    assert kinds(check_deck(path, layout_spec(), m), "zone") == []
+
+
 def test_overflow(plan, template_path, tmp_path, m):
     long_text = ("Light intensity falls with the square of distance so one centimetre of extra gap between "
                  "lamp and teeth costs roughly half of the available light power at the enamel surface")

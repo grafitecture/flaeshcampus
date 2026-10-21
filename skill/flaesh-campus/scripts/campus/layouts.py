@@ -2,7 +2,7 @@
 from dataclasses import dataclass, field
 from typing import Literal
 
-from .tokens import COLOR, KICKER_SPC, LABEL_SPC, SIZE_PT
+from .tokens import COLOR, KICKER_SPC, LABEL_SPC, SIZE_PT, VIDEO_PRESENTER, ZONE, ZONE_PHOTO
 
 Box = tuple[float, float, float, float]
 
@@ -98,8 +98,20 @@ def frame_decor(frame: str) -> list[DecorDef]:
         ]
     else:
         decor.append(DecorDef("image", "rail-logo", (31, 960, 88, 37), {"file": "brand/logo-white.png"}))
-    # Die Kreis-Zone (ZONE) bleibt für die Videoeinblendung frei, wird aber nicht mehr gezeichnet (Martin, 19.10.).
+    if frame in ("light", "dark"):
+        decor += video_zone_decor(dark=frame == "dark")
     return decor
+
+
+def video_zone_decor(dark: bool) -> list[DecorDef]:
+    """Video-Kreis unten rechts: leuchtender Ring mit Brustbild des Präsentators als Platzhalter.
+
+    Dort wird Dr. Gómez eingeblendet, wenn er spricht (Martin, 21.10.). Die Titelfolie zeigt ihn schon groß.
+    """
+    ring = {"fill": COLOR["ring_dark" if dark else "white"], "line": (COLOR["sky"], 4),
+            "glow": (COLOR["sky"], 60, 55) if dark else (COLOR["sky"], 46, 45)}
+    return [DecorDef("ellipse", "zone-ring", ZONE, ring),
+            DecorDef("image", "zone-presenter", ZONE_PHOTO, {"file": VIDEO_PRESENTER, "ellipse": True})]
 
 
 def _card(name: str, box: Box, accent: bool) -> DecorDef:

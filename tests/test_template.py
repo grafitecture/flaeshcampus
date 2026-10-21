@@ -53,16 +53,29 @@ def test_theme_fonts(prs):
     assert major == minor == "Corporate S"
 
 
-def test_zone_free_without_ring(prs):
-    """Kein sichtbarer Kreis unten rechts (Wunsch Martin, 19.10.); die Fläche bleibt für das Video reserviert."""
+def test_video_zone_with_presenter(prs):
+    """Unten rechts sitzt der Video-Kreis: leuchtender Ring mit Dr. Gómez' Brustbild als Platzhalter.
+
+    Wunsch Martin, 21.10.: Dort wird er eingeblendet, wenn er spricht. Die Titelfolie zeigt ihn schon groß,
+    die Vollbild-Fotofolie bekommt den Kreis erst auf der Folie über das Foto gelegt.
+    """
     from campus.template import layout_spec
 
     spec = layout_spec()
+    x, y, w, h = ZONE
     for name in NAMES:
         lay = layout(prs, name)
-        assert named(lay, "zone-ring") is None, name
-        assert not [s.name for s in lay.shapes if box(s) == tuple(px(v) for v in ZONE)], name
+        ring, photo = named(lay, "zone-ring"), named(lay, "zone-presenter")
         assert spec[name]["zone"] is (name != "01 Title"), name
+        if name in ("01 Title", "14 Photo"):
+            assert ring is None and photo is None, name
+            continue
+        assert box(ring) == tuple(px(v) for v in ZONE), name
+        assert ring._element.spPr.find(qn("a:effectLst")).find(qn("a:glow")) is not None, name
+        assert box(photo) == tuple(px(v) for v in (x + 4, y + 4, w - 8, h - 8)), name
+        assert photo._element.spPr.find(qn("a:prstGeom")).get("prst") == "ellipse", name
+        shapes = list(lay.shapes)
+        assert shapes.index(photo) == shapes.index(ring) + 1, name
 
 
 def test_rail(prs):

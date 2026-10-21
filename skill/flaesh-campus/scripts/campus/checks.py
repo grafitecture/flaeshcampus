@@ -15,6 +15,7 @@ from .tokens import EMU_PER_PX, FONT, PH_IDX, zone_circle
 IDX_NAME = {idx: name for name, idx in PH_IDX.items()}
 ALLOWED_FONTS = {None, FONT, "+mj-lt", "+mn-lt"}
 ZONE_EXEMPT_ON_PHOTO = ("brief-",)
+VIDEO_ZONE_SHAPES = ("zone-ring", "zone-presenter")  # der Video-Kreis selbst
 
 
 @dataclass
@@ -122,7 +123,7 @@ def check_deck(pptx: Path, spec: dict, m: Measurer) -> list[Issue]:
             x, y = _px(shape.left), _px(shape.top)
             if x < -1 or y < -1 or x + _px(shape.width) > slide_w + 1 or y + _px(shape.height) > slide_h + 1:
                 issues.append(Issue(n, "bounds", name, "outside the slide"))
-            if layout_name != "01 Title" and _intersects_zone(shape):
+            if layout_name != "01 Title" and not name.startswith(VIDEO_ZONE_SHAPES) and _intersects_zone(shape):
                 exempt = layout_name == "14 Photo" and (name == "Photo" or name.startswith(ZONE_EXEMPT_ON_PHOTO))
                 if not exempt:
                     issues.append(Issue(n, "zone", name, "overlaps the presenter circle"))

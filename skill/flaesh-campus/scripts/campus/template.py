@@ -174,6 +174,8 @@ def _add_decor(shapes, d: DecorDef, assets_dir: Path) -> None:
     if d.kind == "image":
         pic = shapes.add_picture(str(assets_dir / st["file"]), x, y, w, h)
         pic.name = d.name
+        if st.get("ellipse"):
+            pic.auto_shape_type = MSO_SHAPE.OVAL
         return
     if d.kind == "text":
         tb = shapes.add_textbox(x, y, w, h)

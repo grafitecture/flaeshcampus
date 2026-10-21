@@ -11,7 +11,9 @@ from pptx.oxml.ns import qn
 
 from . import oxml
 from .measure import Measurer
-from .tokens import COLOR, EMU_PER_PX, LABEL_SPC, SIZE_PT, px
+from .tokens import COLOR, EMU_PER_PX, LABEL_SPC, SIZE_PT, VIDEO_PRESENTER, ZONE, ZONE_PHOTO, px
+
+ASSETS = Path(__file__).resolve().parents[2] / "assets"
 
 RAIL_DOT_X = 68          # Mitte der Punkte in der Leiste
 RAIL_TOP = 315           # Mitte des ersten Punkts (Punkt-Tops ab y 300)
@@ -246,3 +248,12 @@ def brief_card(slide, box, brief: str) -> None:
     textbox(slide, "brief-text", (x + 40, cy - 16, w - 80, min(h / 2, 120)),
             [(brief, style("body", "slate", align="center"))])
 
+
+def video_zone_on_top(slide, dark: bool) -> None:
+    """Video-Kreis über einem Vollbild-Foto: Ring mit Leuchten und Brustbild des Präsentators als Platzhalter."""
+    shape(slide, MSO_SHAPE.OVAL, "zone-ring-top", ZONE, fill="ring_dark" if dark else "white",
+          line=("sky", 4), glow=("sky", 60, 55) if dark else ("sky", 46, 45))
+    x, y, w, h = ZONE_PHOTO
+    pic = slide.shapes.add_picture(str(ASSETS / VIDEO_PRESENTER), px(x), px(y), px(w), px(h))
+    pic.name = "zone-presenter-top"
+    pic.auto_shape_type = MSO_SHAPE.OVAL

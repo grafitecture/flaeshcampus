@@ -3,8 +3,10 @@ from PIL import Image
 from pptx import Presentation
 
 from campus.measure import Measurer
-from campus.tokens import PH_IDX, px
-from campus.widgets_frame import evidence, focus_box, footer, place_photo, rail_progress
+from pptx.oxml.ns import qn
+
+from campus.tokens import PH_IDX, ZONE, px
+from campus.widgets_frame import evidence, focus_box, footer, place_photo, rail_progress, video_zone_on_top
 
 CHAPTERS = ["Document", "Protect", "Apply", "Activate & Monitor", "Seal & Instruct"]
 
@@ -186,3 +188,16 @@ def test_brief_card_stays_below_text(prs, tmp_path):
     title = next(s.name for s in slide.placeholders if s.placeholder_format.idx == 0)
     assert order.index("brief-card") < order.index(title)
     assert order.index("brief-text") < order.index(title)
+
+
+def test_video_zone_on_top(prs):
+    """Auf der Vollbild-Fotofolie liegt der Video-Kreis mit Brustbild über dem Foto."""
+    slide = new_slide(prs, "14 Photo")
+    video_zone_on_top(slide, dark=True)
+    ring, photo = list(slide.shapes)[-2:]
+    x, y, w, h = ZONE
+    assert (ring.name, photo.name) == ("zone-ring-top", "zone-presenter-top")
+    assert (ring.left, ring.top, ring.width, ring.height) == tuple(px(v) for v in ZONE)
+    assert (photo.left, photo.top, photo.width, photo.height) == tuple(px(v) for v in (x + 4, y + 4, w - 8, h - 8))
+    assert photo._element.spPr.find(qn("a:prstGeom")).get("prst") == "ellipse"
+    assert ring._element.spPr.find(qn("a:effectLst")).find(qn("a:glow")) is not None

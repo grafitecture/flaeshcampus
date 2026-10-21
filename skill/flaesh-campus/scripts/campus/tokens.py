@@ -52,6 +52,8 @@ LABEL_SPC = 176
 RAIL_W = 150
 CONTENT_X = 240
 ZONE = (1564, 724, 300, 300)
+ZONE_PHOTO = (ZONE[0] + 4, ZONE[1] + 4, ZONE[2] - 8, ZONE[3] - 8)  # Brustbild innerhalb des 4-px-Rings
+VIDEO_PRESENTER = "brand/video-presenter.jpg"  # Platzhalter im Video-Kreis, bis das Video eingeblendet wird
 
 PH_IDX = {
     "Title": 0,

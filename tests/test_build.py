@@ -103,11 +103,18 @@ def test_optional_absent(deck, template_path, tmp_path):
     assert PH_IDX["Kicker"] not in [ph.placeholder_format.idx for ph in slides[1].placeholders]
 
 
-def test_no_ring_on_slides(deck):
-    """Auch Fotofolien legen keinen Kreis mehr über das Bild."""
+def test_video_zone_on_photo_slides(deck):
+    """Nur die Vollbild-Fotofolie legt den Video-Kreis selbst obendrauf; alle anderen erben ihn vom Layout."""
     prs, _ = deck
+    photo_slides = 0
     for n, slide in enumerate(prs.slides, 1):
-        assert not [s.name for s in slide.shapes if s.name.startswith("zone-ring")], n
+        names = [s.name for s in slide.shapes]
+        if slide.slide_layout.name == "14 Photo":
+            photo_slides += 1
+            assert names[-2:] == ["zone-ring-top", "zone-presenter-top"], n
+        else:
+            assert not [name for name in names if name.startswith("zone-")], n
+    assert photo_slides
 
 
 def test_notes(deck):

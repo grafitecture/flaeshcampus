@@ -12,7 +12,7 @@ from .tokens import EMU_PER_PX, PH_IDX, ZONE, px
 from .widgets_content import (bars_card, case_findings, checklist, closing_steps, compare_columns, markers, photo_steps,
                               points_text, quiz_options, scale_caption, scale_chips, steps_grid, summary_items,
                               timeline)
-from .widgets_frame import evidence, focus_box, footer, place_photo, rail_progress
+from .widgets_frame import evidence, focus_box, footer, place_photo, rail_progress, video_zone_on_top
 
 LAYOUT_BY_KEY = {ldef.key: ldef.name for ldef in LAYOUTS}
 CHAPTER_TITLE = next(p for ldef in LAYOUTS if ldef.key == "chapter" for p in ldef.placeholders if p.name == "Title")
@@ -278,6 +278,7 @@ def render_photo(ctx: Ctx, s: dict) -> None:
     _photo(ctx, slide, "Photo", s["photo"])
     fill(slide, "Caption", s.get("caption"))
     _frame(ctx, slide, s)
+    video_zone_on_top(slide, dark=True)
 
 
 def render_before_after(ctx: Ctx, s: dict) -> None:
