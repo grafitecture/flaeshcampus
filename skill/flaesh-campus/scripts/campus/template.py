@@ -216,7 +216,6 @@ def layout_spec() -> dict:
         spec[ldef.name] = {
             "key": ldef.key,
             "frame": ldef.frame,
-            "zone": ldef.frame != "cover",
             "placeholders": {
                 ph.name: {
                     "idx": 0 if ph.ph_type == "title" else PH_IDX[ph.name],

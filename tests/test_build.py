@@ -103,18 +103,17 @@ def test_optional_absent(deck, template_path, tmp_path):
     assert PH_IDX["Kicker"] not in [ph.placeholder_format.idx for ph in slides[1].placeholders]
 
 
-def test_video_zone_on_photo_slides(deck):
-    """Nur die Vollbild-Fotofolie legt den Video-Kreis selbst obendrauf; alle anderen erben ihn vom Layout."""
-    prs, _ = deck
-    photo_slides = 0
+def test_presenter_only_where_planned(deck):
+    """Kein fester Video-Kreis: ohne Angabe im Plan keine Einblendung; die Titelfolie zeigt ihn im rechten Drittel."""
+    prs, report = deck
     for n, slide in enumerate(prs.slides, 1):
         names = [s.name for s in slide.shapes]
-        if slide.slide_layout.name == "14 Photo":
-            photo_slides += 1
-            assert names[-2:] == ["zone-ring-top", "zone-presenter-top"], n
+        assert not [name for name in names if name.startswith("zone-")], n
+        if n == 1:
+            assert "presenter-video" in names
         else:
-            assert not [name for name in names if name.startswith("zone-")], n
-    assert photo_slides
+            assert not [name for name in names if name.startswith("presenter-")], n
+    assert report.presenter == [{"slide": 1, "mode": "third_right", "box": [1280, 0, 640, 1080], "caption": None}]
 
 
 def test_notes(deck):

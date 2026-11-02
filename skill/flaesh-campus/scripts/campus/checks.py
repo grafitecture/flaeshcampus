@@ -1,4 +1,4 @@
-"""Prüfungen für gebaute Decks: Überlauf, Kreis-Zone, leere Platzhalter, fremde Schriften, Glyphen."""
+"""Prüfungen für gebaute Decks: Überlauf, Videofeld frei, leere Platzhalter, fremde Schriften, Glyphen."""
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Literal
@@ -10,12 +10,12 @@ from pptx.oxml.ns import qn
 from pptx.shapes.placeholder import PlaceholderPicture
 
 from .measure import Measurer, Para
-from .tokens import EMU_PER_PX, FONT, PH_IDX, zone_circle
+from .presenter import FULL_KEEP_CLEAR, PREFIX, intersects
+from .tokens import EMU_PER_PX, FONT, PH_IDX, SLIDE_PX
 
 IDX_NAME = {idx: name for name, idx in PH_IDX.items()}
 ALLOWED_FONTS = {None, FONT, "+mj-lt", "+mn-lt"}
-ZONE_EXEMPT_ON_PHOTO = ("brief-",)
-VIDEO_ZONE_SHAPES = ("zone-ring", "zone-presenter")  # der Video-Kreis selbst
+EXEMPT_ON_PHOTO = ("brief-",)   # 14 Photo: das Videofeld liegt bewusst über Foto und Briefing
 
 
 @dataclass
@@ -97,11 +97,19 @@ def _paras(shape, layout_ph) -> list[Para]:
     return paras
 
 
-def _intersects_zone(shape) -> bool:
-    cx, cy, r = zone_circle()
-    x, y, w, h = _px(shape.left), _px(shape.top), _px(shape.width), _px(shape.height)
-    nx, ny = max(x, min(cx, x + w)), max(y, min(cy, y + h))
-    return (nx - cx) ** 2 + (ny - cy) ** 2 < r ** 2
+def _box(shape) -> tuple[float, float, float, float]:
+    return _px(shape.left), _px(shape.top), _px(shape.width), _px(shape.height)
+
+
+def video_keep_clear(slide) -> tuple[float, float, float, float] | None:
+    """Bereich, den kein Inhalt berühren darf: das Videofeld, im Vollbild die Fläche, auf der er steht."""
+    video = next((sh for sh in slide.shapes if sh.name == PREFIX + "video"), None)
+    if video is None:
+        return None
+    box = _box(video)
+    if box[2] >= SLIDE_PX[0] - 1 and box[3] >= SLIDE_PX[1] - 1:
+        return FULL_KEEP_CLEAR
+    return box
 
 
 def _cmap(m: Measurer) -> set[int] | None:
@@ -117,16 +125,17 @@ def check_deck(pptx: Path, spec: dict, m: Measurer) -> list[Issue]:
     slide_w, slide_h = _px(prs.slide_width), _px(prs.slide_height)
     for n, slide in enumerate(prs.slides, 1):
         layout_name = slide.slide_layout.name
+        keep_clear = video_keep_clear(slide)
         for shape in slide.shapes:
             name = _logical_name(shape)
             layout_ph = _layout_ph(slide, shape.placeholder_format.idx) if shape.is_placeholder else None
             x, y = _px(shape.left), _px(shape.top)
             if x < -1 or y < -1 or x + _px(shape.width) > slide_w + 1 or y + _px(shape.height) > slide_h + 1:
                 issues.append(Issue(n, "bounds", name, "outside the slide"))
-            if layout_name != "01 Title" and not name.startswith(VIDEO_ZONE_SHAPES) and _intersects_zone(shape):
-                exempt = layout_name == "14 Photo" and (name == "Photo" or name.startswith(ZONE_EXEMPT_ON_PHOTO))
+            if keep_clear and not name.startswith(PREFIX) and intersects(_box(shape), keep_clear):
+                exempt = layout_name == "14 Photo" and (name == "Photo" or name.startswith(EXEMPT_ON_PHOTO))
                 if not exempt:
-                    issues.append(Issue(n, "zone", name, "overlaps the presenter circle"))
+                    issues.append(Issue(n, "zone", name, "overlaps the presenter video"))
             if isinstance(shape, PlaceholderPicture) or shape.shape_type == MSO_SHAPE_TYPE.GROUP:
                 continue
             if not shape.has_text_frame:

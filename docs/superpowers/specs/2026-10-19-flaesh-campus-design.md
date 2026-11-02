@@ -1,6 +1,6 @@
 # fläsh Campus – Präsentationsvorlage und Claude-Skill
 
-Konzept · Stand 19.10.2026 · Status: zur Freigabe durch Martin
+Konzept · Stand 02.11.2026 · Status: zur Freigabe durch Martin
 Auftraggeber: Benno Walter (WHITEsmile GmbH) · Umsetzung: Martin Schweppe (Grafitecture)
 
 ## 1. Ziel
@@ -23,7 +23,7 @@ Erfolgskriterien:
 |---|---|
 | Format | 16:9, 13,333 × 7,5 Zoll; Raster 1920 × 1080 px (1 pt = 2 px) |
 | Sprache der Folien | Englisch wie Episode 2 *(Annahme)* |
-| Aufnahme | Dr. Gómez wird im Schnitt rund eingeblendet, unten rechts |
+| Aufnahme | Dr. Gómez wird im Schnitt wechselnd eingeblendet: Vollbild, halbe oder Drittel-Folie, kleines Feld; optional mit Untertitel (Abschnitt 3) |
 | Farben (flaesh.com) | Blaugrau #5D6C73 · Himmelblau #00A5FF · Stahl #ABB7BE · Nebel #DEE7EC · Text #333333 · Weiß |
 | Campus-Ergänzung | Nacht #1F272B (dunkle Flächen) · Nacht 2 #283237 (Karten auf dunkel) · Leiste #192024 |
 | Schrift | Corporate S (URW). Regular liegt vor, **Bold fehlt noch** |
@@ -40,8 +40,15 @@ Referenzen: `assets/look-campus-mix-glow.png` und `assets/cover-with-portrait.pn
 
 - **Dunkle Rahmenfolien:** Titel, Kapitel, Einstieg und Abschluss auf Nacht-Hintergrund mit blauem Leuchten. Das Leuchten greift das 460-nm-Licht der Lampe auf.
 - **Helle Inhaltsfolien** auf Weiß mit dunkler Leiste links (150 px). Die Leiste zeigt oben die Episode („EP 02“), in der Mitte den Fortschritt durch die 2–6 Kapitel der Episode und unten das fläsh-Logo. Das aktuelle Kapitel leuchtet.
-- **Titelfolie:** Porträt von Dr. Gómez im großen Kreis (Ø 580 px) mit leuchtendem Ring und feinen Lichtringen. Der Untertitel bricht spätestens bei 820 px um, damit er die Ringe nicht kreuzt.
-- **Kreis für die Videoeinblendung:** Ø 300 px mit 56 px Abstand unten und rechts, also x 1564–1864 und y 724–1024. Er ist auf allen Folien außer der Titelfolie frei und als leuchtender Ring mit Dr. Gómez' Brustbild markiert: der Platzhalter für das Video, in dem er eingeblendet wird, wenn er spricht (am 19.10. entfernt, am 21.10.2026 auf Wunsch von Martin mit Brustbild und ohne Play-Zeichen zurück). Ring und Bild (`assets/brand/video-presenter.jpg`) liegen in den Layouts; auf der Vollbild-Fotofolie legt die Pipeline sie über das Foto.
+- **Titelfolie:** Dr. Gómez im rechten Drittel, randabfallend über die volle Höhe, mit leuchtender Kante. Titel, Untertitel und Name stehen links davon.
+- **Einblendung von Dr. Gómez (seit 02.11.2026, auf Wunsch von Martin):** Kein fester Kreis mehr. Jede Folie legt im Folienplan fest, wie er erscheint (`"presenter": {"mode": …}`):
+  - `full` – Vollbild; Texte links auf einem dunklen Verlauf, er steht rechts, Logo unten links
+  - `half_left` / `half_right` – halbe Folie (960 px), randabfallend, Inhalt daneben
+  - `third_left` / `third_right` – Drittel (640 px), randabfallend, Inhalt daneben
+  - `small` – kleines Feld (16:9) mit runden Ecken und Leuchtrand, an einer Vorgabe (`"at": "top_right"` oder `"bottom_right"`) oder frei gesetzt (`"box": [x, y, Breite]`), z. B. in einer freien Rasterzelle
+  - `none` – keine Einblendung (Sprecher aus dem Off)
+
+  Linke Felder beginnen rechts neben der Leiste. Bei großen Feldern rücken Kicker, Titel und Inhalt in den freien Bereich; Titel dürfen dort zweizeilig sein, Kapitelfolien stapeln Nummer, Name und Satz. Das Feld zeigt ein Standbild (Porträt auf erweitertem Hintergrund, `assets/brand/video-presenter.jpg` bzw. das Porträt aus dem Plan); im Schnitt wird dort das Video eingesetzt. Optional zeigt `"caption"` das gesprochene Wort als Untertitel über dem Video, höchstens zwei Zeilen. Der Build gibt eine Schnittliste aus (Folie, Modus, Feld in px, Untertitel).
 - **Typografie:**
   - Titel 39 pt
   - Punkt-Überschrift 21 pt, Erklärung 17 pt
@@ -79,7 +86,7 @@ Inhalts- und Bildfolien tragen die Leiste. Rahmenfolien nutzen dieselbe Leiste i
 
 ## 5. Gestaltungsregeln
 
-1. Der Kreis unten rechts bleibt frei, außer auf der Titelfolie. Ring und Brustbild markieren ihn; die Prüfung meldet alles andere darin.
+1. Das Videofeld bleibt frei: Inhalt steht daneben oder das Feld sitzt in einer freien Fläche. Im Vollbild bleibt die Fläche ab x 1040 frei, auf der er steht. Die Prüfung meldet alles andere darin. Untertitel haben höchstens zwei Zeilen.
 2. Pro Folie höchstens 4 Punkte. Der Titel passt in eine Zeile mit maximal 6–7 Wörtern, eine Erklärung hat maximal etwa 14 Wörter.
 3. Was nicht passt, kommt in die Sprecher-Notizen oder auf eine Folgefolie. Inhalt wird nie verkleinert, um ihn hineinzuquetschen.
 4. Quellen stehen als „Evidence“ unten links, nur die Kurzangabe (Autor, Zeitschrift, Jahr).
@@ -95,11 +102,11 @@ Die Vorlage ist die Referenz. Martin kann Layouts direkt in PowerPoint verfeiner
 ```
 flaesh-campus/
 ├── template/flaesh-campus-template.pptx   Folienmaster + 18 Layouts mit benannten Platzhaltern
-├── template/layout-spec.json              feste Maße: Leiste, Kreis-Zone, Raster, Platzhalter je Layout
+├── template/layout-spec.json              feste Maße: Leiste, Raster, Platzhalter je Layout
 ├── assets/                                Logos (SVG/PNG, weiß/blaugrau), Leucht-Ebenen (PNG), Formen
 ├── scripts/make_template.*                erzeugt die Vorlage reproduzierbar (Ersterstellung)
 ├── scripts/build_deck.py                  Folienplan (JSON) → PowerPoint
-├── scripts/check_deck.py                  Prüfung: Textlänge, Kreis-Zone, Render als Bilder
+├── scripts/check_deck.py                  Prüfung: Textlänge, Videofeld frei, Render als Bilder
 ├── examples/episode-02.json               vollständiger Folienplan für Episode 2
 └── skill/flaesh-campus/                   Skill-Paket: SKILL.md, Referenz der Folientypen, Vorlage, Scripts
 ```
@@ -107,7 +114,7 @@ flaesh-campus/
 ### Ablauf
 
 1. **Input:** Claude liest die Episode: PowerPoint, Skript oder Stichpunkte.
-2. **Folienplan:** Claude erstellt einen Folienplan als JSON. Er enthält die Episodendaten (Nummer, Titel, Kapitel) und je Folie Typ, Kapitel, Felder und Notizen. Ein Schema prüft Pflichtfelder und Höchstlängen.
+2. **Folienplan:** Claude erstellt einen Folienplan als JSON. Er enthält die Episodendaten (Nummer, Titel, Kapitel) und je Folie Typ, Kapitel, Felder, Notizen und die Einblendung von Dr. Gómez. Ein Schema prüft Pflichtfelder und Höchstlängen.
 3. **Bau:** `build_deck.py` (python-pptx) öffnet die Vorlage, legt jede Folie über den Layout-Namen an und füllt die Platzhalter. Dynamisches zeichnet das Script:
    - Fortschritt in der Leiste
    - Balken und Skalen
@@ -119,7 +126,7 @@ flaesh-campus/
    - Flächiges Leuchten im Hintergrund ist eine Ellipse mit radialem Farbverlauf in den dunklen Layouts.
 5. **Prüfung:** `check_deck.py` misst jeden Text mit den echten Schriftmaßen von Corporate S. Es meldet:
    - Text, der überläuft
-   - Elemente in der Kreis-Zone
+   - Elemente im Videofeld
    - leere Platzhalter
    - fremde Schriften
 

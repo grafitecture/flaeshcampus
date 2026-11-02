@@ -289,3 +289,25 @@ def fill_text_frame(tf, paragraphs: list[tuple[str, dict]], anchor: str = "t") -
         run = para.add_run()
         run.text = text
         style_run(run, style)
+
+
+def set_linear_fill(shape, color: str, stops: list[tuple[int, int]], angle: float = 0) -> None:
+    """Linearer Verlauf einer Farbe mit Deckkraft-Stufen [(Position %, Deckkraft %)]; Winkel 0 = links → rechts."""
+    spPr = shape._element.spPr
+    for tag in _FILLS:
+        for old in spPr.findall(qn(tag)):
+            spPr.remove(old)
+    grad = OxmlElement("a:gradFill")
+    grad.set("rotWithShape", "1")
+    gs_lst = OxmlElement("a:gsLst")
+    for pos, alpha in stops:
+        gs = OxmlElement("a:gs")
+        gs.set("pos", str(int(pos * 1000)))
+        gs.append(_clr(color, alpha))
+        gs_lst.append(gs)
+    grad.append(gs_lst)
+    lin = OxmlElement("a:lin")
+    lin.set("ang", str(int(angle * 60000)))
+    lin.set("scaled", "0")
+    grad.append(lin)
+    _insert_after(spPr, grad, _GEOM)

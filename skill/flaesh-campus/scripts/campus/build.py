@@ -6,6 +6,7 @@ from pptx.oxml.ns import qn
 
 from .measure import Measurer, find_font
 from .plan import PlanError, validate_plan
+from .presenter import presenter_photo
 from .slides import RENDERERS, BuildReport, Ctx
 
 
@@ -25,6 +26,7 @@ def build_deck(plan: dict, template: Path, out: Path, base_dir: Path, m: Measure
     clear_slides(prs)
     report = BuildReport()
     ctx = Ctx(prs, plan, m or Measurer(find_font()), Path(base_dir), report)
+    ctx.photo = presenter_photo(plan, Path(base_dir), ctx.assets)
     for slide in plan["slides"]:
         RENDERERS[slide["type"]](ctx, slide)
     out = Path(out)

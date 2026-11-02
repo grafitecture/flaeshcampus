@@ -21,11 +21,18 @@
   "slides": [
     {
       "type": "cover",
-      "notes": "01 Title (cover). Episode number, title, subtitle; presenter name, credentials (two lines) and portrait in the glowing circle. The video circle is not reserved here.",
+      "presenter": {
+        "mode": "third_right"
+      },
+      "notes": "01 Title (cover). Episode number, title, subtitle; presenter name and credentials (two lines). Dr. Gómez fills the right third, full height (presenter 'third_right' or 'half_right').",
       "kicker": "Layout 01 · cover"
     },
     {
       "type": "chapter",
+      "presenter": {
+        "mode": "full",
+        "caption": "Spoken words appear as subtitles over the video."
+      },
       "chapter": 3,
       "line": "The gel is engineered for precision.",
       "notes": "02 Chapter (chapter). Big chapter number, chapter name from the episode, one sentence. Long names wrap to two lines; the sentence moves down.",
@@ -33,6 +40,11 @@
     },
     {
       "type": "hook",
+      "presenter": {
+        "mode": "small",
+        "at": "top_right",
+        "caption": "Subtitles sit inside the small field."
+      },
       "kicker": "Layout 03 · hook",
       "quote": "My friend had her whitening done here — hers looks incredible. Will mine?",
       "truth": {
@@ -45,6 +57,14 @@
     },
     {
       "type": "closing",
+      "presenter": {
+        "mode": "small",
+        "box": [
+          1200,
+          696,
+          580
+        ]
+      },
       "kicker": "Layout 04 · closing",
       "title": "Make It Your Team’s Reflex",
       "steps": [
@@ -69,6 +89,10 @@
     },
     {
       "type": "points",
+      "presenter": {
+        "mode": "third_right",
+        "caption": "Panels run full height, next to the content."
+      },
       "chapter": 3,
       "title": "1 mm. Green. Neutral pH.",
       "points": [
@@ -94,6 +118,14 @@
     },
     {
       "type": "points_photo",
+      "presenter": {
+        "mode": "small",
+        "box": [
+          1000,
+          768,
+          420
+        ]
+      },
       "chapter": 2,
       "title": "Soft Tissue First",
       "points": [
@@ -120,6 +152,9 @@
     },
     {
       "type": "points_chart",
+      "presenter": {
+        "mode": "none"
+      },
       "chapter": 3,
       "title": "The Lamp: Position Is Power",
       "points": [
@@ -157,6 +192,9 @@
     },
     {
       "type": "statement",
+      "presenter": {
+        "mode": "half_right"
+      },
       "kicker": "Layout 08 · statement",
       "big": "30",
       "statement": "years of German-made whitening expertise",
@@ -165,6 +203,9 @@
     },
     {
       "type": "checklist",
+      "presenter": {
+        "mode": "none"
+      },
       "chapter": 2,
       "title": "The Seven Sins of Isolation",
       "items": [
@@ -185,6 +226,10 @@
     },
     {
       "type": "steps",
+      "presenter": {
+        "mode": "small",
+        "at": "top_right"
+      },
       "kicker": "Layout 10 · steps",
       "title": "The Fix & The Conversation",
       "steps": [
@@ -209,6 +254,9 @@
     },
     {
       "type": "steps",
+      "presenter": {
+        "mode": "none"
+      },
       "kicker": "Layout 10 · steps with photos",
       "title": "Apply & Activate",
       "start": 6,
@@ -237,6 +285,9 @@
     },
     {
       "type": "compare",
+      "presenter": {
+        "mode": "none"
+      },
       "kicker": "Layout 11 · compare",
       "title": "Oxidation, Not Erosion",
       "style": "myth_fact",
@@ -260,6 +311,9 @@
     },
     {
       "type": "scale",
+      "presenter": {
+        "mode": "none"
+      },
       "chapter": 1,
       "title": "The Value-Ordered Baseline",
       "scale": {
@@ -299,6 +353,14 @@
     },
     {
       "type": "summary",
+      "presenter": {
+        "mode": "small",
+        "box": [
+          920,
+          736,
+          480
+        ]
+      },
       "kicker": "Layout 13 · summary",
       "title": "The SOP Blueprint",
       "items": [
@@ -327,16 +389,24 @@
     },
     {
       "type": "photo",
+      "presenter": {
+        "mode": "small",
+        "at": "top_right"
+      },
       "kicker": "Layout 14 · photo",
       "title": "Apply & Activate",
       "photo": {
         "file": "photos/ep02/07-adjust-lamp.jpg"
       },
       "caption": "Repeat 3× (max 4×) — fresh gel each cycle, suction only, never rinse.",
-      "notes": "14 Photo (photo). Full-bleed photo right of the rail, kicker, title and caption in a dark band. The video circle stays on top."
+      "notes": "14 Photo (photo). Full-bleed photo right of the rail, kicker, title and caption in a dark band. A presenter field can sit on top of the photo."
     },
     {
       "type": "before_after",
+      "presenter": {
+        "mode": "small",
+        "at": "bottom_right"
+      },
       "kicker": "Layout 15 · before_after",
       "title": "Clean Before You Whiten",
       "before": {
@@ -355,6 +425,10 @@
     },
     {
       "type": "photo_annotated",
+      "presenter": {
+        "mode": "small",
+        "at": "bottom_right"
+      },
       "kicker": "Layout 16 · photo_annotated",
       "title": "The Isolation Setup",
       "photo": {
@@ -386,6 +460,10 @@
     },
     {
       "type": "case",
+      "presenter": {
+        "mode": "small",
+        "at": "top_right"
+      },
       "kicker": "Layout 17 · case",
       "title": "“The Uneven Case”",
       "story": "A 38-year-old at the end of cycle 3 — centrals magnificent, cervical thirds still yellow, canines two steps behind, chalky patches on the laterals. She is holding the mirror.",
@@ -415,6 +493,12 @@
     },
     {
       "type": "quiz",
+      "presenter": {
+        "mode": "none"
+      },
+      "presenter_answer": {
+        "mode": "third_right"
+      },
       "question": "Cervical thirds still yellow after cycle 3 — what is the most likely cause?",
       "options": [
         "Gel layer below 1 mm",

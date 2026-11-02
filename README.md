@@ -2,7 +2,7 @@
 
 PowerPoint-Vorlage und Bau-Pipeline für die Trainingsreihe **fläsh Campus** (WHITEsmile, mit Dr. Germán Gómez). Gestaltung und Umsetzung: Grafitecture.
 
-Ein Folienplan im JSON-Format wird zu einer fertigen PowerPoint im Campus-Layout. Die Vorlage hat 18 Layouts. Eine Prüfung misst jeden Text mit den echten Schriftmaßen von Corporate S und hält den Bereich für die Videoeinblendung frei.
+Ein Folienplan im JSON-Format wird zu einer fertigen PowerPoint im Campus-Layout. Die Vorlage hat 18 Layouts. Jede Folie legt fest, wie Dr. Gómez eingeblendet wird: Vollbild, halbe oder Drittel-Folie links oder rechts, kleines Feld oder gar nicht, optional mit Untertitel. Eine Prüfung misst jeden Text mit den echten Schriftmaßen von Corporate S und hält das Videofeld frei.
 
 ## Inhalt
 

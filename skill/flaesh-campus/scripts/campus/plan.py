@@ -6,6 +6,8 @@ Geprüft werden Pflichtfelder, Anzahlen und Typen, damit der Bau nie mit einem T
 import json
 from pathlib import Path
 
+from .tokens import PRESENTER_MODES, SLIDE_PX, SMALL_AT, SMALL_MIN_W
+
 # Optionale Textfelder auf Folienebene; Pflichtfelder prüfen die Typ-Prüfungen unten zusätzlich.
 OPTIONAL_TEXT = ("kicker", "title", "evidence", "notes", "caption", "line", "big", "statement", "text",
                  "explanation", "style")
@@ -70,6 +72,42 @@ def _box(value, name: str, keys: tuple[str, ...]) -> list[str]:
     wrong = [k for k in BOX_TEXT if k in value and not isinstance(value[k], str)]
     problems = [f"{name} '{k}' must be text" for k in wrong]
     return problems + [f"{name} missing '{k}'" for k in keys if k not in wrong and not _is_text(value.get(k))]
+
+
+def _number(value) -> bool:
+    return isinstance(value, (int, float)) and not isinstance(value, bool)
+
+
+def _presenter(value, kind: str, name: str = "presenter") -> list[str]:
+    """Einblendung von Dr. Gómez: Modus, bei 'small' Lage ('at') oder Feld ('box'), optional Untertitel."""
+    if not isinstance(value, dict):
+        return [f"'{name}' must be an object"]
+    problems = _optional_text(value, ("mode", "caption", "at"), f"{name} ")
+    if problems:
+        return problems
+    mode = value.get("mode", "none")
+    if mode not in PRESENTER_MODES:
+        return [f"{name} mode must be one of: {', '.join(PRESENTER_MODES)}"]
+    if mode == "small":
+        if "box" in value:
+            box = value["box"]
+            if not (isinstance(box, list) and len(box) == 3 and all(_number(v) for v in box)):
+                problems.append(f"{name} box must be [x, y, width]")
+            else:
+                x, y, w = box
+                if w < SMALL_MIN_W or x < 0 or y < 0 or x + w > SLIDE_PX[0] or y + w * 9 / 16 > SLIDE_PX[1]:
+                    problems.append(f"{name} box must lie on the slide, width at least {SMALL_MIN_W}")
+        elif value.get("at", "bottom_right") not in SMALL_AT:
+            problems.append(f"{name} at must be one of: {', '.join(SMALL_AT)}")
+    elif "box" in value or "at" in value:
+        problems.append(f"{name} 'box' and 'at' need mode 'small'")
+    if kind == "cover" and mode not in ("third_right", "half_right"):
+        problems.append(f"{name} mode on the cover must be 'third_right' or 'half_right'")
+    if kind == "photo" and mode == "full":
+        problems.append(f"{name} mode 'full' would hide the photo")
+    if value.get("caption") is not None and mode == "none":
+        problems.append(f"{name} caption needs a presenter on the slide")
+    return problems
 
 
 def _focus(slide: dict) -> list[str]:
@@ -257,6 +295,12 @@ def validate_plan(plan: dict) -> list[str]:
             errors.append(prefix + f"unknown type '{kind}'")
             continue
         problems = _optional_text(slide, OPTIONAL_TEXT) + list(CHECKS[kind](slide))
+        for key in ("presenter", "presenter_answer"):
+            if key in slide:
+                if key == "presenter_answer" and kind != "quiz":
+                    problems.append("'presenter_answer' only on quiz slides")
+                else:
+                    problems += _presenter(slide[key], kind, key)
         if "chapter" in slide:
             ch = slide["chapter"]
             if not isinstance(ch, int) or isinstance(ch, bool) or not 1 <= ch <= len(chapters):

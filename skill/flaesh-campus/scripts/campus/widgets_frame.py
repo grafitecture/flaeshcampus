@@ -11,7 +11,7 @@ from pptx.oxml.ns import qn
 
 from . import oxml
 from .measure import Measurer
-from .tokens import COLOR, EMU_PER_PX, LABEL_SPC, SIZE_PT, VIDEO_PRESENTER, ZONE, ZONE_PHOTO, px
+from .tokens import COLOR, EMU_PER_PX, LABEL_SPC, SIZE_PT, px
 
 ASSETS = Path(__file__).resolve().parents[2] / "assets"
 
@@ -82,15 +82,15 @@ def rail_progress(slide, chapters: list[str], current: int | None, dark: bool) -
         textbox(slide, f"rail-num-{i}", (100, cy - 16, 40, 32), [(str(i), style("small", num_color))], anchor="ctr")
 
 
-def evidence(slide, text: str, dark: bool) -> None:
-    textbox(slide, "evidence-label", (240, 920, 600, 24),
+def evidence(slide, text: str, dark: bool, x: float = 240, w: float = 1240) -> None:
+    textbox(slide, "evidence-label", (x, 920, min(600, w), 24),
             [("Evidence", style("label", "sky", caps=True, spc=LABEL_SPC))])
-    textbox(slide, "evidence-text", (240, 948, 1240, 36),
+    textbox(slide, "evidence-text", (x, 948, w, 36),
             [(text, style("small", "muted_dark" if dark else "muted"))])
 
 
-def footer(slide, text: str, dark: bool) -> None:
-    textbox(slide, "footer", (240, 1010, 1200, 30),
+def footer(slide, text: str, dark: bool, x: float = 240, w: float = 1200) -> None:
+    textbox(slide, "footer", (x, 1010, w, 30),
             [(text, style("label", "muted_dark" if dark else "steel", caps=True, spc=LABEL_SPC))])
 
 
@@ -247,13 +247,3 @@ def brief_card(slide, box, brief: str) -> None:
     shape(slide, MSO_SHAPE.OVAL, "brief-icon-lens", (cx - 12, cy - 67, 24, 24), fill="mist")
     textbox(slide, "brief-text", (x + 40, cy - 16, w - 80, min(h / 2, 120)),
             [(brief, style("body", "slate", align="center"))])
-
-
-def video_zone_on_top(slide, dark: bool) -> None:
-    """Video-Kreis über einem Vollbild-Foto: Ring mit Leuchten und Brustbild des Präsentators als Platzhalter."""
-    shape(slide, MSO_SHAPE.OVAL, "zone-ring-top", ZONE, fill="ring_dark" if dark else "white",
-          line=("sky", 4), glow=("sky", 60, 55) if dark else ("sky", 46, 45))
-    x, y, w, h = ZONE_PHOTO
-    pic = slide.shapes.add_picture(str(ASSETS / VIDEO_PRESENTER), px(x), px(y), px(w), px(h))
-    pic.name = "zone-presenter-top"
-    pic.auto_shape_type = MSO_SHAPE.OVAL

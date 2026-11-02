@@ -28,7 +28,7 @@ from campus.tokens import PH_IDX  # noqa: E402
 
 SITE = REPO / "site"
 FULL_W, THUMB_W = 1600, 400
-STAND = "20. Oktober 2026"
+STAND = "2. November 2026"
 ASSET_VERSION = "2"  # Gleich dem ?v= der Schriften in site.css; erhöhen, wenn Browser alte Assets festhalten.
 
 

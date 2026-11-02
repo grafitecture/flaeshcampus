@@ -98,7 +98,7 @@ PHOTO_STEPS_TOP, PHOTO_STEPS_GAP, PHOTO_STEPS_WIDTH, PHOTO_STEPS_MAX_CELL = 300,
 
 def photo_steps(slide, steps: list[dict], base_dir, warnings: list[str], start: int = 1,
                 caption: str | None = None) -> list[str]:
-    """Schrittfotos in einer Reihe (16:9) über der Kreis-Zone, Nummer auf dem Foto, Titel darunter.
+    """Schrittfotos in einer Reihe (16:9), Nummer auf dem Foto, Titel darunter.
     Gibt die Briefings fehlender Fotos zurück."""
     n = len(steps)
     cell = min(PHOTO_STEPS_MAX_CELL, (PHOTO_STEPS_WIDTH - PHOTO_STEPS_GAP * (n - 1)) / n)
@@ -142,7 +142,7 @@ def bars_card(slide, chart: dict, box=(1000, 330, 800, 364)) -> None:
     bars = chart["bars"]
     pitch, note_h = 104, (40 if chart.get("note") else 0)
     h = 34 + 34 + 16 + len(bars) * pitch + note_h + 20
-    if y + h > 700:                       # sonst kollidiert die Karte mit der Kreis-Zone
+    if y + h > 700:                       # hohe Karte schmaler: unten rechts bleibt Platz für ein Videofeld
         w = 540
     shape(slide, MSO_SHAPE.ROUNDED_RECTANGLE, "chart-card", (x, y, w, h), fill="mist", radius_px=18)
     inner = w - 100
@@ -201,8 +201,8 @@ def scale_chips(slide, items: list[str], highlight: list[str], box=(240, 330, 15
                              anchor="ctr")
 
 
-def scale_caption(slide, text: str, y: float = 490) -> None:
-    textbox(slide, "scale-caption", (240, y, 1260, 40), [(text, style("small", "muted"))])
+def scale_caption(slide, text: str, y: float = 490, x: float = 240, w: float = 1260) -> None:
+    textbox(slide, "scale-caption", (x, y, w, 40), [(text, style("small", "muted"))])
 
 
 def timeline(slide, points: list[dict], box=(240, 330, 1260, 200), dark: bool = False) -> None:
@@ -246,16 +246,17 @@ def case_findings(slide, findings: list[dict], y: float = 560) -> None:
         textbox(slide, f"cause-{i}", (880, top, 620, 64), [(item["cause"], style("body", "ink"))], anchor="ctr")
 
 
-def quiz_options(slide, options: list[str], answer: int | None, explanation: str | None) -> None:
+def quiz_options(slide, options: list[str], answer: int | None, explanation: str | None,
+                 x: float = 240, w: float = 1260) -> None:
     for i, option in enumerate(options, 1):
         y = 480 + (i - 1) * 120
         correct = answer is not None and i - 1 == answer
-        shape(slide, MSO_SHAPE.ROUNDED_RECTANGLE, f"quiz-opt-{i}", (240, y, 1260, 100),
+        shape(slide, MSO_SHAPE.ROUNDED_RECTANGLE, f"quiz-opt-{i}", (x, y, w, 100),
               fill="sky" if correct else "night2", glow=("sky", 50, 50) if correct else None, radius_px=18)
-        _number(slide, f"quiz-letter-{i}", (270, y + 20, 60, 60), "ABC"[i - 1],
+        _number(slide, f"quiz-letter-{i}", (x + 30, y + 20, 60, 60), "ABC"[i - 1],
                 "white" if correct else "night2", "night" if correct else "sky", 18,
                 line=None if correct else ("sky", 3))
-        textbox(slide, f"quiz-text-{i}", (360, y, 1100, 100),
+        textbox(slide, f"quiz-text-{i}", (x + 120, y, w - 160, 100),
                 [(option, style("lead", "night" if correct else "white"))], anchor="ctr")
     if answer is not None and explanation:
-        textbox(slide, "quiz-expl", (240, 880, 1260, 80), [(explanation, style("body", "on_dark"))])
+        textbox(slide, "quiz-expl", (x, 880, w, 80), [(explanation, style("body", "on_dark"))])

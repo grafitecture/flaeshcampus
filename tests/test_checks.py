@@ -44,6 +44,7 @@ def test_clean_minimal(plan, template_path, tmp_path, m):
 
 
 def test_zone_violation(plan, template_path, tmp_path, m):
+    plan["slides"][2]["presenter"] = {"mode": "small", "at": "bottom_right"}
     path = build(plan, template_path, tmp_path)
     prs = Presentation(path)
     tb = prs.slides[2].shapes.add_textbox(px(1600), px(800), px(200), px(60))
@@ -57,12 +58,26 @@ def test_zone_violation(plan, template_path, tmp_path, m):
 
 
 def test_video_zone_is_not_an_intruder(plan, template_path, tmp_path, m):
-    """Der Video-Kreis über der Vollbild-Fotofolie gehört in die Zone und ist kein Fehler."""
+    """Das Videofeld über der Vollbild-Fotofolie liegt bewusst auf dem Foto und ist kein Fehler."""
     plan["slides"].insert(2, {"type": "photo", "kicker": "Step by step", "title": "Prepare & Protect",
-                              "photo": {"file": "photos/ep02/07-adjust-lamp.jpg"}, "caption": "Lamp docked."})
+                              "photo": {"file": "photos/ep02/07-adjust-lamp.jpg"}, "caption": "Lamp docked.",
+                              "presenter": {"mode": "small", "at": "top_right", "caption": "Dock the lamp."}})
     path = build(plan, template_path, tmp_path)
-    assert [s.name for s in Presentation(path).slides[2].shapes][-1] == "zone-presenter-top"
+    assert [s.name for s in Presentation(path).slides[2].shapes][-1] == "presenter-caption"
     assert kinds(check_deck(path, layout_spec(), m), "zone") == []
+
+
+@pytest.mark.parametrize("spec", [
+    {"mode": "full", "caption": "Prophylaxis first."},
+    {"mode": "half_left"}, {"mode": "half_right"},
+    {"mode": "third_left", "caption": "Light, not heat."}, {"mode": "third_right"},
+    {"mode": "small", "at": "top_right", "caption": "Ask, don’t assume."},
+])
+def test_presenter_modes_clean(plan, template_path, tmp_path, m, spec):
+    """Jeder Modus räumt Kapitel- und Punkte-Folien so frei, dass die Prüfung nichts findet."""
+    plan["slides"][1]["presenter"] = spec
+    plan["slides"][2]["presenter"] = spec
+    assert check_deck(build(plan, template_path, tmp_path), layout_spec(), m) == []
 
 
 def test_overflow(plan, template_path, tmp_path, m):
@@ -214,6 +229,7 @@ def test_render_pages(plan, template_path, tmp_path):
 def test_check_cli(plan, template_path, tmp_path):
     import sys
 
+    plan["slides"][2]["presenter"] = {"mode": "small", "at": "bottom_right"}
     path = build(plan, template_path, tmp_path)
     cli = [sys.executable, str(SKILL / "scripts" / "check_deck.py"), str(path)]
     ok = subprocess.run(cli, capture_output=True, text=True)

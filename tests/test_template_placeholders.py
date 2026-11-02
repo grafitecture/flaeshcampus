@@ -16,7 +16,7 @@ EXPECTED = [
     ("01 Title", "Subtitle", "body", (230, 654, 820, 110), "subtitle"),
     ("01 Title", "Presenter", "body", (230, 876, 1000, 52), "lead"),
     ("01 Title", "Credentials", "body", (230, 930, 1000, 80), "small"),
-    ("01 Title", "Photo", "pic", (1236, 250, 580, 580), "small"),
+    ("01 Title", "Photo", "pic", (1280, 0, 640, 1080), "small"),
     ("02 Chapter", "Number", "body", (230, 20, 560, 880), "chapter_number"),
     ("02 Chapter", "Kicker", "body", (800, 330, 900, 40), "kicker"),
     ("02 Chapter", "Title", "title", (792, 376, 1000, 180), "chapter_title"),
@@ -81,11 +81,11 @@ def test_placeholder_matrix(prs, layout_name, name, ph_type, box, size_key):
 
 
 def test_cover_photo(prs):
+    """Kein Kreis mehr: rechtes Drittel, randabfallend, ohne Rahmenlinie."""
     ph = find(prs, "01 Title", "Photo", "pic")
     sp_pr = ph._element.spPr
-    assert sp_pr.find(qn("a:prstGeom")).get("prst") == "ellipse"
-    assert sp_pr.find(qn("a:ln")).get("w") == str(px(6))
-    assert sp_pr.find(qn("a:effectLst")).find(qn("a:glow")).get("rad") == str(px(90))
+    assert sp_pr.find(qn("a:prstGeom")).get("prst") == "rect"
+    assert sp_pr.find(qn("a:effectLst")) is None
 
 
 def test_photo_band_seamless(prs):
@@ -105,6 +105,6 @@ def test_spec_json(tmp_path):
     assert len(spec) == 18
     assert spec == json.loads(json.dumps(layout_spec()))
     for layout_name, entry in spec.items():
-        assert {"key", "frame", "zone", "placeholders"} <= set(entry), layout_name
+        assert {"key", "frame", "placeholders"} <= set(entry), layout_name
         for name, ph in entry["placeholders"].items():
             assert {"idx", "type", "box", "levels"} <= set(ph), (layout_name, name)

@@ -51,9 +51,12 @@ LABEL_SPC = 176
 
 RAIL_W = 150
 CONTENT_X = 240
-ZONE = (1564, 724, 300, 300)
-ZONE_PHOTO = (ZONE[0] + 4, ZONE[1] + 4, ZONE[2] - 8, ZONE[3] - 8)  # Brustbild innerhalb des 4-px-Rings
-VIDEO_PRESENTER = "brand/video-presenter.jpg"  # Platzhalter im Video-Kreis, bis das Video eingeblendet wird
+VIDEO_PRESENTER = "brand/video-presenter.jpg"  # Porträt für die Standbilder im Videofeld, falls der Plan keins hat
+
+# Einblendung von Dr. Gómez (Details in presenter.py)
+PRESENTER_MODES = ("none", "full", "half_left", "half_right", "third_left", "third_right", "small")
+SMALL_AT = {"top_right": (1384, 40, 480), "bottom_right": (1384, 754, 480)}   # x, y, Breite (16:9)
+SMALL_MIN_W = 320
 
 PH_IDX = {
     "Title": 0,
@@ -90,9 +93,3 @@ PH_IDX = {
 def px(v: float) -> int:
     """Rasterpixel → EMU."""
     return int(round(v * EMU_PER_PX))
-
-
-def zone_circle() -> tuple[float, float, float]:
-    """Kreis-Zone für die Videoeinblendung: (Mitte x, Mitte y, Radius) in px."""
-    x, y, w, _ = ZONE
-    return (x + w / 2, y + w / 2, w / 2)

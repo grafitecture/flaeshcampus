@@ -1,6 +1,6 @@
 import re
 
-from campus.tokens import COLOR, PH_IDX, px, zone_circle
+from campus.tokens import COLOR, PH_IDX, PRESENTER_MODES, SLIDE_PX, SMALL_AT, px
 
 
 def test_px():
@@ -21,5 +21,7 @@ def test_ph_idx_unique():
     assert PH_IDX["Title"] == 0
 
 
-def test_zone():
-    assert zone_circle() == (1714, 874, 150)
+def test_presenter_tokens():
+    assert PRESENTER_MODES[0] == "none" and "full" in PRESENTER_MODES and "small" in PRESENTER_MODES
+    for at, (x, y, w) in SMALL_AT.items():
+        assert x + w <= SLIDE_PX[0] - 40 and y + w * 9 / 16 <= SLIDE_PX[1] - 40, at

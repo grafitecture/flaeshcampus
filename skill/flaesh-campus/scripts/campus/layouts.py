@@ -2,7 +2,7 @@
 from dataclasses import dataclass, field
 from typing import Literal
 
-from .tokens import COLOR, KICKER_SPC, LABEL_SPC, SIZE_PT, VIDEO_PRESENTER, ZONE, ZONE_PHOTO
+from .tokens import COLOR, KICKER_SPC, LABEL_SPC, SIZE_PT
 
 Box = tuple[float, float, float, float]
 
@@ -80,12 +80,8 @@ def frame_decor(frame: str) -> list[DecorDef]:
     """Rahmen-Elemente je Rahmentyp (light, dark, cover, full)."""
     decor: list[DecorDef] = []
     if frame == "cover":
-        decor += [
-            DecorDef("radial", "glow-bg", (766, -220, 1520, 1520),
-                     {"color": COLOR["sky"], "stops": [(0, 34), (50, 10), (100, 0)]}),
-            DecorDef("ellipse", "arc-1", (1126, 140, 800, 800), {"line": (COLOR["sky"], 2, 28)}),
-            DecorDef("ellipse", "arc-2", (1036, 50, 980, 980), {"line": (COLOR["sky"], 2, 14)}),
-        ]
+        decor.append(DecorDef("radial", "glow-bg", (566, -220, 1520, 1520),
+                              {"color": COLOR["sky"], "stops": [(0, 30), (50, 9), (100, 0)]}))
     rail_color = COLOR["night"] if frame == "light" else COLOR["rail"]
     decor.append(DecorDef("rect", "rail", (0, 0, 150, 1080), {"fill": rail_color}))
     decor.append(DecorDef("text", "rail-ep-label", (0, 84, 150, 30),
@@ -98,20 +94,8 @@ def frame_decor(frame: str) -> list[DecorDef]:
         ]
     else:
         decor.append(DecorDef("image", "rail-logo", (31, 960, 88, 37), {"file": "brand/logo-white.png"}))
-    if frame in ("light", "dark"):
-        decor += video_zone_decor(dark=frame == "dark")
+    # Kein fester Video-Kreis mehr (Martin, 02.11.): jede Folie legt ihre Einblendung selbst fest (presenter.py).
     return decor
-
-
-def video_zone_decor(dark: bool) -> list[DecorDef]:
-    """Video-Kreis unten rechts: leuchtender Ring mit Brustbild des Präsentators als Platzhalter.
-
-    Dort wird Dr. Gómez eingeblendet, wenn er spricht (Martin, 21.10.). Die Titelfolie zeigt ihn schon groß.
-    """
-    ring = {"fill": COLOR["ring_dark" if dark else "white"], "line": (COLOR["sky"], 4),
-            "glow": (COLOR["sky"], 60, 55) if dark else (COLOR["sky"], 46, 45)}
-    return [DecorDef("ellipse", "zone-ring", ZONE, ring),
-            DecorDef("image", "zone-presenter", ZONE_PHOTO, {"file": VIDEO_PRESENTER, "ellipse": True})]
 
 
 def _card(name: str, box: Box, accent: bool) -> DecorDef:
@@ -140,8 +124,9 @@ LAYOUTS: list[LayoutDef] = [
         text_ph("Subtitle", (230, 654, 820, 110), "subtitle", "on_dark", "Subtitle of the episode"),
         text_ph("Presenter", (230, 876, 1000, 52), "lead", "white", "Dr. Germán Gómez"),
         text_ph("Credentials", (230, 930, 1000, 80), "small", "steel", "Credentials"),
-        PhDef("Photo", "pic", (1236, 250, 580, 580), PIC_LEVELS, ["Insert portrait"], anchor="ctr",
-              geom="ellipse", line=(COLOR["sky"], 6), glow=(COLOR["sky"], 90, 60)),
+        # Rechtes Drittel: Videofeld bzw. Porträt von Dr. Gómez, randabfallend
+        PhDef("Photo", "pic", (1280, 0, 640, 1080), PIC_LEVELS, ["Insert presenter"], anchor="ctr",
+              fill=COLOR["night2"]),
     ]),
     _layout("02 Chapter", "chapter", "dark", [
         PhDef("Number", "body", (230, 20, 560, 880),

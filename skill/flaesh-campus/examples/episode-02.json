@@ -21,10 +21,18 @@
   "slides": [
     {
       "type": "cover",
+      "presenter": {
+        "mode": "third_right"
+      },
       "notes": "PROFESSIONAL TOOTH WHITENING · MADE IN GERMANY\nONLINE TRAINING SERIES — EPISODE 2\nIn-Office Whitening Workflow (SOP)\nStep-by-Step Protocol + Common Mistakes\nDr. Germán Gómez\nDDS · MD · PhD (University of Tübingen, Germany)\nEsthetic Dentistry & Implantology · Spain | 500+ lectures · 43 countries"
     },
     {
       "type": "hook",
+      "presenter": {
+        "mode": "small",
+        "at": "top_right",
+        "caption": "Same gel, same lamp — two clinics, visibly different results."
+      },
       "kicker": "Hook",
       "quote": "My friend had her whitening done here — hers looks incredible. Will mine?",
       "truth": {
@@ -37,6 +45,10 @@
     },
     {
       "type": "points",
+      "presenter": {
+        "mode": "third_left",
+        "caption": "Predictable outcomes are engineered."
+      },
       "kicker": "Principle · The big idea",
       "title": "A Protocol, Not a Performance",
       "points": [
@@ -61,6 +73,9 @@
     },
     {
       "type": "statement",
+      "presenter": {
+        "mode": "full"
+      },
       "kicker": "Principle · The big idea",
       "big": "30",
       "statement": "years of German-made whitening expertise",
@@ -69,6 +84,14 @@
     },
     {
       "type": "steps",
+      "presenter": {
+        "mode": "small",
+        "box": [
+          1100,
+          626,
+          400
+        ]
+      },
       "kicker": "Principle · The method",
       "title": "The Five-Phase SOP",
       "steps": [
@@ -97,12 +120,19 @@
     },
     {
       "type": "chapter",
+      "presenter": {
+        "mode": "half_right",
+        "caption": "Prophylaxis first. Always — before any chemistry."
+      },
       "chapter": 1,
       "line": "Whitening never begins on an uncleaned tooth.",
       "notes": "PHASE 1 · DOCUMENT\nWhitening never begins on an uncleaned tooth."
     },
     {
       "type": "points_photo",
+      "presenter": {
+        "mode": "none"
+      },
       "chapter": 1,
       "title": "Clean Before You Whiten",
       "points": [
@@ -127,6 +157,9 @@
     },
     {
       "type": "scale",
+      "presenter": {
+        "mode": "none"
+      },
       "chapter": 1,
       "title": "The Value-Ordered Baseline",
       "scale": {
@@ -165,6 +198,14 @@
     },
     {
       "type": "points",
+      "presenter": {
+        "mode": "small",
+        "box": [
+          1220,
+          620,
+          580
+        ]
+      },
       "chapter": 1,
       "title": "Photograph Like a Scientist",
       "points": [
@@ -193,12 +234,19 @@
     },
     {
       "type": "chapter",
+      "presenter": {
+        "mode": "full",
+        "caption": "Moisten the lips first; then the fläsh lip retractor, docked onto the lamp head."
+      },
       "chapter": 2,
       "line": "Where every complication is born — and prevented.",
       "notes": "PHASE 2 · PROTECT\nWhere every complication is born — and prevented."
     },
     {
       "type": "points_photo",
+      "presenter": {
+        "mode": "none"
+      },
       "chapter": 2,
       "title": "Soft Tissue First",
       "points": [
@@ -224,6 +272,9 @@
     },
     {
       "type": "checklist",
+      "presenter": {
+        "mode": "none"
+      },
       "chapter": 2,
       "title": "The Seven Sins of Isolation",
       "items": [
@@ -243,12 +294,23 @@
     },
     {
       "type": "chapter",
+      "presenter": {
+        "mode": "half_left"
+      },
       "chapter": 3,
       "line": "The gel is engineered for precision.",
       "notes": "PHASE 3 · APPLY\nThe gel is engineered for precision — starve it and you starve the result."
     },
     {
       "type": "points_photo",
+      "presenter": {
+        "mode": "small",
+        "box": [
+          1000,
+          768,
+          420
+        ]
+      },
       "chapter": 3,
       "title": "1 mm. Green. Neutral pH.",
       "points": [
@@ -278,6 +340,9 @@
     },
     {
       "type": "points_chart",
+      "presenter": {
+        "mode": "none"
+      },
       "chapter": 3,
       "title": "The Lamp: Position Is Power",
       "points": [
@@ -314,12 +379,19 @@
     },
     {
       "type": "chapter",
+      "presenter": {
+        "mode": "third_left",
+        "caption": "The cycle length is not negotiable — it is the protocol."
+      },
       "chapter": 4,
       "line": "Insert the card — let the system lead your assistant.",
       "notes": "PHASE 4 · ACTIVATE & MONITOR\nInsert the card — and let the system lead your assistant, step by step."
     },
     {
       "type": "points_photo",
+      "presenter": {
+        "mode": "none"
+      },
       "chapter": 4,
       "title": "The fläshcard Discipline",
       "points": [
@@ -345,6 +417,15 @@
     },
     {
       "type": "points",
+      "presenter": {
+        "mode": "small",
+        "box": [
+          1404,
+          36,
+          420
+        ],
+        "caption": "At every gel change — ask, don’t assume."
+      },
       "chapter": 4,
       "title": "Comfort Checkpoints",
       "points": [
@@ -373,12 +454,24 @@
     },
     {
       "type": "chapter",
+      "presenter": {
+        "mode": "third_right",
+        "caption": "Rinsing destroys isolation — suction only."
+      },
       "chapter": 5,
       "line": "The last ten minutes decide how the first sixty are remembered.",
       "notes": "PHASE 5 · SEAL & INSTRUCT\nThe last ten minutes decide how the first sixty are remembered."
     },
     {
       "type": "points",
+      "presenter": {
+        "mode": "small",
+        "box": [
+          1220,
+          660,
+          580
+        ]
+      },
       "chapter": 5,
       "title": "Finish Without Undoing It",
       "points": [
@@ -407,6 +500,10 @@
     },
     {
       "type": "scale",
+      "presenter": {
+        "mode": "third_right",
+        "caption": "Slight settling over the next days is normal."
+      },
       "chapter": 5,
       "title": "The Aftercare Window",
       "timeline": {
@@ -440,6 +537,9 @@
     },
     {
       "type": "steps",
+      "presenter": {
+        "mode": "none"
+      },
       "kicker": "The in-office procedure · Step by step",
       "title": "Prepare & Protect",
       "start": 1,
@@ -468,6 +568,14 @@
     },
     {
       "type": "steps",
+      "presenter": {
+        "mode": "small",
+        "box": [
+          1296,
+          300,
+          504
+        ]
+      },
       "kicker": "The in-office procedure · Step by step",
       "title": "Prepare & Protect",
       "start": 4,
@@ -490,6 +598,10 @@
     },
     {
       "type": "steps",
+      "presenter": {
+        "mode": "small",
+        "at": "bottom_right"
+      },
       "kicker": "The in-office procedure · Step by step",
       "title": "Apply & Activate",
       "start": 6,
@@ -518,6 +630,9 @@
     },
     {
       "type": "steps",
+      "presenter": {
+        "mode": "none"
+      },
       "kicker": "The in-office procedure · Step by step",
       "title": "Seal & Finish",
       "start": 9,
@@ -546,6 +661,11 @@
     },
     {
       "type": "case",
+      "presenter": {
+        "mode": "small",
+        "at": "top_right",
+        "caption": "Run the checklist — never guess in front of the patient."
+      },
       "kicker": "Mini case · Diagnose",
       "title": "“The Uneven Case”",
       "story": "A 38-year-old at the end of cycle 3 — centrals magnificent, cervical thirds still yellow, canines two steps behind, chalky patches on the laterals. She is holding the mirror.",
@@ -575,6 +695,9 @@
     },
     {
       "type": "steps",
+      "presenter": {
+        "mode": "none"
+      },
       "kicker": "Mini case · Resolve",
       "title": "The Fix & The Conversation",
       "steps": [
@@ -599,6 +722,12 @@
     },
     {
       "type": "quiz",
+      "presenter": {
+        "mode": "none"
+      },
+      "presenter_answer": {
+        "mode": "third_right"
+      },
       "question": "Cervical thirds still yellow after cycle 3 — what is the most likely cause?",
       "options": [
         "Gel layer below 1 mm",
@@ -611,6 +740,14 @@
     },
     {
       "type": "summary",
+      "presenter": {
+        "mode": "small",
+        "box": [
+          920,
+          736,
+          480
+        ]
+      },
       "kicker": "Summary + next action",
       "title": "The SOP Blueprint",
       "items": [
@@ -639,6 +776,15 @@
     },
     {
       "type": "closing",
+      "presenter": {
+        "mode": "small",
+        "box": [
+          1200,
+          696,
+          580
+        ],
+        "caption": "One full dry run — this week, not this quarter."
+      },
       "kicker": "Next action · This week, not this quarter",
       "title": "Make It Your Team’s Reflex",
       "steps": [
