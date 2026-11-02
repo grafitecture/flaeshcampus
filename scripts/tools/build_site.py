@@ -51,6 +51,9 @@ def slide_records(pptx: Path) -> list[dict]:
                  or _placeholder_text(slide, PH_IDX["Question"]) or _placeholder_text(slide, PH_IDX["Statement"]))
         active = [s.name for s in slide.shapes if s.name.startswith("rail-dot-") and s.name.endswith("-active")]
         chapter = int(active[0].split("-")[2]) if active else None
+        if chapter is None and slide.slide_layout.name == "02 Chapter":   # Vollbild-Kapitel: Leiste liegt unter dem Video
+            number = _placeholder_text(slide, PH_IDX["Number"])
+            chapter = int(number) if number.isdigit() else None
         notes = slide.notes_slide.notes_text_frame.text.strip() if slide.has_notes_slide else ""
         records.append({"n": n, "title": title, "kicker": _placeholder_text(slide, PH_IDX["Kicker"]),
                         "chapter": chapter, "notes": notes, "layout": slide.slide_layout.name})

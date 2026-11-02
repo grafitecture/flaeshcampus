@@ -28,6 +28,15 @@ def test_slide_records(template_path, tmp_path):
     assert records[0]["chapter"] is None
 
 
+def test_full_screen_chapter_keeps_its_chapter(template_path, tmp_path):
+    """Im Vollbild liegt die Leiste unter dem Video; das Kapitel kommt dann aus der Kapitelnummer."""
+    plan = json.loads(FIXTURE.read_text(encoding="utf-8"))
+    plan["slides"][1]["presenter"] = {"mode": "full"}
+    deck = tmp_path / "deck.pptx"
+    build_deck(plan, template_path, deck, SKILL / "examples")
+    assert slide_records(deck)[1]["chapter"] == 3
+
+
 def test_write_index(tmp_path):
     """Die Seite listet alle Folien und Downloads und bleibt aus Suchmaschinen heraus."""
     slides = [{"n": i, "title": f"Slide {i}", "kicker": "", "chapter": None, "notes": "",
